@@ -12,3 +12,6 @@ Content-Type: application/json
   "email": "first.last@gmail.com",
   "password": "example"
 }
+
+### DELETE request for user by id
+DELETE http://localhost:3001/api/users/4935a82e-affd-4ceb-bbeb-bfb85fa87e17
