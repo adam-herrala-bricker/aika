@@ -1,0 +1,14 @@
+### GET request for all users
+GET http://localhost:3001/api/users
+
+### POST request for a new user
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "username": "user.name",
+  "firstName": "first",
+  "lastName": "last",
+  "email": "first.last@gmail.com",
+  "password": "example"
+}
