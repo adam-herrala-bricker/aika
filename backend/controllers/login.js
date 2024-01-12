@@ -44,7 +44,20 @@ router.post('/', async (req, res) => {
 
   // then send respond
   res.status(200).send({...userObject, token});
+});
 
+// DELETE request to logout (token is passed in header)
+router.delete('/', async (req, res) => {
+
+  // check whether a token was provided
+  if (!req.encodedToken) {
+    return res.status(404).end();
+  }
+
+  // delete the token (if there)
+  await ActiveSession.destroy({where: {token: req.encodedToken}});
+
+  res.status(204).end();
 })
 
 module.exports = router;

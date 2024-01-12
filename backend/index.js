@@ -17,6 +17,9 @@ app.use(express.json());
 // outputs traffic to console
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 
+// custom middleware
+app.use(middleware.tokenExtractor);
+
 // routers
 app.use('/api/login', loginRouter);
 app.use('/api/users', userRouter);

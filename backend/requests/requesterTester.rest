@@ -27,3 +27,8 @@ Content-Type: application/json
   "username": "user.name",
   "password": "example"
 }
+
+### DELETE request to log out
+DELETE http://localhost:3001/api/login
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImE2OTE2N2Q5LTIxOTktNDQzNy05OThhLTc3ZTM0NTMyMjExYyIsInVzZXJuYW1lIjoidXNlci5uYW1lIiwiaWF0IjoxNzA1MDgyOTA5fQ.DVGM9o5OAugZfWgAdvZhFgdKzXyQnZm6dBh2ojlWSMI
+Content-Type: application/json

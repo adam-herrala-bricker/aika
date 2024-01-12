@@ -1,3 +1,13 @@
+const tokenExtractor = (req, res, next) => {
+  const authorization = req.get('authorization');
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    req.encodedToken = authorization.substring(7);
+  }
+
+  next();
+};
+
+
 const errorHandler = (error, request, response, next) => {
 
   if (error.name === 'CastError') {
@@ -13,4 +23,7 @@ const errorHandler = (error, request, response, next) => {
   next(error);
 };
 
-module.exports = {errorHandler};
+module.exports = {
+  tokenExtractor, 
+  errorHandler,
+};
