@@ -7,7 +7,11 @@ const {USER_SECRET} = require('../util/config');
 // GET request to see all active sessions
 router.get('/', async (req, res) => {
   const sessions = await ActiveSession.findAll({
-    include: [User]
+    attributes: ['id', 'token', 'createdAt'],
+    include: {
+      model: User,
+      attributes: ['id', 'username']
+    }
   });
 
   res.json(sessions);

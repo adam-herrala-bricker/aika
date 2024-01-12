@@ -1,6 +1,9 @@
 ### GET request for all users
 GET http://localhost:3001/api/users
 
+### GET request for only one user
+GET http://localhost:3001/api/users?username=user.name
+
 ### POST request for a new user
 POST http://localhost:3001/api/users
 Content-Type: application/json

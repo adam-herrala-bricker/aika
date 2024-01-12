@@ -2,10 +2,22 @@ const router = require('express').Router();
 const bcrypt = require('bcrypt');
 const {ActiveSession, User} = require('../models');
 
-// GET request for users
+// GET request for users (can search by username in query)
 router.get('/', async (req, res) => {
+  const username = req.query.username;
+  console.log(username);
+  let where = {};
+
+  if (username) {
+    where = {username};
+  }
   const users = await User.findAll({
-    include: [ActiveSession]
+    attributes: {exclude: ['passwordHash']},
+    include: {
+      model: ActiveSession,
+      attributes: ['id', 'token', 'createdAt']
+    },
+    where
   });
 
   res.json(users);
