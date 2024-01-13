@@ -25,6 +25,9 @@ router.post('/', async (req, res) => {
   // can't log in if user is disabled
   if (thisUser.isDisabled) return res.status(403).json({error: 'user disabled'});
 
+  // can't log in if user email isn't confirmed
+  if (!thisUser.emailConfirmed) return res.status(403).json({error: 'user email not confirmed'});
+
   // check the password against the hash
   const passwordCorrect = thisUser === null
   ? false // so bcrypt doesn't try to compare null.password

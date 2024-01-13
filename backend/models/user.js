@@ -35,6 +35,12 @@ User.init({
     }
   },
 
+  emailConfirmed: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  },
+
   passwordHash: {
     type: DataTypes.TEXT,
     allowNull: false,

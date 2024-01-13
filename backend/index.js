@@ -4,6 +4,7 @@ const app = express();
 const cors = require('cors');
 const morgan = require('morgan');
 
+const confirmRouter = require('./controllers/confirm');
 const loginRouter = require('./controllers/login');
 const userRouter = require('./controllers/users');
 const middleware = require('./util/middleware');
@@ -20,7 +21,8 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 // custom middleware
 app.use(middleware.tokenExtractor);
 
-// routers
+// routes
+app.use('/confirm', confirmRouter);
 app.use('/api/login', loginRouter);
 app.use('/api/users', userRouter);
 

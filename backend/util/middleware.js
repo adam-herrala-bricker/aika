@@ -16,7 +16,9 @@ const errorHandler = (error, request, response, next) => {
     return response.status(400).json({error: error.message});
   } else if (error.name === 'SequelizeUniqueConstraintError') {
     return response.status(400).json({error: "entry must be unique"});
-  }else if (error.name === 'JsonWebTokenError') {
+  } else if (error.name === 'SequelizeDatabaseError') {
+    return response.status(400).json({error: error.message});
+  } else if (error.name === 'JsonWebTokenError') {
     return response.status(400).json({error: error.message});
   }
 
