@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const bcrypt = require('bcrypt');
-const {ActiveSession, User} = require('../models');
+const {ActiveSession, Stream, User} = require('../models');
 
 // GET request for users (can search by username in query)
 router.get('/', async (req, res) => {
@@ -13,10 +13,13 @@ router.get('/', async (req, res) => {
   }
   const users = await User.findAll({
     attributes: {exclude: ['passwordHash']},
-    include: {
+    include: [{
       model: ActiveSession,
       attributes: ['id', 'token', 'createdAt']
-    },
+    }, {
+      model: Stream,
+      attributes: ['id', 'name', 'createdAt', 'updatedAt']
+    }],
     where
   });
 

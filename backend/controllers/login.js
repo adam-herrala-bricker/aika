@@ -4,7 +4,7 @@ const router = require('express').Router();
 const {ActiveSession, User} = require('../models');
 const {USER_SECRET} = require('../util/config');
 
-// GET request to see all active sessions
+// GET request to see all active sessions (will require admin token)
 router.get('/', async (req, res) => {
   const sessions = await ActiveSession.findAll({
     attributes: ['id', 'token', 'createdAt'],

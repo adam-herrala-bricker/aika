@@ -6,6 +6,7 @@ const morgan = require('morgan');
 
 const confirmRouter = require('./controllers/confirm');
 const loginRouter = require('./controllers/login');
+const streamsRouter = require('./controllers/streams');
 const userRouter = require('./controllers/users');
 const middleware = require('./util/middleware');
 
@@ -20,10 +21,12 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 
 // custom middleware
 app.use(middleware.tokenExtractor);
+app.use(middleware.userExtractor);
 
 // routes
 app.use('/confirm', confirmRouter);
 app.use('/api/login', loginRouter);
+app.use('/api/streams', streamsRouter);
 app.use('/api/users', userRouter);
 
 app.use(middleware.errorHandler);
