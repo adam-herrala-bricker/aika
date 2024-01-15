@@ -1,4 +1,5 @@
 const ActiveSession = require('./activeSession');
+const Entry = require('./entry');
 const Stream = require('./stream');
 const StreamUser = require('./streamUser');
 const User = require('./user');
@@ -14,4 +15,14 @@ User.hasMany(Stream, {foreignKey: 'creatorId'});
 Stream.belongsToMany(User, {through: StreamUser, as: 'connected_streams'});
 User.belongsToMany(Stream, {through: StreamUser, as: 'connected_users'});
 
-module.exports = {ActiveSession, Stream, StreamUser, User};
+// watch out here this might not actually be the right association
+Stream.hasMany(StreamUser, {foreignKey: 'streamId'});
+StreamUser.belongsTo(Stream, {foreignKey: 'streamId'});
+
+Entry.belongsTo(User, {foreignKey: 'creatorId'});
+User.hasMany(Entry, {foreignKey: 'creatorId'});
+
+Entry.belongsTo(Stream);
+Stream.hasMany(Entry);
+
+module.exports = {ActiveSession, Entry, Stream, StreamUser, User};

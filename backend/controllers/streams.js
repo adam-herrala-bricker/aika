@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const {Op} = require('sequelize');
-const {Stream, StreamUser, User} = require('../models');
+const {Entry, Stream, StreamUser, User} = require('../models');
 
 // GET request to see all streams (will require ADMIN token)
 router.get('/', async (req, res) => {
@@ -15,12 +15,74 @@ router.get('/', async (req, res) => {
   res.json(streams);
 });
 
-// GET request to view your own streams (requires USER token)
+// GET request to view user's own streams (requires USER token)
 router.get('/mine', async (req, res) => {
   const streams = await Stream.findAll({
+    include: {
+      model: Entry,
+      attributes: {
+        exclude: ['updatedAt', 'creatorId', 'streamId']
+      }
+    },
     where: {creatorId: req.decodedToken.id}});
 
   res.json(streams);
+});
+
+// GET request to view all streams user has read permission for (requires USER token)
+router.get('/read', async (req, res) => {
+  const streams = await StreamUser.findAll({
+    include: {
+      model: Stream
+    },
+    where: {
+      [Op.and]: {
+        read: true,
+        userId: req.decodedToken.id
+      }
+    }});
+
+  res.json(streams);
+});
+
+// GET request to view all entries in a single stream (requires USER token)
+router.get('/one/:id', async (req, res) => {
+  const streamId = req.params.id;
+  const userId = req.decodedToken.id;
+
+  const userPermissions = await StreamUser.findOne({
+    where: {
+      [Op.and]: {
+        userId: userId,
+        streamId: streamId,
+      }
+    }});
+
+  // entry not found
+  if (!userPermissions) {
+    return res.status(404).json({error: 'user, stream, or user permissions not found'});
+  }
+
+  // user doesn't have read permissions
+  if (!userPermissions.read) {
+    return res.status(403).json({error: 'user does not have read permissions for this stream'});
+  }
+
+  const stream = await Stream.findByPk(streamId, {
+    include: {
+      model: Entry,
+      attributes: {
+        exclude: ['streamId', 'creatorId']
+      },
+      include: {
+        model: User,
+        attributes: ['id', 'username', 'firstName', 'lastName']
+      },
+    },
+    order: [[Entry, 'createdAt', 'DESC']]
+  });
+
+  res.json(stream);
 });
 
 // POST request to create new stream (requires USER token)
@@ -43,7 +105,9 @@ router.post('/', async (req, res) => {
     userId: req.decodedToken.id,
     read: true,
     write: true,
-    delete: true
+    deleteOwn: true,
+    deleteAll: true,
+    admin: true,
   });
 
   res.json(newStream);
@@ -54,10 +118,11 @@ router.delete('/:id', async (req, res) => {
   const streamId = req.params.id;
   // there should be only one UserStream entry per user/stream
   const userPermissions = await StreamUser.findOne({
-    where: {[Op.and]: {
-      userId: req.decodedToken.id,
-      streamId: streamId,
-    }
+    where: {
+      [Op.and]: {
+        userId: req.decodedToken.id,
+        streamId: streamId,
+      }
     }});
 
   // entry not found
@@ -66,10 +131,9 @@ router.delete('/:id', async (req, res) => {
   }
 
   // user doesn't have delete permissions
-  if (!userPermissions.delete) {
+  if (!userPermissions.deleteAll) {
     return res.status(403).json({error: 'user cannot delete this stream'});
   }
-
 
   // remove from both streams and stream_users join table
   // note that the order matters: the foreign key needs to be removed first

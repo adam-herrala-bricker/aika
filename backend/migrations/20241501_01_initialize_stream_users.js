@@ -34,7 +34,19 @@ module.exports = {
         default: false
       },
 
-      delete: {
+      delete_own: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        default: false
+      },
+
+      delete_all: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        default: false
+      },
+
+      admin: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         default: false

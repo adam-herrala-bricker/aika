@@ -22,7 +22,19 @@ StreamUser.init({
     default: false
   },
 
-  delete: {
+  deleteOwn: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    default: false
+  },
+
+  deleteAll: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    default: false
+  },
+
+  admin: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
     default: false
