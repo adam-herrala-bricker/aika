@@ -30,11 +30,11 @@ router.post('/', async (req, res) => {
 
   // check the password against the hash
   const passwordCorrect = thisUser === null
-  ? false // so bcrypt doesn't try to compare null.password
-  : await bcrypt.compare(password, thisUser.passwordHash);
+    ? false // so bcrypt doesn't try to compare null.password
+    : await bcrypt.compare(password, thisUser.passwordHash);
 
   if (!passwordCorrect) {
-    return res.status(404).json({error: "username or password incorrect"});
+    return res.status(404).json({error: 'username or password incorrect'});
   }
 
   // data to encode in the token
@@ -65,6 +65,6 @@ router.delete('/', async (req, res) => {
   await ActiveSession.destroy({where: {token: req.encodedToken}});
 
   res.status(204).end();
-})
+});
 
 module.exports = router;

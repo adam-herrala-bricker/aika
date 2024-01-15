@@ -17,13 +17,13 @@ router.post('/:id', async (req, res) => {
   if (latency > maxLatency) {
     // remove from DB if they took too long
     await thisUser.destroy();
-    return res.status(400).json({error: 'link has expired'})
+    return res.status(400).json({error: 'link has expired'});
   }
 
   // change email to confirmed
   thisUser.emailConfirmed = true;
   await thisUser.save();
-  
+
   res.status(200).end();
 });
 

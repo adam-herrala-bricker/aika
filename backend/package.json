@@ -1,6 +1,7 @@
 {
   "scripts": {
     "dev": "NODE_ENV=development nodemon index.js",
+    "lint": "eslint .",
     "migration:down": "node ./util/rollback.js"
   },
   "dependencies": {
@@ -16,6 +17,7 @@
     "umzug": "^3.5.0"
   },
   "devDependencies": {
+    "eslint": "^8.56.0",
     "nodemon": "^3.0.2"
   }
 }

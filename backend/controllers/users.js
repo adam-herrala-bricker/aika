@@ -36,11 +36,11 @@ router.post('/', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   const thisID = req.params.id;
   const thisUser = await User.findByPk(thisID);
-  
+
   // no user with that ID
   if (!thisUser) return res.status(404).json({error: 'user not found'});
-  
-  await User.destroy({where: {id: thisID}})
+
+  await User.destroy({where: {id: thisID}});
   return res.status(204).end();
 });
 

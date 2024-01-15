@@ -23,7 +23,7 @@ const runMigrations = async () => {
   const migrations = await migrator.up();
   console.log('Migrations up to date', {
     files: migrations.map((mig) => mig.name),
-  })
+  });
 };
 
 // and function to roll migrations back
