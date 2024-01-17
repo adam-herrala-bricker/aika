@@ -9,8 +9,28 @@ router.get('/', async (req, res) => {
   res.json(allEntries);
 });
 
-// GET request for a user to view an entry would go here, but unclear if we need that,
-// since entries are viewed through streams
+// GET request for X entries in a stream, starting at Y (requires USER token)
+router.get('/:id', streamPermissions, async (req, res) => {
+  const defaultLimit = 10;
+  const defaultOffset = 0;
+  const streamId = req.params.id;
+  const permissions = req.permissions;
+
+  const thisLimit = req.body.limit || defaultLimit;
+  const thisOffset = req.body.offset || defaultOffset;
+
+  if (!permissions.read) return res.status(403).json({error: 'read permission required'});
+
+  const entries = await Entry.findAll({
+    where: {streamId: streamId},
+    limit: thisLimit,
+    offset: thisOffset,
+    order: [['createdAt', 'DESC']]
+  });
+
+  res.json(entries);
+
+});
 
 // POST request to create new entry
 router.post('/:id', streamPermissions, async (req, res) => {
