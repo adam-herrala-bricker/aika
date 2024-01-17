@@ -1,0 +1,30 @@
+# Aika
+
+> [!NOTE]
+> Aika is currently under development. A link will be added here once testing opens to the public.
+
+## About
+
+Aika is a multi-modal, temporal slicing app. It is designed for applications where long-term storage, data privacy, and fine-grained access controls are a priority.
+
+### When might you want to use Aika?
+- Your data is associated with a moment in time (short text, photos, videos, audio, the weather, a location, etc.).
+- You want to tightly control who can view your data, typically only yourself or a small group of people. 
+- You don't want your data to be visible to third-parties, tracked for targeted advertising, or otherwise commodified. 
+- You want to control read, write, and delete permissions in unusual ways.
+- You want to ensure the long-term availability of your data.
+
+### When might you want to use something else?
+- You want your data to be publicly visible or otherwise available to large groups (as in social media).
+- You need to store complex, structured, or specialized data (as in GitHub).
+- Strict temporal sequencing and temporal integrity are not priorities (as in a cloud storage service).
+
+### What are three examples of when Aika might be useful?
+- Capturing big (and small) moments over the course of a childhood.
+- Documenting discrete events in long-term projects.
+- Tracking complex, time sensitive operations. 
+
+### What's under the hood?
+- Backend: NodeJS
+- Database: PostgreSQL
+  - Development: Containerized via the [Official Postgres Docker Image](https://www.docker.com/blog/how-to-use-the-postgres-docker-official-image/)
