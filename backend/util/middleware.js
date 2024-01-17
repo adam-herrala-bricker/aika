@@ -1,7 +1,9 @@
 const jwt = require('jsonwebtoken');
-const {ActiveSession} = require('../models');
+const {Op} = require('sequelize');
+const {ActiveSession, Entry, StreamUser} = require('../models');
 const {USER_SECRET} = require('./config');
 
+// extracts bearer token from the header (if provided)
 const tokenExtractor = (req, res, next) => {
   const authorization = req.get('authorization');
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
@@ -28,6 +30,60 @@ const userExtractor = async (req, res, next) => {
   next();
 };
 
+// if there's a decoded token, checks that user's stream permissions (given a STREAM id)
+// note: this only runs for specific endpoints that need to know stream permissions
+const streamPermissions = async (req, res, next) => {
+  if (!req.decodedToken) return res.status(400).json({error: 'token missing'});
+  if (!req.params.id) return res.status(400).json({error: 'stream id missing'});
+
+  // there will only ever be one StreamUser entry for each stream/user pair
+  const permissions = await StreamUser.findOne({
+    where: {
+      [Op.and]: {
+        userId: req.decodedToken.id,
+        streamId: req.params.id,
+      }
+    }});
+
+  req.permissions = permissions;
+
+  next();
+};
+
+// if there's a decoded token, checks the user's stream permissions (given an ENTRY id)
+// this also only runs on specific endpoints that need to know stream permissions
+// but in this case it's for operations on an entry, not an entire stream
+const entryPermissions = async (req, res, next) => {
+  const entryId = req.params.id;
+  const user = req.decodedToken;
+  if (!user) return res.status(400).json({error: 'token missing'});
+  if (!entryId) return res.status(400).json({error: 'entry id missing'});
+
+  // first need stream id for the given entry
+  const thisEntry = await Entry.findByPk(entryId);
+  if (!thisEntry) return res.status(404).json({error: 'entry not found'});
+
+  // then check permissions for the stream the entry is on
+  const permissions = await StreamUser.findOne({
+    where: {[Op.and]: {
+      userId: user.id,
+      streamId: thisEntry.streamId,
+    }
+    }});
+
+  // variable for whether the user can delete this post
+  const canDelete = (permissions.deleteOwn && thisEntry.creatorId === user.id) || permissions.deleteAll;
+
+  // note entry permissions are structured differently than stream permissions
+  req.permissions = {
+    canRead: permissions.read,
+    canWrite: permissions.write,
+    canDelete: canDelete
+  };
+
+  next();
+};
+
 const errorHandler = (error, request, response, next) => {
 
   if (error.name === 'CastError') {
@@ -50,5 +106,7 @@ const errorHandler = (error, request, response, next) => {
 module.exports = {
   tokenExtractor,
   userExtractor,
+  streamPermissions,
+  entryPermissions,
   errorHandler,
 };

@@ -1,6 +1,6 @@
 const router = require('express').Router();
-const {Op} = require('sequelize');
-const {Entry, StreamUser} = require('../models');
+const {Entry} = require('../models');
+const {entryPermissions} = require('../util/middleware');
 
 // GET request for all entries (will require ADMIN token)
 router.get('/', async (req, res) => {
@@ -30,26 +30,12 @@ router.post('/', async (req, res) => {
 });
 
 // DELETE request to delete an entry
-router.delete('/:id', async (req, res) => {
-  const creatorId = req.decodedToken.id;
+router.delete('/:id', entryPermissions, async (req, res) => {
   const entryId = req.params.id;
+  const permissions = req.permissions;
 
-  // check that the entry is there
-  const thisEntry = await Entry.findByPk(entryId);
-  if (!thisEntry) return res.status(404).json({error: 'entry not found'});
-
-  const userPermissions = await StreamUser.findOne({
-    where: {[Op.and]: {
-      userId: req.decodedToken.id,
-      streamId: thisEntry.streamId,
-    }
-    }});
-
-  if (!userPermissions) return res.status(403).json({error: 'no user permissions for this stream'});
-
-  // can delete if deleteOwn AND it's the user's own, OR deleteAll
-  const canDelete = (userPermissions.deleteOwn && thisEntry.creatorId === creatorId) || userPermissions.deleteAll;
-  if (!canDelete) return res.status(403).json({error: 'user cannot delete this entry'});
+  if (!permissions) return res.status(403).json({error: 'no user permissions for this stream'});
+  if (!permissions.canDelete) return res.status(403).json({error: 'user cannot delete this entry'});
 
   // remove from DB
   Entry.destroy({where: {id: entryId}});

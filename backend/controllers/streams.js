@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const {Op} = require('sequelize');
 const {Entry, Stream, StreamUser, User} = require('../models');
+const {streamPermissions} = require('../util/middleware');
 
 // GET request to see all streams (will require ADMIN token)
 router.get('/', async (req, res) => {
@@ -46,17 +47,9 @@ router.get('/read', async (req, res) => {
 });
 
 // GET request to view all entries in a single stream (requires USER token)
-router.get('/one/:id', async (req, res) => {
+router.get('/one/:id', streamPermissions, async (req, res) => {
   const streamId = req.params.id;
-  const userId = req.decodedToken.id;
-
-  const userPermissions = await StreamUser.findOne({
-    where: {
-      [Op.and]: {
-        userId: userId,
-        streamId: streamId,
-      }
-    }});
+  const userPermissions = req.permissions;
 
   // entry not found
   if (!userPermissions) {
@@ -114,16 +107,9 @@ router.post('/', async (req, res) => {
 });
 
 // DELETE request to delete a stream (requires USER token)
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', streamPermissions, async (req, res) => {
   const streamId = req.params.id;
-  // there should be only one UserStream entry per user/stream
-  const userPermissions = await StreamUser.findOne({
-    where: {
-      [Op.and]: {
-        userId: req.decodedToken.id,
-        streamId: streamId,
-      }
-    }});
+  const userPermissions = req.permissions;
 
   // entry not found
   if (!userPermissions) {
