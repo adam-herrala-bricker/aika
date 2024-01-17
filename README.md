@@ -19,7 +19,7 @@ Aika is a multi-modal, temporal slicing app. It is designed for applications whe
 - You need to store complex, structured, or specialized data (as in GitHub).
 - Strict temporal sequencing and temporal integrity are not priorities (as in a cloud storage service).
 
-### What are three examples of when Aika might be useful?
+### What are a few examples of when Aika might be useful?
 - Capturing big (and small) moments over the course of a childhood.
 - Documenting discrete events in long-term projects.
 - Tracking complex, time sensitive operations. 
