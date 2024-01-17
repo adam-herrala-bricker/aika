@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const bcrypt = require('bcrypt');
-const {ActiveSession, Stream, User} = require('../models');
+const {ActiveSession, Stream, StreamUser, User} = require('../models');
 
 // GET request for users (can search by username in query)
 router.get('/', async (req, res) => {
@@ -43,6 +43,7 @@ router.delete('/:id', async (req, res) => {
   // no user with that ID
   if (!thisUser) return res.status(404).json({error: 'user not found'});
 
+  await StreamUser.destroy({where: {userId: thisID}}); // remove permissions too
   await User.destroy({where: {id: thisID}});
   return res.status(204).end();
 });

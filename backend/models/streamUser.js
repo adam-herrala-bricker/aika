@@ -13,31 +13,31 @@ StreamUser.init({
   read: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
-    default: true
+    defaultValue: true
   },
 
   write: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
-    default: false
+    defaultValue: false
   },
 
   deleteOwn: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
-    default: false
+    defaultValue: false
   },
 
   deleteAll: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
-    default: false
+    defaultValue: false
   },
 
   admin: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
-    default: false
+    defaultValue: false
   },
 
 }, {

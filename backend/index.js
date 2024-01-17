@@ -7,6 +7,7 @@ const morgan = require('morgan');
 const confirmRouter = require('./controllers/confirm');
 const loginRouter = require('./controllers/login');
 const entriesRouter = require('./controllers/entries');
+const permissionsRouter = require('./controllers/permissions');
 const streamsRouter = require('./controllers/streams');
 const userRouter = require('./controllers/users');
 const middleware = require('./util/middleware');
@@ -28,6 +29,7 @@ app.use(middleware.userExtractor);
 app.use('/confirm', confirmRouter);
 app.use('/api/login', loginRouter);
 app.use('/api/entries', entriesRouter);
+app.use('/api/permissions', permissionsRouter);
 app.use('/api/streams', streamsRouter);
 app.use('/api/users', userRouter);
 

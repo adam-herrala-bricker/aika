@@ -25,31 +25,31 @@ module.exports = {
       read: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        default: true
+        defaultValue: true
       },
 
       write: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        default: false
+        defaultValue: false
       },
 
       delete_own: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        default: false
+        defaultValue: false
       },
 
       delete_all: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        default: false
+        defaultValue: false
       },
 
       admin: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        default: false
+        defaultValue: false
       },
 
       created_at: {
