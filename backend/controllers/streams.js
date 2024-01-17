@@ -51,11 +51,6 @@ router.get('/one/:id', streamPermissions, async (req, res) => {
   const streamId = req.params.id;
   const userPermissions = req.permissions;
 
-  // entry not found
-  if (!userPermissions) {
-    return res.status(404).json({error: 'user, stream, or user permissions not found'});
-  }
-
   // user doesn't have read permissions
   if (!userPermissions.read) {
     return res.status(403).json({error: 'user does not have read permissions for this stream'});
@@ -110,11 +105,6 @@ router.post('/', async (req, res) => {
 router.delete('/:id', streamPermissions, async (req, res) => {
   const streamId = req.params.id;
   const userPermissions = req.permissions;
-
-  // entry not found
-  if (!userPermissions) {
-    return res.status(404).json({error: 'user, stream, or user permissions not found'});
-  }
 
   // user doesn't have delete permissions
   if (!userPermissions.deleteAll) {

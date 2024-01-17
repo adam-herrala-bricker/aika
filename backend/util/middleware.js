@@ -45,6 +45,9 @@ const streamPermissions = async (req, res, next) => {
       }
     }});
 
+  // will only ever run on endpoints where not finding permissions is an error
+  if (!permissions) return res.status(404).json({error: 'no user permissions for this stream'});
+
   req.permissions = permissions;
 
   next();
@@ -70,6 +73,9 @@ const entryPermissions = async (req, res, next) => {
       streamId: thisEntry.streamId,
     }
     }});
+
+  // will only ever run on endpoints where not finding permissions is an error
+  if (!permissions) return res.status(404).json({error: 'no user permissions for this stream'});
 
   // variable for whether the user can delete this post
   const canDelete = (permissions.deleteOwn && thisEntry.creatorId === user.id) || permissions.deleteAll;
