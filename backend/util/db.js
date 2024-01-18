@@ -1,10 +1,10 @@
 const Sequelize = require('sequelize');
 const {Umzug, SequelizeStorage} = require('umzug');
-const {DB_URI_DEV} = require('./config');
+const {DB_URI} = require('./config');
 
-console.log(DB_URI_DEV);
+console.log(DB_URI);
 // this is the sequelize instance that will be used everywhere
-const sequelize = new Sequelize(DB_URI_DEV);
+const sequelize = new Sequelize(DB_URI);
 
 // config for migration
 const migrationConf = {
@@ -36,7 +36,7 @@ const rollbackMigrations = async () => {
 // function to run when the app starts up
 const connectToDB = async () => {
   try {
-    console.log('connecting to', DB_URI_DEV);
+    console.log('connecting to', DB_URI);
     await sequelize.authenticate();
     console.log('successfully connected to DB!');
     await runMigrations();
