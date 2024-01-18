@@ -2,9 +2,11 @@ module.exports = {
   'env': {
     'node': true,
     'commonjs': true,
-    'es2021': true
+    'es2021': true,
+    'jest/globals': true,
   },
-  'extends': 'eslint:recommended',
+  'extends': ['eslint:recommended'],
+  'plugins': ['jest'],
   'overrides': [
     {
       'env': {
@@ -47,5 +49,5 @@ module.exports = {
       'error', {'before': true, 'after': true}
     ],
     'spaced-comment': ['error', 'always']
-  }
+  },
 };
