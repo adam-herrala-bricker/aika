@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const bcrypt = require('bcrypt');
-const {ActiveSession, Stream, StreamUser, User} = require('../models');
+const {ActiveConfirmation, ActiveSession, Stream, StreamUser, User} = require('../models');
+const {getCryptoKey} = require('../util/helpers');
 
 // GET request for users (can search by username in query)
 router.get('/', async (req, res) => {
@@ -26,12 +27,17 @@ router.get('/', async (req, res) => {
   res.json(users);
 });
 
-// POST request for new user
+// POST request to create a new user
 router.post('/', async (req, res) => {
   const {username, firstName, lastName, email, password} = req.body;
   const passwordHash = await bcrypt.hash(password, 10);
 
+  // create new user in DB
   const newUser = await User.create({username, firstName, lastName, email, passwordHash});
+
+  // add confirmation key to DB
+  await ActiveConfirmation.create({userId: newUser.id, key: getCryptoKey()});
+
   res.json(newUser);
 });
 

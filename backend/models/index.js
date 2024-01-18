@@ -1,3 +1,4 @@
+const ActiveConfirmation = require('./activeConfirmation');
 const ActiveSession = require('./activeSession');
 const Entry = require('./entry');
 const Stream = require('./stream');
@@ -8,6 +9,9 @@ const User = require('./user');
 // note: MUST BE INCLUDED AS A PAIR!
 ActiveSession.belongsTo(User); // looks like it takes 'userId' as the foreign key by default
 User.hasMany(ActiveSession);
+
+ActiveConfirmation.belongsTo(User);
+User.hasMany(ActiveConfirmation);
 
 Stream.belongsTo(User, {foreignKey: 'creatorId'});
 User.hasMany(Stream, {foreignKey: 'creatorId'});
@@ -25,4 +29,11 @@ User.hasMany(Entry, {foreignKey: 'creatorId'});
 Entry.belongsTo(Stream);
 Stream.hasMany(Entry);
 
-module.exports = {ActiveSession, Entry, Stream, StreamUser, User};
+module.exports = {
+  ActiveConfirmation,
+  ActiveSession,
+  Entry,
+  Stream,
+  StreamUser,
+  User
+};
