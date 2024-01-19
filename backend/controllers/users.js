@@ -38,7 +38,13 @@ router.post('/', async (req, res) => {
   // add confirmation key to DB
   await ActiveConfirmation.create({userId: newUser.id, key: getCryptoKey()});
 
-  res.json(newUser);
+  res.json({
+    id: newUser.id,
+    username: newUser.username,
+    firstName: newUser.firstName,
+    lastName: newUser.lastName,
+    email: newUser.email,
+  });
 });
 
 // DELETE request to remove a user by id

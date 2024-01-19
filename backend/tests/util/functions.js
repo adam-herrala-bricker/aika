@@ -5,4 +5,11 @@ const clearDB = async () => {
   await User.destroy({truncate: true, cascade: true});
 };
 
-module.exports = {clearDB};
+// adds array of users to DB
+const addUsers = async (userArray) => {
+  userArray.forEach(async (user) => {
+    await User.create(user);
+  });
+};
+
+module.exports = {addUsers, clearDB};
