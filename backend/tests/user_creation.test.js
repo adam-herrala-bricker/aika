@@ -96,8 +96,6 @@ describe('valid user requests', () => {
         password: user.one.password
       })
       .expect(200);
-
-    // duplicate names and PWs are fine
   });
 });
 
