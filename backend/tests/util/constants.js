@@ -13,6 +13,17 @@ const user = {
     lastName: 'one',
     email: 'test.one@gmail.com',
     password: 'example'
+  },
+
+  // note: user two already has confirmed email
+  // this is only possible to add with a direct query to the DB
+  two: {
+    username: 'test.two',
+    firstName: 'test',
+    lastName: 'two',
+    email: 'test.two@gmail.com',
+    password: 'example',
+    emailConfirmed: true
   }
 };
 

@@ -3,7 +3,7 @@ const app = require('../app');
 const api = supertest(app);
 const {ActiveConfirmation, User} = require('../models');
 const {connectToDB, sequelize} = require('../util/db');
-const {clearDB, addUsers} = require('./util/functions');
+const {clearDB, addUser} = require('./util/functions');
 const {user} = require('./util/constants');
 
 beforeAll(async () => {
@@ -104,7 +104,7 @@ describe('invalid user requests', () => {
   describe('duplicate info', () => {
     beforeEach(async () => {
       // add user.zero to DB
-      await addUsers([user.zero]);
+      await addUser(user.zero);
     });
 
     test('duplicate username', async () => {

@@ -20,7 +20,13 @@ router.get('/', async (req, res) => {
 // POST request to login (returns bearer token)
 router.post('/', async (req, res) => {
   const {username, password} = req.body;
+
+  const allUsers = await User.findAll();
+  console.log(allUsers);
+
+  console.log(username);
   const thisUser = await User.findOne({where: {username}});
+  console.log(thisUser);
 
   // can't log in if user is disabled
   if (thisUser.isDisabled) return res.status(403).json({error: 'user disabled'});
