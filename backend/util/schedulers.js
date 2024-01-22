@@ -1,6 +1,6 @@
 // these are all functions to schedule things at regular intervals
 const {CronJob} = require('cron');
-const {ActiveConfirmation, User} = require('../models');
+const {ActiveConfirmation, ActiveSession, User} = require('../models');
 const {howLongAgoInMinutes} = require('./helpers');
 
 // function used to prune ActiveConfirmations + Users after 30 minutes
@@ -10,7 +10,7 @@ const pruneConfirmations = async (after = 30) => {
 
   // loop over every active confirmation to see how old it is
   let pruneCount = 0;
-  activeConfirmations.forEach(async (entry) => {
+  for await (const entry of activeConfirmations) {
     const thisId = entry.userId;
 
     // prune if older than maxTime (in minutes)
@@ -20,8 +20,24 @@ const pruneConfirmations = async (after = 30) => {
       await User.destroy({where: {id: thisId}});
       pruneCount ++;
     }
-  });
+  }
+  return pruneCount;
+};
 
+// function used fo prune ActiveSessions older than 1 week (10080 minutes)
+// note: this doesn't do anything to the User
+const pruneSessions = async (after = 10080) => {
+  const activeSessions = await ActiveSession.findAll();
+
+  let pruneCount = 0;
+  for await (const entry of activeSessions) {
+    const thisId = entry.userId;
+    if (howLongAgoInMinutes(entry.createdAt) > after) {
+      console.log(`pruning active session for user: ${thisId}`);
+      await ActiveSession.destroy({where: {id: entry.id}});
+      pruneCount ++;
+    }
+  }
   return pruneCount;
 };
 
@@ -32,8 +48,12 @@ const prune = new CronJob(
     console.log(new Date());
     console.log('beginning prune check');
 
-    const pruneCount = await pruneConfirmations(30);
-    if (pruneCount === 0) console.log('nothing pruned');
+    const confirmationsPruned = await pruneConfirmations();
+    const sessionsPruned = await pruneSessions();
+
+    if (confirmationsPruned + sessionsPruned === 0) {
+      console.log('nothing pruned');
+    }
   }
 );
 
