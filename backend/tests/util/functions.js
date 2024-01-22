@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt');
 const {User} = require('../../models');
 
 // clears the test DB of all entries
@@ -8,7 +9,10 @@ const clearDB = async () => {
 // adds array of users to DB
 const addUsers = async (userArray) => {
   userArray.forEach(async (user) => {
-    await User.create(user);
+    await User.create({
+      ...user,
+      passwordHash: await bcrypt.hash(user.password, 10),
+    });
   });
 };
 

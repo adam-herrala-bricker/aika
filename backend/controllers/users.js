@@ -6,7 +6,6 @@ const {getCryptoKey} = require('../util/helpers');
 // GET request for users (can search by username in query)
 router.get('/', async (req, res) => {
   const username = req.query.username;
-  console.log(username);
   let where = {};
 
   if (username) {
@@ -30,7 +29,13 @@ router.get('/', async (req, res) => {
 // POST request to create a new user
 router.post('/', async (req, res) => {
   const {username, firstName, lastName, email, password} = req.body;
-  const passwordHash = await bcrypt.hash(password, 10);
+  let passwordHash;
+  try {
+    passwordHash = await bcrypt.hash(password, 10);
+  } catch (error) {
+    return res.status(400).json({error: error.message});
+  }
+
 
   // create new user in DB
   const newUser = await User.create({username, firstName, lastName, email, passwordHash});
