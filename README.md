@@ -27,4 +27,4 @@ Aika is a multi-modal, temporal slicing app. It is designed for applications whe
 ### What's under the hood?
 - Backend: NodeJS
 - Database: PostgreSQL
-  - Development: Containerized via the [Official Postgres Docker Image](https://www.docker.com/blog/how-to-use-the-postgres-docker-official-image/)
+  - Development + Testing: Containerized via the [Official Postgres Docker Image](https://www.docker.com/blog/how-to-use-the-postgres-docker-official-image/)
