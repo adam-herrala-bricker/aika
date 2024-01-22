@@ -24,6 +24,27 @@ const user = {
     email: 'test.two@gmail.com',
     password: 'example',
     emailConfirmed: true
+  },
+
+  // same pre-confirmation as with user.two
+  three: {
+    username: 'test.three',
+    firstName: 'test',
+    lastName: 'three',
+    email: 'test.three@gmail.com',
+    password: '€x4mp1@',
+    emailConfirmed: true,
+  },
+
+  // pre-disabled: can also only add directly to DB
+  four: {
+    username: 'test.four',
+    firstName: 'test',
+    lastName: 'four',
+    email: 'test.four@gmail.com',
+    password: 'example',
+    emailConfirmed: true,
+    isDisabled: true,
   }
 };
 
