@@ -91,3 +91,43 @@ Removes active session corresponding with the provided token from the database.
 
 #### Returns:
 - `Status 204` (no body)
+
+## Stream Creation and Deletion
+
+### POST `/api/streams`
+
+Creates a new stream with the give name. 
+
+Creating user's information is sent via bearer token.
+
+>[!NOTE]
+>When a user creates a new stream, maximal permissions for that user/stream are concurrently added to `StreamUser` in the database. 
+
+#### Headers:
+- `Authorization: Bearer <token>`
+
+#### Parameters:
+- `name`
+  - type: string
+  - required: true
+  - unique: false
+
+#### Returns:
+- `id`
+  - type: UUID v4 
+- `creatorId`
+  - UUID of user that created the stream
+- `name` 
+
+### DELETE `/api/streams/id`
+
+If authorized, deletes stream with the given id from the database.
+
+#### Headers:
+- `Authorization: Bearer <token>`
+
+#### Parameters:
+  - None
+
+#### Returns:
+  - `Status 204` (no body)
