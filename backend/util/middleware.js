@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const {Op} = require('sequelize');
-const {ActiveSession, Entry, StreamUser} = require('../models');
+const {ActiveSession, Entry, Stream, StreamUser} = require('../models');
 const {USER_SECRET} = require('./config');
 
 // extracts bearer token from the header (if provided)
@@ -17,13 +17,15 @@ const tokenExtractor = (req, res, next) => {
 const userExtractor = async (req, res, next) => {
   // only run if token was provided
   if (req.encodedToken) {
-    // check that the token is in active sessions
+    // decode the token (do this first to get right error message for bad token)
+    const decodedToken = jwt.verify(req.encodedToken, USER_SECRET);
+
+    // check that the (encoded) token is in active sessions before returning
     const thisSession = await ActiveSession.findAll({where: {token: req.encodedToken}});
     if (thisSession.length === 0) {
       throw Error('expired token');
     }
-    // decode the token
-    const decodedToken = jwt.verify(req.encodedToken, USER_SECRET);
+
     req.decodedToken = decodedToken;
   }
 
@@ -33,8 +35,12 @@ const userExtractor = async (req, res, next) => {
 // if there's a decoded token, checks that user's stream permissions (given a STREAM id)
 // note: this only runs for specific endpoints that need to know stream permissions
 const streamPermissions = async (req, res, next) => {
-  if (!req.decodedToken) return res.status(400).json({error: 'token missing'});
+  if (!req.decodedToken) return res.status(401).json({error: 'token missing'});
   if (!req.params.id) return res.status(400).json({error: 'stream id missing'});
+
+  // verify that the stream exists
+  const streamFound = await Stream.findByPk(req.params.id);
+  if (!streamFound) return res.status(404).json({error: 'stream not found'});
 
   // there will only ever be one StreamUser entry for each stream/user pair
   const permissions = await StreamUser.findOne({
@@ -59,7 +65,7 @@ const streamPermissions = async (req, res, next) => {
 const entryPermissions = async (req, res, next) => {
   const entryId = req.params.id;
   const user = req.decodedToken;
-  if (!user) return res.status(400).json({error: 'token missing'});
+  if (!user) return res.status(401).json({error: 'token missing'});
   if (!entryId) return res.status(400).json({error: 'entry id missing'});
 
   // first need stream id for the given entry
