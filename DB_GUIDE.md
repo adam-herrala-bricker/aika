@@ -23,7 +23,7 @@ flowchart LR
             AS2(user_id)
             AS3(token)
             AS4(created_at)
-            AS4(updated_at)
+            AS5(updated_at)
         end
         subgraph Stream
             S1(id)
