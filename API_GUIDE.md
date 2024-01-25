@@ -105,6 +105,9 @@ Removes active session corresponding with the provided token from the database.
 #### Returns:
 - `Status 204` (no body)
 
+## Permission Setting
+I.e., sharing.
+
 ## Stream Creation and Deletion
 
 ### POST `/api/streams`
@@ -144,3 +147,50 @@ If authorized, deletes stream with the given id from the database.
 
 #### Returns:
   - `Status 204` (no body)
+
+## Slice Creation and Deletion
+
+## Stream and Slice Access
+
+### GET `/api/streams/read`
+
+Gets permission and stream data for all streams that the user has `read` permissions for.
+
+The user is identified via bear token.
+
+>[!NOTE]
+>This does not return the data for any slices in the stream. Use GET `/api/slices/:id` for that.
+
+#### Headers:
+- `Authorization: Bearer <token>`
+
+#### Parameters:
+- None
+
+#### Returns:
+Array of `StreamUser` instances joined with their corresponding `Stream`:
+- `id`
+  - Type: UUID v4
+  - Note that this is the id for the `StreamUser` instance that stores user permissions, not the user or stream id
+- `read`
+  - Type: boolean
+- `write`
+  - Type: boolean
+- `deleteOwn`
+  - Type: boolean
+- `deleteAll`
+  - Type: boolean
+- `admin`
+  - Type: boolean
+- `createdAt`
+- `updatedAt`
+- `Stream` instance:
+  - `id`
+    - UUID for the stream
+  - `name`
+    - Type: string
+  - `creatorID`
+    - UUID for the creator of the stream, not necessarily the user accessing it now
+  - `createdAt`
+  - `updatedAt`   
+
