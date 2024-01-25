@@ -27,7 +27,7 @@ flowchart LR
         end
         subgraph Stream
             S1(id)
-            S2(user_id)
+            S2(creator_id)
             S3(name)
             S4(created_at)
             S5(updated_at)
