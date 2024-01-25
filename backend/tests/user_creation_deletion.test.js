@@ -1,10 +1,10 @@
 const supertest = require('supertest');
 const app = require('../app');
 const api = supertest(app);
-const {ActiveConfirmation, User} = require('../models');
+const {ActiveConfirmation, Stream, User} = require('../models');
 const {connectToDB, sequelize} = require('../util/db');
-const {clearDB, addUser} = require('./util/functions');
-const {user} = require('./util/constants');
+const {clearDB, addUser, logInUser, addStream} = require('./util/functions');
+const {badToken, expiredUserTwoToken, stream, user} = require('./util/constants');
 
 beforeAll(async () => {
   // this runs migrations and makes sure that all the relations are there
@@ -96,6 +96,33 @@ describe('valid user requests', () => {
         password: user.one.password
       })
       .expect(200);
+  });
+
+  test('user can delete themselves', async () => {
+    // add + login user to delete
+    await addUser(user.two);
+    const thisUser = await logInUser(user.two);
+
+    // add stream + entry (need to check it can remove all user data)
+    await addStream(user.two, stream.zero);
+    // ADD ENTRY HERE WHEN DOING OTHER ENTRY TESTS!!
+
+    // request to delete
+    await api
+      .delete('/api/users/')
+      .set('Authorization', `Bearer ${thisUser.token}`)
+      .expect(204);
+
+    // confirm that the user is gone
+    const isUser = await User.findByPk(thisUser.id);
+    expect(isUser).toBe(null);
+
+    // confirm the stream is gone
+    const isStream = await Stream.findOne({where: {creatorId: thisUser.id}});
+    expect(isStream).toBe(null);
+
+    // confirm the entry is gone
+    // ADD WHEN DOING OTHER ENTRY TESTS!!
   });
 });
 
@@ -245,6 +272,77 @@ describe('invalid user requests', () => {
       expect(userDB.storageLimit).toBe(10);
     });
   });
+
+  describe('invalid deletion', () => {
+    let thisUser; // user we'll check hasn't been deleted each time
+
+    beforeEach(async () => {
+      // add + login user to delete
+      await addUser(user.two);
+      thisUser = await logInUser(user.two);
+    });
+
+    test('cannot delete without token', async () => {
+      const {body} = await api
+        .delete('/api/users')
+        .expect(401);
+
+      expect(body.error).toBe('token missing');
+
+      // user is still in DB
+      const isUser = await User.findByPk(thisUser.id);
+      expect(isUser.id).toBe(thisUser.id);
+    });
+
+    test('cannot delete with a bad token', async () => {
+      const {body} = await api
+        .delete('/api/users')
+        .set('Authorization', `Bearer ${badToken}`)
+        .expect(400);
+
+      expect(body.error).toBe('jwt malformed');
+
+      // user is still in DB
+      const isUser = await User.findByPk(thisUser.id);
+      expect(isUser.id).toBe(thisUser.id);
+    });
+
+    test('cannot delete with expired token', async () => {
+      const {body} = await api
+        .delete('/api/users')
+        .set('Authorization', `Bearer ${expiredUserTwoToken}`)
+        .expect(403);
+
+      expect(body.error).toBe('login token has expired');
+
+      // user is still in DB
+      const isUser = await User.findByPk(thisUser.id);
+      expect(isUser.id).toBe(thisUser.id);
+
+    });
+
+    test('can only delete self', async () => {
+      // add + log in second user
+      await addUser(user.five);
+      const userFive = await logInUser(user.five);
+
+      // delete request
+      await api
+        .delete('/api/users')
+        .set('Authorization', `Bearer ${userFive.token}`)
+        .expect(204);
+
+      // user five is gone
+      const userFiveEntry = await User.findByPk(userFive.id);
+      expect(userFiveEntry).toBe(null);
+
+      // but user two is still there
+      const userTwoEntry = await User.findByPk(thisUser.id);
+      expect(userTwoEntry.id).toBe(thisUser.id);
+    });
+
+  });
+
 });
 
 afterAll(async () => {

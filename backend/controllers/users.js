@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const bcrypt = require('bcrypt');
-const {ActiveConfirmation, ActiveSession, Stream, StreamUser, User} = require('../models');
+const {ActiveConfirmation, ActiveSession, Entry, Stream, StreamUser, User} = require('../models');
 const {getCryptoKey} = require('../util/helpers');
 
 // GET request for users (can search by username in query)
@@ -52,15 +52,29 @@ router.post('/', async (req, res) => {
   });
 });
 
-// DELETE request to remove a user by id
-router.delete('/:id', async (req, res) => {
-  const thisID = req.params.id;
+// DELETE request to remove a user identified in token (requires USER token)
+// note: this route only allows users to delete themselves
+// a seperate route will be needed for admin deletion of users
+router.delete('/', async (req, res) => {
+  // thow an error if no token provided
+  if (!req.decodedToken) {
+    return res.status(401).json({error: 'token missing'});
+  }
+
+  const thisID = req.decodedToken.id;
   const thisUser = await User.findByPk(thisID);
 
   // no user with that ID
   if (!thisUser) return res.status(404).json({error: 'user not found'});
 
-  await StreamUser.destroy({where: {userId: thisID}}); // remove permissions too
+  // remove everything associated with that user
+  await ActiveConfirmation.destroy({where: {userId: thisID}});
+  await ActiveSession.destroy({where: {userId: thisID}});
+  await StreamUser.destroy({where: {userId: thisID}});
+  await Entry.destroy({where: {creatorId: thisID}});
+  await Stream.destroy({where: {creatorId: thisID}});
+
+  // then remove the user entry
   await User.destroy({where: {id: thisID}});
   return res.status(204).end();
 });
