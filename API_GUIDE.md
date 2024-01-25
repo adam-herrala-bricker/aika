@@ -53,6 +53,19 @@ The user has 30 minutes to follow the link and confirm the provided email. If th
 #### Returns:
 - `Status 200` (no body)
 
+### DELETE `/api/users`
+
+Deletes user identified in token. (This means that users can only authorize requests to delete themselves).
+
+#### Headers:
+- `Authorization: Bearer <token>`
+
+#### Parameters:
+- None
+
+#### Returns:
+- `Status 204` (no body)
+
 ## Log-in and Log-out
 
 >[!NOTE]
