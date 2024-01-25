@@ -32,7 +32,11 @@ router.get('/mine', async (req, res) => {
 
 // GET request to view all streams user has read permission for (requires USER token)
 router.get('/read', async (req, res) => {
+  // thow an error if no token provided
+  if (!req.decodedToken) return res.status(401).json({error: 'token missing'});
+
   const streams = await StreamUser.findAll({
+    attributes: {exclude: ['userId', 'streamId']},
     include: {
       model: Stream
     },

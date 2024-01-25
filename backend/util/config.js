@@ -1,9 +1,11 @@
 require('dotenv').config();
+const NODE_ENV = process.env.NODE_ENV;
+
 
 const DB_URI_DEV = process.env.DB_URI_DEV;
 const DB_URI_TESTING = process.env.DB_URI_TESTING;
 
-const DB_URI = process.env.NODE_ENV === 'development'
+const DB_URI = NODE_ENV === 'development'
   ? DB_URI_DEV
   : DB_URI_TESTING;
 
@@ -16,6 +18,7 @@ const USER_SECRET = process.env.USER_SECRET;
 module.exports = {
   ADMIN_KEY,
   DB_URI,
+  NODE_ENV,
   PORT,
   USER_SECRET,
 };

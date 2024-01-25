@@ -65,6 +65,22 @@ const user = {
 const stream = {
   zero: {
     name: 'streamZero'
+  },
+
+  one: {
+    name: 'streamOne'
+  },
+
+  two: {
+    name: 'streamTwo'
+  },
+
+  three: {
+    name: 'streamThree'
+  },
+
+  four: {
+    name: 'streamFour'
   }
 };
 
