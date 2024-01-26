@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const bcrypt = require('bcrypt');
-const {ActiveConfirmation, ActiveSession, Entry, Stream, StreamUser, User} = require('../models');
+const {ActiveConfirmation, ActiveSession, Slice, Stream, StreamUser, User} = require('../models');
 const {getCryptoKey} = require('../util/helpers');
 
 // GET request for users (can search by username in query)
@@ -71,7 +71,7 @@ router.delete('/', async (req, res) => {
   await ActiveConfirmation.destroy({where: {userId: thisID}});
   await ActiveSession.destroy({where: {userId: thisID}});
   await StreamUser.destroy({where: {userId: thisID}});
-  await Entry.destroy({where: {creatorId: thisID}});
+  await Slice.destroy({where: {creatorId: thisID}});
   await Stream.destroy({where: {creatorId: thisID}});
 
   // then remove the user entry

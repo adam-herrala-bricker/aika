@@ -59,10 +59,10 @@ const streamPermissions = async (req, res, next) => {
   next();
 };
 
-// if there's a decoded token, checks the user's stream permissions (given an ENTRY id)
+// if there's a decoded token, checks the user's stream permissions (given a SLICE id)
 // this also only runs on specific endpoints that need to know stream permissions
-// but in this case it's for operations on an entry, not an entire stream
-const entryPermissions = async (req, res, next) => {
+// but in this case it's for operations on a slice, not an entire stream
+const slicePermissions = async (req, res, next) => {
   const entryId = req.params.id;
   const user = req.decodedToken;
   if (!user) return res.status(401).json({error: 'token missing'});
@@ -119,6 +119,6 @@ module.exports = {
   tokenExtractor,
   userExtractor,
   streamPermissions,
-  entryPermissions,
+  slicePermissions,
   errorHandler,
 };

@@ -1,9 +1,9 @@
 const {DataTypes, Model} = require('sequelize');
 const {sequelize} = require('../util/db');
 
-class Entry extends Model {}
+class Slice extends Model {}
 
-Entry.init({
+Slice.init({
   id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
@@ -40,7 +40,7 @@ Entry.init({
   sequelize,
   underscored: true,
   timestamps: true,
-  modelName: 'entry'
+  modelName: 'slices'
 });
 
-module.exports = Entry;
+module.exports = Slice;

@@ -1,15 +1,15 @@
 const router = require('express').Router();
-const {Entry} = require('../models');
-const {entryPermissions, streamPermissions} = require('../util/middleware');
+const {Slice} = require('../models');
+const {slicePermissions, streamPermissions} = require('../util/middleware');
 
-// GET request for all entries (will require ADMIN token)
+// GET request for all slices (will require ADMIN token)
 router.get('/', async (req, res) => {
-  const allEntries = await Entry.findAll({});
+  const allSlices = await Slice.findAll({});
 
-  res.json(allEntries);
+  res.json(allSlices);
 });
 
-// GET request for X entries in a stream, starting at Y (requires USER token)
+// GET request for X slices in a stream, starting at Y (requires USER token)
 router.get('/:id', streamPermissions, async (req, res) => {
   const defaultLimit = 10;
   const defaultOffset = 0;
@@ -21,7 +21,7 @@ router.get('/:id', streamPermissions, async (req, res) => {
 
   if (!permissions.read) return res.status(403).json({error: 'read permission required'});
 
-  const entries = await Entry.findAll({
+  const entries = await Slice.findAll({
     where: {streamId: streamId},
     limit: thisLimit,
     offset: thisOffset,
@@ -32,7 +32,7 @@ router.get('/:id', streamPermissions, async (req, res) => {
 
 });
 
-// POST request to create new entry
+// POST request to create new slice
 router.post('/:id', streamPermissions, async (req, res) => {
   const creatorId = req.decodedToken.id;
   const streamId = req.params.id;
@@ -46,7 +46,7 @@ router.post('/:id', streamPermissions, async (req, res) => {
     return res.status(403).json({error: 'user cannot write to this stream'});
   }
 
-  const newEntry = await Entry.create({
+  const newEntry = await Slice.create({
     ...req.body,
     creatorId: creatorId,
     streamId: streamId,
@@ -55,15 +55,15 @@ router.post('/:id', streamPermissions, async (req, res) => {
   res.json(newEntry);
 });
 
-// DELETE request to delete an entry
-router.delete('/:id', entryPermissions, async (req, res) => {
+// DELETE request to delete a slice
+router.delete('/:id', slicePermissions, async (req, res) => {
   const entryId = req.params.id;
   const permissions = req.permissions;
 
   if (!permissions.canDelete) return res.status(403).json({error: 'user cannot delete this entry'});
 
   // remove from DB
-  Entry.destroy({where: {id: entryId}});
+  Slice.destroy({where: {id: entryId}});
 
   res.status(204).end();
 });
