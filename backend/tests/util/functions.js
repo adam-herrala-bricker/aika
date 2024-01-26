@@ -18,6 +18,7 @@ const addUser = async (user) => {
 };
 
 // creates the given stream as the given user (assumes user is already in DB)
+// uses the API to also create the StreamUser object, as in normal operation
 const addStream = async (user, stream) => {
   const {token} = await logInUser(user);
   const {body} = await api

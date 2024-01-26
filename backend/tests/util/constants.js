@@ -1,5 +1,6 @@
 const badToken = '1111111111111111111';
 const expiredUserTwoToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0MzJlZWQ0LWNkMDgtNDAyOS1iNmQ1LWFlM2FhMzFmNzdmMSIsInVzZXJuYW1lIjoidGVzdC50d28iLCJpYXQiOjE3MDYxNjc5NzZ9.sdKr0md5Glze4mQtRQnCZDVYZSymg-oipuT2CxE31v0';
+const invalidId = '8333c83b-273a-479c-95d6-2c7da850deb1';
 
 const user = {
   zero: {
@@ -59,6 +60,16 @@ const user = {
     email: 'test.five@gmail.com',
     password: 'example',
     emailConfirmed: true,
+  },
+
+  // same as user.two and user.five
+  six: {
+    username: 'test.six',
+    firstName: 'test',
+    lastName: 'six',
+    email: 'test.six@gmail.com',
+    password: 'example',
+    emailConfirmed: true,
   }
 };
 
@@ -87,6 +98,7 @@ const stream = {
 module.exports = {
   badToken,
   expiredUserTwoToken,
+  invalidId,
   stream,
   user
 };

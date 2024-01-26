@@ -162,7 +162,7 @@ describe('invalid requests', () => {
       const {body} = await api
         .delete(`/api/streams/${thisStream.id}`)
         .set('Authorization', `Bearer ${userFive.token}`)
-        .expect(404);
+        .expect(403);
 
       expect(body.error).toBe('no user permissions for this stream');
     });
