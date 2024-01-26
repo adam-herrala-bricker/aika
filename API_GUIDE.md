@@ -75,7 +75,7 @@ Deletes user identified in token. (This means that users can only authorize requ
 
 Used to log users in.
 
-Checks the provided password against the stored hash. Creates a new active session in the database and returns a bearer token for authenticating requests.
+Checks the provided password against the stored hash. Creates a new `ActiveSession` instance in the database and returns a bearer token for authenticating requests.
 
 #### Parameters:
 - `username`
@@ -106,7 +106,64 @@ Removes active session corresponding with the provided token from the database.
 - `Status 204` (no body)
 
 ## Permission Setting
-I.e., sharing.
+
+Enables sharing of slices with others.
+
+### PUT `/api/permissions/:id`
+
+Creates or modifies a `StreamUser` instance, which stores user permissions for the stream given with `id`. 
+
+(Stream id is passed in the path because this route uses the same authorization middleware as requests to create new streams.)
+
+>[!IMPORTANT]
+>Creating or modifying permissions requires that the creating/modifying user has admin rights for that stream. These are assigned to the creator of a stream by default.
+
+#### Headers:
+- `Authorization: Bearer <token>`
+
+#### Parameters:
+- `userId`
+  - id of the user whose permissions are being created or modified
+  - type: UUID v4
+  - required: true
+- `read`
+  - permission to read slices on the stream
+  - type: boolean
+  - required: false
+  - default: true
+- `write`
+  - permission to add new slices to the stream
+  - type: boolean
+  - required: false
+  - default: false
+- `deleteOwn`
+  - permission to delete any slices from the stream that were added by the user sending the delete request
+  - type: boolean
+  - required: false
+  - default: false
+- `deleteAll`
+  - permission to delete all slices from the stream, regardless of who created them, as well as to delete the entire stream
+  - type: boolean
+  - required: false
+  - default: false
+- `admin`
+  - permission to create or modify user permissions for this stream
+  - type: boolean
+  - required: false
+  - default: false
+
+#### Returns:
+- `id`
+  - UUID of the `StreamUser` instance
+- `userId`
+- `streamId`
+- `read`
+- `write`
+- `deleteOwn`
+- `deleteAll`
+- `admin`
+- `createdAt`
+- `updatedAt`  
 
 ## Stream Creation and Deletion
 
@@ -170,25 +227,25 @@ The user is identified via bear token.
 #### Returns:
 Array of `StreamUser` instances joined with their corresponding `Stream`:
 - `id`
-  - Type: UUID v4
-  - Note that this is the id for the `StreamUser` instance that stores user permissions, not the user or stream id
+  - type: UUID v4
+  - note that this is the id for the `StreamUser` instance that stores user permissions, not the user or stream id
 - `read`
-  - Type: boolean
+  - type: boolean
 - `write`
-  - Type: boolean
+  - type: boolean
 - `deleteOwn`
-  - Type: boolean
+  - type: boolean
 - `deleteAll`
-  - Type: boolean
+  - type: boolean
 - `admin`
-  - Type: boolean
+  - type: boolean
 - `createdAt`
 - `updatedAt`
 - `Stream` instance:
   - `id`
     - UUID for the stream
   - `name`
-    - Type: string
+    - type: string
   - `creatorID`
     - UUID for the creator of the stream, not necessarily the user accessing it now
   - `createdAt`
