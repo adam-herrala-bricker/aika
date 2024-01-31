@@ -308,3 +308,36 @@ Array of `StreamUser` instances joined with their corresponding `Stream`:
   - `createdAt`
   - `updatedAt`   
 
+### GET `/api/slices/:id`
+
+Gets slices on stream with given `id`. Requires `read` permissions for that stream.
+
+Slices are sorted by time created, with the most recent returned first.
+
+#### Headers:
+- `Authorization: Bearer <token>`
+
+#### Parameters:
+- `limit`
+  - maximum number of slices to return with the request 
+  - type: integer 
+  - required: false
+  - default: 10
+- `offset`
+  - number of slices on stream to skip over before returning
+  - type: integer
+  - required: false
+  - default: 0
+
+#### Returns:
+- Array of `Slice` instances:
+  - `id`
+  - `creatorId`
+  - `streamId`
+  - `title`
+  - `text`
+  - `isPublic`
+  - `isMilestone`
+  - `createdAt`
+  - `updatedAt`
+
