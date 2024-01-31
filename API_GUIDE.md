@@ -207,6 +207,63 @@ If authorized, deletes stream with the given id from the database.
 
 ## Slice Creation and Deletion
 
+### POST `/api/slices/:id`
+
+Adds a new slice to the stream with the given `id` (if user has `write` permissions on that stream).
+
+#### Headers:
+- `Authorization: Bearer <token>`
+
+#### Parameters:
+- `title`
+  - type: string
+  - required: false
+  - validation:
+    - maximum length: 32
+- `text`
+  - type: string
+  - required: false
+  - validation:
+    - maximum length: 512
+- `isPublic`
+  - type: boolean
+  - required: false
+  - default: false
+- `isMilestone`
+  - type boolean
+  - required: false
+  - default: false
+
+#### Returns:
+- `id`
+  - type: UUID v4
+- `creatorId`
+  - UUID of user that created slice
+- `streamId`
+  - UUID of stream that slice is on
+- `title`
+- `text`
+- `isPublic`
+- `isMilestone` 
+- `createdAt`
+- `updatedAt`    
+
+### DELETE `/api/slices/:id`
+
+Deletes slice with the given id.
+
+>[!NOTE]
+>Deleting requires either `deleteOwn` permissions, which enables deletion for slices that a user has created, or `deleteAll` permissions, which allows a user to delete any slices on the stream.
+
+#### Headers:
+- `Authorization: Bearer <token>`
+
+#### Parameters:
+- None
+
+#### Returns:
+  - `Status 204` (no body)
+
 ## Stream and Slice Access
 
 ### GET `/api/streams/read`
