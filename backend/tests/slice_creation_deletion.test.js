@@ -443,7 +443,7 @@ describe('invalid requests', () => {
           .set('Authorization', `Bearer ${userFive.token}`)
           .expect(403);
 
-        console.log(body);
+        expect(body.error).toBe('user cannot delete this entry');
       });
     });
 
