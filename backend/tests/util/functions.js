@@ -2,6 +2,7 @@ const supertest = require('supertest');
 const app = require('../../app');
 const api = supertest(app);
 const bcrypt = require('bcrypt');
+const {Op} = require('sequelize');
 const {StreamUser, User} = require('../../models');
 
 // clears the test DB of all entries
@@ -29,6 +30,17 @@ const addStream = async (user, stream) => {
   return body;
 };
 
+// creates a new slice on the given stream as the given user
+// user object is that returned by logInUser
+const addSlice = async (user, streamId, slice) => {
+  const {body} = await api
+    .post(`/api/slices/${streamId}`)
+    .set('Authorization', `Bearer ${user.token}`)
+    .send(slice);
+
+  return body;
+};
+
 // logs the given user in, returns full user object
 const logInUser = async (user) => {
   const {body} = await api
@@ -41,13 +53,40 @@ const logInUser = async (user) => {
   return body;
 };
 
-// creates *new* permissions for the given user and stream (with IDs included in both objects)
+// creates (or updates) permissions for the given user and stream (with IDs included in both objects)
 const createPermissions = async (user, stream, permissions) => {
-  await StreamUser.create({
-    ...permissions,
-    userId: user.id,
-    streamId: stream.id,
+  // check to see if there's already an entry there
+  const permissionsDB = await StreamUser.findOne({
+    where:
+    {[Op.and]: {
+      userId: user.id,
+      streamId: stream.id
+    }}});
+
+  if (!permissionsDB) { // create new if not
+    await StreamUser.create({
+      ...permissions,
+      userId: user.id,
+      streamId: stream.id,
+    });
+  } else { // otherwise can just update
+    ['read', 'write', 'deleteOwn', 'deleteAll', 'admin'].forEach((per) => {
+      if (permissions[per] !== undefined) permissionsDB[per] = permissions[per];
+    });
+
+    await permissionsDB.save();
+  }
+};
+
+// removes all permissions from DB for given user + stream (both objects need IDs)
+const clearPermissions = async (user, stream) => {
+  await StreamUser.destroy({
+    where: {
+      [Op.and]: {
+        userId: user.id,
+        streamId: stream.id
+      }}
   });
 };
 
-module.exports = {addUser, addStream, clearDB, logInUser, createPermissions};
+module.exports = {addUser, addStream, addSlice, clearDB, clearPermissions, logInUser, createPermissions};

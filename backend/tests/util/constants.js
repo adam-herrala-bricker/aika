@@ -73,6 +73,68 @@ const user = {
   }
 };
 
+const slice = {
+  valid: {
+    zero: {
+      title: 'slice zero',
+      text: 'this slice only has a title and text'
+    },
+
+    one: {
+      title: 'title only slice'
+    },
+
+    two: {
+      text: 'and this slice only has text'
+    },
+
+    three: {
+      title: 'public slice',
+      isPublic: true
+    },
+
+    four: {
+      title: 'milestone slice',
+      text: 'and what a milestone it was',
+      isMilestone: true
+    },
+
+    five: {
+      title: 'slice five',
+      text: 'just another ordinary slice'
+    },
+
+    six: {
+      title: '',
+      text: 'here the title is an empty string, likely to happen in the real world'
+    },
+
+    seven: {
+      title: 'empty text',
+      text: ''
+    }
+  },
+
+  invalid: {
+    titleTooLong: {
+      title: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+    },
+
+    textTooLong: {
+      text: 'STATELY, PLUMP BUCK MULLIGAN CAME FROM THE STAIRHEAD, bearing a bowl of lather on which a mirror and a razor lay crossed. A yellow dressing gown, ungirdled, was sustained gently-behind him by the mild morning air. He held the bowl aloft and intoned: —Introibo ad altare Dei. Halted, he peered down the dark winding stairs and called up coarsely: —Come up, Kinch. Come up, you fearful jesuit. Solemnly he came forward and mounted the round gunrest. He faced about and blessed gravely thrice the tower, the surrounding country and the awaking mountains. Then, catching sight of Stephen Dedalus, he bent towards him and made rapid crosses in the air, gurgling in his throat and shaking his head. Stephen Dedalus, displeased and sleepy, leaned his arms on the top of the staircase and looked coldly at the shaking gurgling face that blessed him, equine in its length, and at the light untonsured hair, grained and hued like pale oak.'
+    },
+
+    stringMilestone: {
+      isMilestone: 'indeed'
+    },
+
+    stringPublic: {
+      isPublic: 'quite'
+    }
+  }
+};
+
+
 const stream = {
   zero: {
     name: 'streamZero'
@@ -99,6 +161,7 @@ module.exports = {
   badToken,
   expiredUserTwoToken,
   invalidId,
+  slice,
   stream,
   user
 };

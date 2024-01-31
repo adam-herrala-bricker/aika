@@ -19,7 +19,7 @@ Slice.init({
 
   text: {
     type: DataTypes.TEXT,
-    vaildate: {
+    validate: {
       len: [0, 512]
     }
   },

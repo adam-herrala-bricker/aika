@@ -3,8 +3,8 @@ const app = require('../app');
 const api = supertest(app);
 const {StreamUser, Stream} = require('../models');
 const {connectToDB, sequelize} = require('../util/db');
-const {addStream, addUser, clearDB, createPermissions, logInUser} = require('./util/functions');
-const {badToken, expiredUserTwoToken, stream, user} = require('./util/constants');
+const {addSlice, addStream, addUser, clearDB, createPermissions, logInUser} = require('./util/functions');
+const {badToken, expiredUserTwoToken, slice, stream, user} = require('./util/constants');
 
 let loginObject;
 
@@ -56,6 +56,9 @@ describe('valid requests', () => {
     const thisStream = await Stream.findByPk(id);
     expect(thisStream).toBeDefined();
 
+    // add a slice to simulate an actual stream
+    await addSlice(loginObject, id, slice.valid.zero);
+
     // request to delete
     await api
       .delete(`/api/streams/${thisStream.id}`)
@@ -74,6 +77,9 @@ describe('valid requests', () => {
   test('stream deletion by authorized non-creator', async () => {
     // add stream to DB
     const thisStream = await addStream(user.two, stream.zero);
+
+    // add a slice to simulate an actual stream
+    await addSlice(loginObject, thisStream.id, slice.valid.zero);
 
     // create new user, log in, and assign operative permission
     await addUser(user.five);

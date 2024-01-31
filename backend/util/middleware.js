@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const {Op} = require('sequelize');
-const {ActiveSession, Entry, Stream, StreamUser} = require('../models');
+const {ActiveSession, Slice, Stream, StreamUser} = require('../models');
 const {USER_SECRET} = require('./config');
 
 // extracts bearer token from the header (if provided)
@@ -69,7 +69,7 @@ const slicePermissions = async (req, res, next) => {
   if (!entryId) return res.status(400).json({error: 'entry id missing'});
 
   // first need stream id for the given entry
-  const thisEntry = await Entry.findByPk(entryId);
+  const thisEntry = await Slice.findByPk(entryId);
   if (!thisEntry) return res.status(404).json({error: 'entry not found'});
 
   // then check permissions for the stream the entry is on
@@ -81,7 +81,7 @@ const slicePermissions = async (req, res, next) => {
     }});
 
   // will only ever run on endpoints where not finding permissions is an error
-  if (!permissions) return res.status(404).json({error: 'no user permissions for this stream'});
+  if (!permissions) return res.status(403).json({error: 'no user permissions for this stream'});
 
   // variable for whether the user can delete this post
   const canDelete = (permissions.deleteOwn && thisEntry.creatorId === user.id) || permissions.deleteAll;

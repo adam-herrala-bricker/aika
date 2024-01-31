@@ -63,7 +63,7 @@ router.delete('/:id', slicePermissions, async (req, res) => {
   if (!permissions.canDelete) return res.status(403).json({error: 'user cannot delete this entry'});
 
   // remove from DB
-  Slice.destroy({where: {id: entryId}});
+  await Slice.destroy({where: {id: entryId}});
 
   res.status(204).end();
 });

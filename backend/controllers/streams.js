@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const {Op} = require('sequelize');
-const {Entry, Stream, StreamUser, User} = require('../models');
+const {Entry, Slice, Stream, StreamUser, User} = require('../models');
 const {streamPermissions} = require('../util/middleware');
 
 // GET request to see all streams (will require ADMIN token)
@@ -115,8 +115,9 @@ router.delete('/:id', streamPermissions, async (req, res) => {
     return res.status(403).json({error: 'user cannot delete this stream'});
   }
 
-  // remove from both streams and stream_users join table
-  // note that the order matters: the foreign key needs to be removed first
+  // remove from streams, stream_users, and slices
+  // note that the order matters: the foreign keys need to be removed first
+  await Slice.destroy({where: {streamId: streamId}});
   await StreamUser.destroy({where: {streamId: streamId}});
   await Stream.destroy({where: {id: streamId}});
 

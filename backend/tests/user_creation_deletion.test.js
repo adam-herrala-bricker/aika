@@ -1,10 +1,10 @@
 const supertest = require('supertest');
 const app = require('../app');
 const api = supertest(app);
-const {ActiveConfirmation, Stream, User} = require('../models');
+const {ActiveConfirmation, Slice, Stream, User} = require('../models');
 const {connectToDB, sequelize} = require('../util/db');
-const {clearDB, addUser, logInUser, addStream} = require('./util/functions');
-const {badToken, expiredUserTwoToken, stream, user} = require('./util/constants');
+const {clearDB, addUser, logInUser, addSlice, addStream} = require('./util/functions');
+const {badToken, expiredUserTwoToken, slice, stream, user} = require('./util/constants');
 
 beforeAll(async () => {
   // this runs migrations and makes sure that all the relations are there
@@ -103,9 +103,9 @@ describe('valid user requests', () => {
     await addUser(user.two);
     const thisUser = await logInUser(user.two);
 
-    // add stream + entry (need to check it can remove all user data)
-    await addStream(user.two, stream.zero);
-    // ADD ENTRY HERE WHEN DOING OTHER ENTRY TESTS!!
+    // add stream + slice (need to check it can remove all user data)
+    const thisStream = await addStream(user.two, stream.zero);
+    await addSlice(thisUser, thisStream.id, slice.valid.zero);
 
     // request to delete
     await api
@@ -121,8 +121,9 @@ describe('valid user requests', () => {
     const isStream = await Stream.findOne({where: {creatorId: thisUser.id}});
     expect(isStream).toBe(null);
 
-    // confirm the entry is gone
-    // ADD WHEN DOING OTHER ENTRY TESTS!!
+    // confirm the slice is gone
+    const isSlice = await Slice.findOne({where: {creatorId: thisUser.id}});
+    expect(isSlice).toBe(null);
   });
 });
 
