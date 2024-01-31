@@ -192,7 +192,7 @@ Creating user's information is sent via bearer token.
   - UUID of user that created the stream
 - `name` 
 
-### DELETE `/api/streams/id`
+### DELETE `/api/streams/:id`
 
 If authorized, deletes stream with the given id from the database.
 
