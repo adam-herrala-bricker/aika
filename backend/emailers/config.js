@@ -8,6 +8,6 @@ const auth = {
   clientSecret: GMAIL_CLIENT_SECRET
 };
 
-const confText = 'Thank you for registering with Aika! Confirm your email (valid for the next 30 minutes): ';
+const confText = 'Thank you for registering with Aika! Your account will be activated once your email is confirmed (link expires in 30 minutes). ';
 
 module.exports = {auth, confText};

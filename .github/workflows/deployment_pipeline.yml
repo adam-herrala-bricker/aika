@@ -1,0 +1,36 @@
+name: Deployment Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  deployment_pipeline:
+    runs-on: ubuntu-20.04
+    env:
+      ADMIN_KEY: ${{ secrets.ADMIN_KEY }}
+      DB_URI_TESTING: ${{ secrets.DB_URI_TESTING }}
+      PORT: ${{ secrets.PORT }}
+      USER_SECRET: ${{ secrets.USER_SECRET}}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '21.1'
+      - name: Install backend dependencies
+        run: cd backend && npm ci
+      - name: Backend linting
+        run: cd backend && npm run lint
+      - name: Compose test DB
+        run: cd backend && docker compose up -d
+      - name: Backend integration testing
+        run: cd backend && npm run test
+      - name: Decompose test DB
+        run: cd backend && docker compose down
