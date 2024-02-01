@@ -1,4 +1,4 @@
-const crypto = require('crypto');
+const crypto = require('node:crypto');
 
 // helper to get a cryptographic key (used for email confirmation)
 const getCryptoKey = (length = 256) => {
