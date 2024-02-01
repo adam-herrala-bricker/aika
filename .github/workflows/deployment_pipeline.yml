@@ -29,8 +29,8 @@ jobs:
       - name: Backend linting
         run: cd backend && npm run lint
       - name: Compose test DB
-        run: cd backend && docker compose up -d
+        run: cd testDB && docker compose up -d
       - name: Backend integration testing
         run: cd backend && npm run test
       - name: Decompose test DB
-        run: cd backend && docker compose down
+        run: cd testDB && docker compose down
