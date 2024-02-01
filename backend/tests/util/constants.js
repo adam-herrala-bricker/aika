@@ -7,7 +7,7 @@ const user = {
     username: 'test.zero',
     firstName: 'test',
     lastName: 'zero',
-    email: 'test.zero@gmail.com',
+    email: 'test.zero@example.com',
     password: 'example'
   },
 
@@ -15,7 +15,7 @@ const user = {
     username: 'test.one',
     firstName: 'test',
     lastName: 'one',
-    email: 'test.one@gmail.com',
+    email: 'test.one@example.com',
     password: 'example'
   },
 
@@ -25,7 +25,7 @@ const user = {
     username: 'test.two',
     firstName: 'test',
     lastName: 'two',
-    email: 'test.two@gmail.com',
+    email: 'test.two@example.com',
     password: 'example',
     emailConfirmed: true
   },
@@ -35,7 +35,7 @@ const user = {
     username: 'test.three',
     firstName: 'test',
     lastName: 'three',
-    email: 'test.three@gmail.com',
+    email: 'test.three@example.com',
     password: '€x4mp1@',
     emailConfirmed: true,
   },
@@ -45,7 +45,7 @@ const user = {
     username: 'test.four',
     firstName: 'test',
     lastName: 'four',
-    email: 'test.four@gmail.com',
+    email: 'test.four@example.com',
     password: 'example',
     emailConfirmed: true,
     isDisabled: true,
@@ -57,7 +57,7 @@ const user = {
     username: 'test.five',
     firstName: 'test',
     lastName: 'five',
-    email: 'test.five@gmail.com',
+    email: 'test.five@example.com',
     password: 'example',
     emailConfirmed: true,
   },
@@ -67,7 +67,7 @@ const user = {
     username: 'test.six',
     firstName: 'test',
     lastName: 'six',
-    email: 'test.six@gmail.com',
+    email: 'test.six@example.com',
     password: 'example',
     emailConfirmed: true,
   }

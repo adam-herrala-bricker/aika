@@ -1,7 +1,9 @@
 const router = require('express').Router();
 const bcrypt = require('bcrypt');
 const {ActiveConfirmation, ActiveSession, Slice, Stream, StreamUser, User} = require('../models');
+const {sendConfirmationEmail} = require('../emailers');
 const {getCryptoKey} = require('../util/helpers');
+const {NODE_ENV} = require('../util/config');
 
 // GET request for users (can search by username in query)
 router.get('/', async (req, res) => {
@@ -36,12 +38,16 @@ router.post('/', async (req, res) => {
     return res.status(400).json({error: error.message});
   }
 
-
   // create new user in DB
   const newUser = await User.create({username, firstName, lastName, email, passwordHash});
 
   // add confirmation key to DB
-  await ActiveConfirmation.create({userId: newUser.id, key: getCryptoKey()});
+  const thisConf = await ActiveConfirmation.create({userId: newUser.id, key: getCryptoKey()});
+
+  // send confirmation email (if not testing)
+  if (NODE_ENV !== 'testing') {
+    sendConfirmationEmail(newUser.email, thisConf.key);
+  }
 
   res.json({
     id: newUser.id,
