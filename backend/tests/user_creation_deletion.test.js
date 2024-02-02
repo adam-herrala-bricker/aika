@@ -79,6 +79,11 @@ describe('valid user requests', () => {
     // get confirmation key directly from DB
     const confirmation = await ActiveConfirmation.findOne({where: {userId}});
 
+    // confirmation static page is there (the trailing / is added by express)
+    await api
+      .get(`/email-confirmation/${confirmation.key}/`)
+      .expect(200);
+
     // "click on" the confirmation link
     await api
       .post(`/confirm/${confirmation.key}`)
