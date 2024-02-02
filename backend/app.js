@@ -18,6 +18,9 @@ app.use(express.json());
 // outputs traffic to console
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 
+// static FE builds (note redirect: false doesn't seem to work)
+app.use('/email-confirmation/:id', express.static('../browserConf/build', {redirect: false}));
+
 // custom middleware
 app.use(middleware.tokenExtractor);
 app.use(middleware.userExtractor);

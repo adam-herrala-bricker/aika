@@ -1,0 +1,17 @@
+{
+  "scripts": {
+    "build": "node ./scripts/buildProd.mjs",
+    "dev": "node ./scripts/buildDev.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "0.20.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.7",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.22.0",
+    "semantic-ui-css": "^2.5.0",
+    "semantic-ui-react": "^2.1.5"
+  }
+}
