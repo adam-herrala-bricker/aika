@@ -1,15 +1,15 @@
 {
   "scripts": {
-    "build": "esbuild ./src/index.jsx --bundle --outfile=./build/static/js/out.js",
-    "dev": "esbuild ./src/index.jsx --watch --bundle --outfile=./build/static/js/out.js"
+    "build": "node ./scripts/buildProd.mjs",
+    "dev": "node ./scripts/buildDev.mjs"
   },
-
   "devDependencies": {
     "esbuild": "0.20.0"
   },
-
   "dependencies": {
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "semantic-ui-css": "^2.5.0",
+    "semantic-ui-react": "^2.1.5"
   }
 }
