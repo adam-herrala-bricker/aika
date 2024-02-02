@@ -1,0 +1,16 @@
+.outer-container {
+  margin-top: 100px;
+
+  display: flex;
+  flex-grow: 1;
+
+  justify-content: center;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  border-style: solid;
+}
