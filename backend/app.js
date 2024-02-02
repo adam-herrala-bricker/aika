@@ -18,6 +18,9 @@ app.use(express.json());
 // outputs traffic to console
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 
+// static FE builds
+app.use('/', express.static('../browserConf/build'));
+
 // custom middleware
 app.use(middleware.tokenExtractor);
 app.use(middleware.userExtractor);
