@@ -11,6 +11,26 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
 
   border-style: solid;
+
+  min-height: 300px;
+  max-width: 350px;
+  padding: 5px;
+}
+
+.route-container {
+  display: flex;
+  flex-grow: 2;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.conf-container {
+  display: flex;
+  flex-grow: 2;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
 }

@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 
 // static FE builds
-app.use('/:id', express.static('../browserConf/build'));
+app.use('/email-confirmation/:id', express.static('../browserConf/build'));
 
 // custom middleware
 app.use(middleware.tokenExtractor);
