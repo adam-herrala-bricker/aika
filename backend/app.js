@@ -20,6 +20,8 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 
 // static FE builds (note redirect: false doesn't seem to work)
 app.use('/email-confirmation/:id', express.static('../browserConf/build', {redirect: false}));
+app.use('/app', express.static('../browserApp/build', {redirect: false}));
+app.use('/admin', express.static('../browserAdmin/build', {redirect: false}));
 
 // custom middleware
 app.use(middleware.tokenExtractor);

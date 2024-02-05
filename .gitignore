@@ -1,6 +1,17 @@
 *.DS_Store
 *.env
+
 **/build/static/
+
+**/build/*.js
+**/build/*.map
+**/build/*.svg
+**/build/*.woff
+**/build/*.woff2
+**/build/*.ttf
+**/build/*.png
+**/build/*.eot
+
 **/node_modules/
 **/pgdata/**
 *.rest
