@@ -1,0 +1,30 @@
+.outer-container {
+  height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.app-container {
+  padding: 5px;
+  max-width: 600px;
+  height: 90vh;
+
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+
+  justify-content: space-between;
+  align-items: center;
+
+  border-style: solid;
+}
+
+.generic-flex-column {
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
+
+  min-width: 300px;
+}
