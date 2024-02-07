@@ -43,7 +43,6 @@ const RegistrationForm = ({setIsRegistered}) => {
 
   // event handlers
   const handleSubmit = async () => {
-    console.log('submitted!');
     try {
       await registerUser(thisRegistration).unwrap();
       setIsRegistered(true);

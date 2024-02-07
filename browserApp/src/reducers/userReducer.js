@@ -1,9 +1,10 @@
 import {createSlice} from '@reduxjs/toolkit';
+import {appApi} from '../services/config';
 
 const defaultUser = {
   username: 'guest',
-  userId: 'null',
-  token: 'null',
+  userId: null,
+  token: null,
 };
 
 const userSlice = createSlice({
@@ -15,18 +16,37 @@ const userSlice = createSlice({
 
   reducers: {
     setUser(state, action) {
-      const {username, id, token} = action.payload;
-      console.log(username);
+      const thisUser = action.payload;
+      const {username, id, token} = thisUser;
+
+      // add user to local storage
+      window.localStorage.setItem('aikaUser', JSON.stringify(thisUser));
+
       return {
         ...state,
         username : username,
         userId: id,
         token: token,
       };
+    },
+
+    clearUser() {
+      window.localStorage.removeItem('aikaUser');
+      return {...defaultUser};
     }
   }
 });
 
-export const {setUser} = userSlice.actions;
+export const {clearUser, setUser} = userSlice.actions;
+
+export const logOut = (token) => {
+  return async (dispatch) => {
+    const response = await dispatch(appApi.endpoints.logoutUser.initiate({token}));
+    if (response.error) {
+      console.log('something went wrong');
+    }
+    dispatch(clearUser());
+  };
+};
 
 export default userSlice.reducer;

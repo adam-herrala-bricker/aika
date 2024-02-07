@@ -5,6 +5,16 @@ export const appApi = createApi({
 
   baseQuery: fetchBaseQuery({
     baseUrl: `${BACKEND_URL}/api`, // eslint-disable-line no-undef
+
+    prepareHeaders: (headers, {getState}) => {
+      const token = (getState()).user.token;
+
+      if (token) {
+        headers.set('Authorization', `Bearer ${token}`);
+      }
+
+      return headers;
+    },
   }),
 
   endpoints: () => ({}), // need empty endpoints here

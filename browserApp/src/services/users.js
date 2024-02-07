@@ -16,11 +16,19 @@ export const userApi = appApi.injectEndpoints({
         method: 'POST',
         body: userInfo
       })
+    }),
+
+    logoutUser: build.mutation({
+      query: () => ({
+        url: '/login',
+        method: 'DELETE'
+      })
     })
   })
 });
 
 export const {
   useLoginUserMutation,
+  useLogoutUserMutation,
   useRegisterUserMutation,
 } = userApi;

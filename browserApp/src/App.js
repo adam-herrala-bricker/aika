@@ -1,10 +1,19 @@
 import React from 'react';
 import {Route, Routes} from 'react-router-dom';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {setUser} from './reducers/userReducer';
 import {Entry, LogIn, MenuBar, Register, Welcome} from './components';
 
 const Home = () => {
+  const dispatch = useDispatch();
   const thisUser = useSelector((i) => i.user);
+
+  // keep user logged in on refresh
+  const loggedInUserJSON = window.localStorage.getItem('aikaUser');
+  const loggedInUser = JSON.parse(loggedInUserJSON);
+  if (loggedInUser && thisUser.username === 'guest') {
+    dispatch(setUser(loggedInUser));
+  }
 
   return (
     <div>

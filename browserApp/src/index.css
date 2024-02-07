@@ -39,11 +39,22 @@
 
   display: flex;
   flex-direction: row;
+  column-gap: 10px;
+
+  justify-content: space-between;
   align-self: stretch;
+  align-items: center;
 
   border-bottom-style: solid;
   margin-bottom: 20px;
+}
 
+.menu-bar-left {
+  display: flex;
+  flex-direction: row;
+  column-gap: 5px;
+
+  align-items: center;
 }
 
 .generic-flex-column {
