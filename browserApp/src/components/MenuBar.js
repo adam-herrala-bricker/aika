@@ -2,6 +2,7 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Button, Header} from 'semantic-ui-react';
 import {logOut} from '../reducers/userReducer';
+import {ToggleSideMenu} from '.';
 
 const LogOutButton = ({thisUser}) => {
   const dispatch = useDispatch();
@@ -47,6 +48,7 @@ const MenuBar = () => {
             Aika
           </Header>
         </div>
+        <ToggleSideMenu thisUser = {thisUser}/>
         <LogOutButton thisUser = {thisUser}/>
       </div>
       <div>

@@ -4,7 +4,15 @@ import {useDispatch, useSelector} from 'react-redux';
 import {setUser} from './reducers/userReducer';
 import {Entry, LogIn, MenuBar, Register, Welcome} from './components';
 
-const Home = () => {
+const Home = ({thisUser}) => {
+  return (
+    thisUser.username === 'guest'
+      ? <Entry />
+      : <Welcome />
+  );
+};
+
+const App = () => {
   const dispatch = useDispatch();
   const thisUser = useSelector((i) => i.user);
 
@@ -16,23 +24,14 @@ const Home = () => {
   }
 
   return (
-    <div>
-      {thisUser.username === 'guest'
-        ? <Entry />
-        : <Welcome />
-      }
-    </div>
-  );
-};
-
-const App = () => {
-  return (
     <div className = 'outer-container'>
       <div className = 'app-container'>
         <MenuBar />
-        <div className = 'body-container'>
+        <div className = {thisUser.username === 'guest'
+          ? 'body-container-centered'
+          : 'body-container-left'}>
           <Routes>
-            <Route path = '/' element = {<Home />}/>
+            <Route path = '/' element = {<Home thisUser = {thisUser}/>}/>
             <Route path = '/login' element = {<LogIn />}/>
             <Route path = '/register' element = {<Register />} />
           </Routes>

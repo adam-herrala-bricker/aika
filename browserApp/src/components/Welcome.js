@@ -1,9 +1,10 @@
 import React from 'react';
+import {StreamSliceView} from '.';
 
 const Welcome = () => {
   return (
-    <div>
-      welcome
+    <div className = 'welcome-container'>
+      <StreamSliceView />
     </div>
   );
 };
