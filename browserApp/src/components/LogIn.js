@@ -5,6 +5,7 @@ import {useNavigate} from 'react-router';
 import {useLoginUserMutation} from '../services/users';
 import {setUser} from '../reducers/userReducer';
 import {Button, Header} from 'semantic-ui-react';
+import {NavButton} from '.';
 
 const LogIn = () => {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ const LogIn = () => {
       dispatch(setUser(result));
       navigate('/');
     } catch (error) {
-      console.log(error); // do we need anything here? maybe check if it's an expect error?
+      console.log(error); // do we need anything here? maybe check if it's an expected error?
     }
   };
 
@@ -57,6 +58,7 @@ const LogIn = () => {
             placeholder = 'password' />
         </div>
         <Button onClick = {handleSubmit}>{buttonLabel}</Button>
+        <NavButton text = 'cancel' path = '/'/>
       </div>
     </div>
   );

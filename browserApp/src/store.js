@@ -1,15 +1,17 @@
 import {configureStore} from '@reduxjs/toolkit';
 import {setupListeners} from '@reduxjs/toolkit/query';
-import {userApi} from './services/users';
+import {appApi} from './services/config';
+import registrationReducer from './reducers/registrationReducer';
 import userReducer from './reducers/userReducer';
 
 const store = configureStore({
   reducer: {
+    registration: registrationReducer,
     user: userReducer,
-    [userApi.reducerPath]: userApi.reducer,
+    [appApi.reducerPath]: appApi.reducer,
   },
 
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(userApi.middleware)
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(appApi.middleware)
 
 });
 

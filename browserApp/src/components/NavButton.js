@@ -6,7 +6,9 @@ const NavButton = ({text, path}) => {
   const navigate = useNavigate();
 
   return (
-    <Button onClick={() => navigate(path)}>
+    <Button
+      type = 'button'
+      onClick={() => navigate(path)}>
       {text}
     </Button>
   );
