@@ -16,6 +16,7 @@ const CreateSlice = () => {
   const [newSlice, result] = useNewSliceMutation();
   const thisSlice = useSelector((i) => i.slice);
   const {loadedId} = useSelector((i) => i.stream);
+  const [hidden, setHidden] = React.useState(true);
 
   const buttonLabel = result.isError
     ? result.error.data.error
@@ -26,6 +27,7 @@ const CreateSlice = () => {
     try {
       await newSlice({slice: thisSlice, streamId: loadedId});
       dispatch(clearSlice());
+      setHidden(true);
     } catch (error) {
       console.log(error); // will want to improve the error handling here
     }
@@ -36,6 +38,15 @@ const CreateSlice = () => {
     setTimeout(() => {
       result.reset();
     }, 5000);
+  }
+
+  if (hidden) {
+    return (
+      <Button
+        onClick = {() => setHidden(false)}>
+        New Slice
+      </Button>
+    );
   }
 
   return (
@@ -72,11 +83,19 @@ const CreateSlice = () => {
           name = 'text'
           placeholder = 'Text'
           value = {thisSlice.text}/>
-        <Button
-          fluid
-          type = 'submit'>
-          {buttonLabel}
-        </Button>
+        <div className = 'slice-button-container'>
+          <Button
+            fluid
+            type = 'submit'>
+            {buttonLabel}
+          </Button>
+          <Button
+            fluid
+            onClick = {() => setHidden(true)}
+            type = 'button'>
+            Cancel
+          </Button>
+        </div>
       </Form>
     </div>
   );
