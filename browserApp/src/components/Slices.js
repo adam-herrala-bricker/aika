@@ -59,13 +59,15 @@ const Slices = () => {
     <div className = 'slice-view-container'>
       <SliceMenu loadedName = {loadedName}/>
       <CreateSlice />
-      {data.map((slice) => <Slice key = {slice.id} slice = {slice}/>)}
-      <div>
-        <Button
-          primary
-          fluid>
-          Load more
-        </Button>
+      <div className = 'slice-scroll-region'>
+        {data.map((slice) => <Slice key = {slice.id} slice = {slice}/>)}
+        <div>
+          <Button
+            primary
+            fluid>
+            Load more
+          </Button>
+        </div>
       </div>
     </div>
   );

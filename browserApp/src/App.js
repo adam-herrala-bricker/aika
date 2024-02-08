@@ -9,6 +9,8 @@ const Home = ({thisUser}) => {
     thisUser.username === 'guest'
       ? <Entry />
       : <StreamSliceView />
+
+
   );
 };
 

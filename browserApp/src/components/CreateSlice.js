@@ -42,15 +42,18 @@ const CreateSlice = () => {
 
   if (hidden) {
     return (
-      <Button
-        onClick = {() => setHidden(false)}>
-        New Slice
-      </Button>
+      <div className = 'slice-create-container-closed'>
+        <Button
+          fluid
+          onClick = {() => setHidden(false)}>
+          New Slice
+        </Button>
+      </div>
     );
   }
 
   return (
-    <div>
+    <div className = 'slice-create-container-open'>
       <Header size = 'medium'>New Slice</Header>
       <Form onSubmit = {submitSlice}>
         <Header size = 'tiny'>Title</Header>
