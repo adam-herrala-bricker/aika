@@ -3,9 +3,9 @@ import {appApi} from './config';
 export const sliceApi = appApi.injectEndpoints({
   endpoints: (build) => ({
     getSlices: build.query({
-      query: ({streamId}) => ({
+      query: ({streamId, limit, offset}) => ({
         url: `/slices/${streamId}`,
-        method: 'GET'
+        method: 'GET',
       }),
       providesTags: ['Slice']
     }),

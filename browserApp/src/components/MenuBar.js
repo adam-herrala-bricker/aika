@@ -18,7 +18,10 @@ const LogOutButton = ({thisUser}) => {
 
   return (
     <div>
-      <Button onClick = {handleLogout}>
+      <Button
+        compact
+        fluid
+        onClick = {handleLogout}>
         log out
       </Button>
     </div>
@@ -42,17 +45,15 @@ const MenuBar = () => {
 
   return (
     <div className = 'menu-bar-container'>
-      <div className = 'menu-bar-left'>
-        <div>
-          <Header size = 'huge'>
-            Aika
-          </Header>
-        </div>
-        <ToggleSideMenu thisUser = {thisUser}/>
-        <LogOutButton thisUser = {thisUser}/>
+      <ToggleSideMenu thisUser = {thisUser}/>
+      <div>
+        <Header size = 'huge'>
+          Aika
+        </Header>
       </div>
       <div>
         <UserDisplay thisUser = {thisUser}/>
+        <LogOutButton thisUser = {thisUser}/>
       </div>
     </div>
   );

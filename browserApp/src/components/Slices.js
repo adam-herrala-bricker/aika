@@ -1,7 +1,7 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 import {useGetSlicesQuery} from '../services/slices';
-import {Header} from 'semantic-ui-react';
+import {Button, Header} from 'semantic-ui-react';
 import {CreateSlice, SliceMenu} from '.';
 
 const Tag = ({text, color = 'black'}) => {
@@ -19,13 +19,14 @@ const Slice = ({slice}) => {
 
   return (
     <div className = 'slice-single-container'>
-      <div className = 'slice-single-header'>
+      <div className = 'slice-single-row'>
         <Header size = 'medium'>{slice.title}</Header>
-        {thisDate.toLocaleTimeString('fi-FI')} |
-        {thisDate.toLocaleDateString('fi-FI')}
+        {thisDate.toLocaleTimeString('fi-FI')} | {thisDate.toLocaleDateString('fi-FI')}
       </div>
-      {slice.isMilestone && <Tag color = 'darkblue' text = 'milestone'/>}
-      {slice.isPublic && <Tag color = 'teal' text = 'public'/>}
+      <div className = 'slice-single-row'>
+        {slice.isMilestone && <Tag color = 'darkblue' text = 'milestone'/>}
+        {slice.isPublic && <Tag color = 'teal' text = 'public'/>}
+      </div>
       {slice.text}
     </div>
   );
@@ -33,7 +34,10 @@ const Slice = ({slice}) => {
 
 const Slices = () => {
   const {loadedId, loadedName} = useSelector((i) => i.stream);
-  const {data, isLoading} = useGetSlicesQuery({streamId: loadedId});
+  const {data, isLoading, isError} = useGetSlicesQuery({
+    streamId: loadedId,
+    limit: 5
+  });
 
   // don't display anything before slice is loaded
   if (!loadedId) {
@@ -45,11 +49,24 @@ const Slices = () => {
     return <div>loading ...</div>;
   }
 
+  // error
+  if (isError) {
+    console.log(data);
+    return <div>error loading data</div>;
+  }
+
   return (
     <div className = 'slice-view-container'>
       <SliceMenu loadedName = {loadedName}/>
       <CreateSlice />
       {data.map((slice) => <Slice key = {slice.id} slice = {slice}/>)}
+      <div>
+        <Button
+          primary
+          fluid>
+          Load more
+        </Button>
+      </div>
     </div>
   );
 };

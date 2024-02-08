@@ -2,13 +2,13 @@ import React from 'react';
 import {Route, Routes} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 import {setUser} from './reducers/userReducer';
-import {Entry, LogIn, MenuBar, Register, Welcome} from './components';
+import {Entry, LogIn, MenuBar, Register, StreamSliceView} from './components';
 
 const Home = ({thisUser}) => {
   return (
     thisUser.username === 'guest'
       ? <Entry />
-      : <Welcome />
+      : <StreamSliceView />
   );
 };
 
