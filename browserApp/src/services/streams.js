@@ -5,10 +5,23 @@ export const streamApi = appApi.injectEndpoints({
     getStreams: build.query({
       query: () => ({
         url: '/streams/read',
-        method: 'GET'
-      })
+        method: 'GET',
+      }),
+      providesTags: ['Stream']
+    }),
+
+    newStream: build.mutation({
+      query: (name) => ({
+        url: '/streams',
+        method: 'POST',
+        body: name
+      }),
+      invalidatesTags: ['Stream']
     })
   })
 });
 
-export const {useGetStreamsQuery} = streamApi;
+export const {
+  useGetStreamsQuery,
+  useNewStreamMutation
+} = streamApi;

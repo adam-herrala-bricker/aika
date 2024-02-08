@@ -2,6 +2,7 @@ import React from 'react';
 import {useSelector} from 'react-redux';
 import {useGetStreamsQuery} from '../services/streams';
 import {Header, MenuItem} from 'semantic-ui-react';
+import {CreateStream} from '.';
 
 const Stream = ({thisStream}) => {
   const {userId} = useSelector((i) => i.user);
@@ -44,9 +45,7 @@ const Streams = () => {
           key = {streamUser.id}
           thisStream = {streamUser.stream} />
       )}
-      <MenuItem>
-        new stream
-      </MenuItem>
+      <CreateStream />
     </div>
   );
 };

@@ -11,10 +11,13 @@ import StreamSliceView from './StreamSliceView'; // menu component for main stre
 import Slices from './Slices'; // component for viewing slices
 import Streams from './Streams'; // displays streams in the side menu
 
+import CreateStream from './CreateStream'; // component to create new stream
+
 import NavButton from './NavButton'; // button specifically for nagivating via a route
 import ToggleSideMenu from './ToggleSideMenu'; // button just to toggle side menu
 
 export {
+  CreateStream,
   Entry,
   LogIn,
   MenuBar,
