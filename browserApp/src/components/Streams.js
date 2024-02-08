@@ -1,16 +1,23 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {useGetStreamsQuery} from '../services/streams';
+import {setStream} from '../reducers/streamReducer';
+import {closeSideMenu} from '../reducers/viewReducer';
 import {Header, MenuItem} from 'semantic-ui-react';
 import {CreateStream} from '.';
 
 const Stream = ({thisStream}) => {
+  const dispatch = useDispatch();
   const {userId} = useSelector((i) => i.user);
   const isOwner = userId === thisStream.creatorId;
 
   // event handler
   const handleClick = () => {
-    console.log('clicked!');
+    dispatch(setStream({
+      name: thisStream.name,
+      id: thisStream.id
+    }));
+    dispatch(closeSideMenu());
   };
 
   return (

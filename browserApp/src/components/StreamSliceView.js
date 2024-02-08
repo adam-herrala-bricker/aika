@@ -8,6 +8,7 @@ const MenuSide = () => {
   const dispatch = useDispatch();
   const slicesRef = React.useRef(); // used to close menu on click
   const {showSideMenu} = useSelector((i) => i.view);
+  const {loadedId} = useSelector((i) => i.stream);
 
   return (
     <div className = 'menu-side-container'>
@@ -27,7 +28,7 @@ const MenuSide = () => {
         </Sidebar>
         <div ref = {slicesRef}>
           <SidebarPusher>
-            <Slices/>
+            {loadedId && <Slices/>}
           </SidebarPusher>
         </div>
       </SidebarPushable>

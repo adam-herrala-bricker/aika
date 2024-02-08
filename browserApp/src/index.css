@@ -73,15 +73,41 @@
   align-self: stretch;
 }
 
+.menu-slice-container {
+  margin-top: 5px;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: baseline;
+  column-gap: 5px;
+}
+
 .slice-view-container {
   display: flex;
   flex-direction: column;
+}
+
+.stream-name-container {
+  padding: 5px;
+  align-self: stretch;
+
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 5px;
+}
+
+.test-container {
+  border-style: solid;
+  display: flex;
+  flex-grow: 1;
 }
 
 .welcome-container {
   display: flex;
   flex-direction: column;
   align-self: stretch;
+  flex-grow: 1;
 }
 
 .create-stream-container {
@@ -92,10 +118,15 @@
 
 .ui.segment.menu-side-style, 
 .ui.sidebar.menu-side-style {
+  flex-grow: 1;
   border-style: none;
   border-radius: 0;
 
   box-shadow: none;
+}
+
+.ui.input.stretchy {
+  flex-grow: 1;
 }
 
 .generic-flex-column {
