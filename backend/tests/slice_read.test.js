@@ -43,6 +43,11 @@ describe('valid requests', () => {
 
     // note that order matters: it should be display most recent first
     expect(body).toMatchObject([slice.valid.four, slice.valid.two, slice.valid.one, slice.valid.zero]);
+
+    // returns creating user too
+    body.forEach((slice) => {
+      expect(slice.user.username).toBe(userTwo.username);
+    });
   });
 
   test('view with limit given', async () => {
@@ -53,6 +58,11 @@ describe('valid requests', () => {
       .expect(200);
 
     expect(body).toMatchObject([slice.valid.four, slice.valid.two]);
+
+    // returns creating user too
+    body.forEach((slice) => {
+      expect(slice.user.username).toBe(userTwo.username);
+    });
   });
 
   test('view with offset given', async () => {
@@ -63,6 +73,11 @@ describe('valid requests', () => {
       .expect(200);
 
     expect(body).toMatchObject([slice.valid.one, slice.valid.zero]);
+
+    // returns creating user too
+    body.forEach((slice) => {
+      expect(slice.user.username).toBe(userTwo.username);
+    });
   });
 
   test('view with limit and offset given', async () => {
@@ -76,6 +91,11 @@ describe('valid requests', () => {
       .expect(200);
 
     expect(body).toMatchObject([slice.valid.two, slice.valid.one]);
+
+    // returns creating user too
+    body.forEach((slice) => {
+      expect(slice.user.username).toBe(userTwo.username);
+    });
   });
 });
 

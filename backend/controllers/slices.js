@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const {Slice} = require('../models');
+const {Slice, User} = require('../models');
 const {slicePermissions, streamPermissions} = require('../util/middleware');
 
 // GET request for all slices (will require ADMIN token)
@@ -23,6 +23,10 @@ router.post('/view/:id', streamPermissions, async (req, res) => {
 
   const entries = await Slice.findAll({
     where: {streamId: streamId},
+    include: {
+      model: User,
+      attributes: ['username', 'id']
+    },
     limit: thisLimit,
     offset: thisOffset,
     order: [['createdAt', 'DESC']]
