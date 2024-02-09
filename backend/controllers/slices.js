@@ -9,8 +9,8 @@ router.get('/', async (req, res) => {
   res.json(allSlices);
 });
 
-// GET request for X slices in a stream, starting at Y (requires USER token)
-router.get('/:id', streamPermissions, async (req, res) => {
+// POST request to view X slices in a stream, starting at Y (requires USER token)
+router.post('/view/:id', streamPermissions, async (req, res) => {
   const defaultLimit = 10;
   const defaultOffset = 0;
   const streamId = req.params.id;

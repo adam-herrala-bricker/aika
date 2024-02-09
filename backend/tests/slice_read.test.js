@@ -37,7 +37,7 @@ describe('valid requests', () => {
   // note: default limit is 10, so should display all 4 in this case
   test('view with no limit or offset given', async () => {
     const {body} = await api
-      .get(`/api/slices/${streamZero.id}`)
+      .post(`/api/slices/view/${streamZero.id}`)
       .set('Authorization', `Bearer ${userTwo.token}`)
       .expect(200);
 
@@ -47,7 +47,7 @@ describe('valid requests', () => {
 
   test('view with limit given', async () => {
     const {body} = await api
-      .get(`/api/slices/${streamZero.id}`)
+      .post(`/api/slices/view/${streamZero.id}`)
       .set('Authorization', `Bearer ${userTwo.token}`)
       .send({limit: 2})
       .expect(200);
@@ -57,7 +57,7 @@ describe('valid requests', () => {
 
   test('view with offset given', async () => {
     const {body} = await api
-      .get(`/api/slices/${streamZero.id}`)
+      .post(`/api/slices/view/${streamZero.id}`)
       .set('Authorization', `Bearer ${userTwo.token}`)
       .send({offset: 2})
       .expect(200);
@@ -67,7 +67,7 @@ describe('valid requests', () => {
 
   test('view with limit and offset given', async () => {
     const {body} = await api
-      .get(`/api/slices/${streamZero.id}`)
+      .post(`/api/slices/view/${streamZero.id}`)
       .set('Authorization', `Bearer ${userTwo.token}`)
       .send({
         limit: 2,
@@ -82,7 +82,7 @@ describe('valid requests', () => {
 describe('invalid requests', () => {
   test('missing token', async () => {
     const {body} = await api
-      .get(`/api/slices/${streamZero.id}`)
+      .post(`/api/slices/view/${streamZero.id}`)
       .expect(401);
 
     expect(body.error).toBe('token missing');
@@ -90,7 +90,7 @@ describe('invalid requests', () => {
 
   test('bad token', async () => {
     const {body} = await api
-      .get(`/api/slices/${streamZero.id}`)
+      .post(`/api/slices/view/${streamZero.id}`)
       .set('Authorization', `Bearer ${badToken}`)
       .expect(400);
 
@@ -99,7 +99,7 @@ describe('invalid requests', () => {
 
   test('expired token', async () => {
     const {body} = await api
-      .get(`/api/slices/${streamZero.id}`)
+      .post(`/api/slices/view/${streamZero.id}`)
       .set('Authorization', `Bearer ${expiredUserTwoToken}`)
       .expect(403);
 
@@ -112,7 +112,7 @@ describe('invalid requests', () => {
 
     // send request
     const {body} = await api
-      .get(`/api/slices/${streamZero.id}`)
+      .post(`/api/slices/view/${streamZero.id}`)
       .set('Authorization', `Bearer ${userFive.token}`)
       .expect(403);
 
@@ -125,7 +125,7 @@ describe('invalid requests', () => {
 
     // send request
     const {body} = await api
-      .get(`/api/slices/${streamZero.id}`)
+      .post(`/api/slices/view/${streamZero.id}`)
       .set('Authorization', `Bearer ${userFive.token}`)
       .expect(403);
 
@@ -134,7 +134,7 @@ describe('invalid requests', () => {
 
   test('bad stream id', async () => {
     const {body} = await api
-      .get(`/api/slices/${invalidId}`)
+      .post(`/api/slices/view/${invalidId}`)
       .set('Authorization', `Bearer ${userTwo.token}`)
       .expect(404);
 
