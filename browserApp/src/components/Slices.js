@@ -1,6 +1,8 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {useGetSlicesQuery} from '../services/slices';
+import {incrementScroller} from '../reducers/streamReducer';
+import {setCachedDataLength, setShowLoadMore} from '../reducers/viewReducer';
 import {Button, Header} from 'semantic-ui-react';
 import {CreateSlice, SliceMenu} from '.';
 
@@ -33,11 +35,27 @@ const Slice = ({slice}) => {
 };
 
 const Slices = () => {
-  const {loadedId, loadedName} = useSelector((i) => i.stream);
+  const dispatch = useDispatch();
+  const {loadedId, loadedName, scroller} = useSelector((i) => i.stream);
+  const {cachedDataLength, showLoadMore} = useSelector((i) => i.view);
+
   const {data, isLoading, isError} = useGetSlicesQuery({
     streamId: loadedId,
-    limit: 5
+    limit: scroller.limit,
+    offset: scroller.offset
   });
+
+  // event handler
+  const handleShowMore = () => {
+    // changes scroll values to load more
+    dispatch(incrementScroller());
+    // checks if we've reached the bottom
+    if (data.length === cachedDataLength) {
+      dispatch(setShowLoadMore(false));
+    }
+
+    dispatch(setCachedDataLength(data.length));
+  };
 
   // don't display anything before slice is loaded
   if (!loadedId) {
@@ -62,11 +80,13 @@ const Slices = () => {
       <div className = 'slice-scroll-region'>
         {data.map((slice) => <Slice key = {slice.id} slice = {slice}/>)}
         <div>
+          {showLoadMore &&
           <Button
-            primary
-            fluid>
+            onClick = {handleShowMore}
+            fluid
+            primary>
             Load more
-          </Button>
+          </Button>}
         </div>
       </div>
     </div>

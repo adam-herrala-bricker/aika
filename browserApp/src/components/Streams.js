@@ -1,22 +1,30 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useGetStreamsQuery} from '../services/streams';
-import {setStream} from '../reducers/streamReducer';
-import {closeSideMenu} from '../reducers/viewReducer';
+import {clearStreamCache, setStream} from '../reducers/streamReducer';
+import {closeSideMenu, resetScrollView} from '../reducers/viewReducer';
 import {Header, MenuItem} from 'semantic-ui-react';
 import {CreateStream} from '.';
 
 const Stream = ({thisStream}) => {
   const dispatch = useDispatch();
   const {userId} = useSelector((i) => i.user);
+  const {loadedId} = useSelector((i) => i.stream);
   const isOwner = userId === thisStream.creatorId;
 
   // event handler
+  // clears cache of loaded stream before loading new stream
   const handleClick = () => {
+    // clears current cache if there's a loaded stream + resets scrolling
+    dispatch(clearStreamCache(loadedId));
+
+    // loads new stream
     dispatch(setStream({
       name: thisStream.name,
       id: thisStream.id
     }));
+
+    dispatch(resetScrollView()); // tracks whether to show 'load more' button
     dispatch(closeSideMenu());
   };
 

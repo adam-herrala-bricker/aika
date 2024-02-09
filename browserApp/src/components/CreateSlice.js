@@ -1,6 +1,7 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNewSliceMutation} from '../services/slices';
+import {clearStreamCache} from '../reducers/streamReducer';
 import {clearSlice, updateSlice} from '../reducers/sliceReducer';
 import {
   Button,
@@ -24,6 +25,8 @@ const CreateSlice = () => {
 
   // event handler
   const submitSlice = async () => {
+    // note it clears the existing cache before doing anything else
+    dispatch(clearStreamCache(loadedId));
     try {
       await newSlice({slice: thisSlice, streamId: loadedId});
       dispatch(clearSlice());

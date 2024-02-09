@@ -2,7 +2,9 @@
 import {createSlice} from '@reduxjs/toolkit';
 
 const defaultView = {
-  showSideMenu : true
+  showSideMenu: true,
+  showLoadMore: true,
+  cachedDataLength: null // used to determined whether to show load more
 };
 
 const viewSlice = createSlice({
@@ -18,6 +20,28 @@ const viewSlice = createSlice({
       };
     },
 
+    resetScrollView(state) {
+      return {
+        ...state,
+        showLoadMore: defaultView.showLoadMore,
+        cachedDataLength: defaultView.cachedDataLength
+      };
+    },
+
+    setCachedDataLength(state, action) {
+      return {
+        ...state,
+        cachedDataLength: action.payload
+      };
+    },
+
+    setShowLoadMore(state, action) {
+      return {
+        ...state,
+        showLoadMore: action.payload
+      };
+    },
+
     toggleSideMenu(state) {
       return {
         ...state,
@@ -26,6 +50,12 @@ const viewSlice = createSlice({
   }
 });
 
-export const {closeSideMenu, toggleSideMenu} = viewSlice.actions;
+export const {
+  closeSideMenu,
+  resetScrollView,
+  setCachedDataLength,
+  setShowLoadMore,
+  toggleSideMenu
+} = viewSlice.actions;
 
 export default viewSlice.reducer;
