@@ -33,7 +33,7 @@ export const howLongAgo = (timeThen) => {
 
   timeLevels.forEach((level) => {
     if (level.min <= delta && delta < level.max) {
-      textOut = `${Math.round(delta/level.dem)} ${level.text}`;
+      textOut = `${Math.floor(delta/level.dem)} ${level.text}`;
     }
   });
 
