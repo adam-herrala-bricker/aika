@@ -1,4 +1,5 @@
 import {appApi} from './config';
+import {sortSliceByDate} from '../util/helpers';
 
 export const sliceApi = appApi.injectEndpoints({
   endpoints: (build) => ({
@@ -17,8 +18,20 @@ export const sliceApi = appApi.injectEndpoints({
       },
 
       // merges new response data into cache (it's replaced by default)
+      // note: this uses immer
       merge: (currentCacheData, responseData) => {
-        currentCacheData.push(...responseData);
+        const currentCacheIds = currentCacheData.map((slice) => slice.id);
+        // keeping this here to remember how to print out the immer proxy
+        // console.log(JSON.parse(JSON.stringify(currentCacheIds)));
+
+        // only add data to cache if not already in there
+        responseData.forEach((slice) => {
+          if (!currentCacheIds.includes(slice.id)) {
+            currentCacheData.push(slice);
+          }
+        });
+        // make sure the resulted data is sorted like we want
+        currentCacheData.sort(sortSliceByDate);
       },
 
       // forces a refetch when the args change

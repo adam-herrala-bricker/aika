@@ -13,7 +13,7 @@ const SliceMenu = ({stream}) => {
   const handleStreamSelect = () => {
     dispatch(clearStreamCache(stream.loadedId)); // clear cache when navigating away
     dispatch(resetScrollView()); // also reset scrolling
-    navigate('stream-info');
+    navigate('/stream-info');
   };
 
   return (

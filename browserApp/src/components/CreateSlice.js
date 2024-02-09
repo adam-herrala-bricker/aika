@@ -1,7 +1,7 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNewSliceMutation} from '../services/slices';
-import {clearStreamCache} from '../reducers/streamReducer';
+import {resetScroller} from '../reducers/streamReducer';
 import {clearSlice, updateSlice} from '../reducers/sliceReducer';
 import {
   Button,
@@ -25,10 +25,10 @@ const CreateSlice = () => {
 
   // event handler
   const submitSlice = async () => {
-    // note it clears the existing cache before doing anything else
-    dispatch(clearStreamCache(loadedId));
+    // resets the scroller so that query will get new slice
+    dispatch(resetScroller());
     try {
-      await newSlice({slice: thisSlice, streamId: loadedId});
+      await newSlice({slice: thisSlice, streamId: loadedId}).unwrap();
       dispatch(clearSlice());
       setHidden(true);
     } catch (error) {
@@ -48,7 +48,8 @@ const CreateSlice = () => {
       <div className = 'slice-create-container-closed'>
         <Button
           fluid
-          onClick = {() => setHidden(false)}>
+          onClick = {() => setHidden(false)}
+          primary>
           New Slice
         </Button>
       </div>
@@ -92,6 +93,7 @@ const CreateSlice = () => {
         <div className = 'slice-button-container'>
           <Button
             fluid
+            primary
             type = 'submit'>
             {buttonLabel}
           </Button>

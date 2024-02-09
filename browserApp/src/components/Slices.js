@@ -2,7 +2,6 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useGetSlicesQuery} from '../services/slices';
 import {incrementScroller} from '../reducers/streamReducer';
-import {setCachedDataLength, setShowLoadMore} from '../reducers/viewReducer';
 import {Button, Header} from 'semantic-ui-react';
 import {CreateSlice, SliceMenu} from '.';
 
@@ -21,9 +20,20 @@ const Slice = ({slice}) => {
 
   return (
     <div className = 'slice-single-container'>
-      <div className = 'slice-single-row'>
-        <Header size = 'medium'>{slice.title}</Header>
-        {thisDate.toLocaleTimeString('fi-FI')} | {thisDate.toLocaleDateString('fi-FI')}
+      <div className = 'slice-single-top-row'>
+        <div className = 'slice-single-row'>
+          <Header size = 'medium'>{slice.title}</Header>
+          {thisDate.toLocaleTimeString('fi-FI')} | {thisDate.toLocaleDateString('fi-FI')}
+        </div>
+        <div>
+          <Button
+            basic
+            color = 'red'
+            compact
+            size = 'mini'>
+            delete
+          </Button>
+        </div>
       </div>
       <div className = 'slice-single-row'>
         {slice.isMilestone && <Tag color = 'darkblue' text = 'milestone'/>}
@@ -37,7 +47,8 @@ const Slice = ({slice}) => {
 const Slices = () => {
   const dispatch = useDispatch();
   const {loadedId, loadedName, scroller} = useSelector((i) => i.stream);
-  const {cachedDataLength, showLoadMore} = useSelector((i) => i.view);
+  // ref for element to add scroll event listener
+  const scrollRef = React.useRef(0);
 
   const {data, isLoading, isError} = useGetSlicesQuery({
     streamId: loadedId,
@@ -45,27 +56,23 @@ const Slices = () => {
     offset: scroller.offset
   });
 
-  // event handler
-  const handleShowMore = () => {
-    // changes scroll values to load more
-    dispatch(incrementScroller());
-    // checks if we've reached the bottom
-    if (data.length === cachedDataLength) {
-      dispatch(setShowLoadMore(false));
-    }
+  // used for infinite scrolling
+  React.useLayoutEffect(() => { // critical that this is a layout effect!
+    const onScroll = () => {
+      const {clientHeight, scrollHeight, scrollTop} = scrollRef.current;
 
-    dispatch(setCachedDataLength(data.length));
-  };
+      const scrolledToBottom = scrollTop + clientHeight >= scrollHeight;
+      if (scrolledToBottom && !isLoading) {
+        dispatch(incrementScroller());
+      }
+    };
 
-  // don't display anything before slice is loaded
-  if (!loadedId) {
-    return null;
-  }
+    scrollRef.current.addEventListener('scroll', onScroll);
 
-  // loading data
-  if (isLoading) {
-    return <div>loading ...</div>;
-  }
+    return () => {
+      scrollRef.current.removeEventListener('scroll', onScroll);
+    };
+  }, [data, scrollRef]);
 
   // error
   if (isError) {
@@ -75,19 +82,10 @@ const Slices = () => {
 
   return (
     <div className = 'slice-view-container'>
-      <SliceMenu stream = {{loadedName, loadedId}}/>
+      {loadedId && <SliceMenu stream = {{loadedName, loadedId}}/>}
       <CreateSlice />
-      <div className = 'slice-scroll-region'>
-        {data.map((slice) => <Slice key = {slice.id} slice = {slice}/>)}
-        <div>
-          {showLoadMore &&
-          <Button
-            onClick = {handleShowMore}
-            fluid
-            primary>
-            Load more
-          </Button>}
-        </div>
+      <div ref = {scrollRef} className = 'slice-scroll-region'>
+        {data && data.map((slice) => <Slice key = {slice.id} slice = {slice}/>)}
       </div>
     </div>
   );

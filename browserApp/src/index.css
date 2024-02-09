@@ -108,6 +108,12 @@
   column-gap: 5px;
 }
 
+.slice-single-top-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .slice-scroll-region {
   display: flex;
   flex-direction: column;
