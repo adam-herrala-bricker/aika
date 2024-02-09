@@ -17,11 +17,20 @@ export const streamApi = appApi.injectEndpoints({
         body: name
       }),
       invalidatesTags: ['Stream']
+    }),
+
+    deleteStream: build.mutation({
+      query: (streamId) => ({
+        url: `/streams/${streamId}`,
+        method: 'DELETE'
+      }),
+      invalidatesTags: ['Stream']
     })
   })
 });
 
 export const {
+  useDeleteStreamMutation,
   useGetStreamsQuery,
   useNewStreamMutation
 } = streamApi;

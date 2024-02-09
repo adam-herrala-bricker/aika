@@ -123,6 +123,13 @@
   flex-direction: column;
 }
 
+.stream-info-container {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+}
+
 .stream-name-container {
   padding: 5px;
   align-self: stretch;

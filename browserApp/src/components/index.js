@@ -10,6 +10,8 @@ import SliceMenu from './SliceMenu'; // menu bar for Slices component;
 import Slices from './Slices'; // component for viewing slices
 import Streams from './Streams'; // displays streams in the side menu
 
+import StreamInfo from './StreamInfo'; // view info for a stream, set permissions, delete
+
 import CreateSlice from './CreateSlice'; // component to create new slice
 import CreateStream from './CreateStream'; // component to create new stream
 
@@ -26,6 +28,7 @@ export {
   Register,
   SliceMenu,
   Slices,
+  StreamInfo,
   Streams,
   StreamSliceView,
   ToggleSideMenu

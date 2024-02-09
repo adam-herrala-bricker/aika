@@ -15,16 +15,18 @@ const Stream = ({thisStream}) => {
   // event handler
   // clears cache of loaded stream before loading new stream
   const handleClick = () => {
-    // clears current cache if there's a loaded stream + resets scrolling
-    dispatch(clearStreamCache(loadedId));
+    if (thisStream.id !== loadedId) { // don't change state if you click on current stream
+      // clears current cache if there's a loaded stream + resets scrolling
+      dispatch(clearStreamCache(loadedId));
 
-    // loads new stream
-    dispatch(setStream({
-      name: thisStream.name,
-      id: thisStream.id
-    }));
+      // loads new stream
+      dispatch(setStream({
+        name: thisStream.name,
+        id: thisStream.id
+      }));
 
-    dispatch(resetScrollView()); // tracks whether to show 'load more' button
+      dispatch(resetScrollView()); // tracks whether to show 'load more' button
+    }
     dispatch(closeSideMenu());
   };
 

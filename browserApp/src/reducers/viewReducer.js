@@ -28,6 +28,10 @@ const viewSlice = createSlice({
       };
     },
 
+    resetView() {
+      return defaultView;
+    },
+
     setCachedDataLength(state, action) {
       return {
         ...state,
@@ -53,6 +57,7 @@ const viewSlice = createSlice({
 export const {
   closeSideMenu,
   resetScrollView,
+  resetView,
   setCachedDataLength,
   setShowLoadMore,
   toggleSideMenu

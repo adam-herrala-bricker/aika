@@ -75,7 +75,7 @@ const Slices = () => {
 
   return (
     <div className = 'slice-view-container'>
-      <SliceMenu loadedName = {loadedName}/>
+      <SliceMenu stream = {{loadedName, loadedId}}/>
       <CreateSlice />
       <div className = 'slice-scroll-region'>
         {data.map((slice) => <Slice key = {slice.id} slice = {slice}/>)}
