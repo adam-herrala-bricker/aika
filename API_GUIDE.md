@@ -308,9 +308,9 @@ Array of `StreamUser` instances joined with their corresponding `Stream`:
   - `createdAt`
   - `updatedAt`   
 
-### GET `/api/slices/:id`
+### POST `/api/slices/view/:id`
 
-Gets slices on stream with given `id`. Requires `read` permissions for that stream.
+View slices on stream with given `id`. Requires `read` permissions for that stream.
 
 Slices are sorted by time created, with the most recent returned first.
 
