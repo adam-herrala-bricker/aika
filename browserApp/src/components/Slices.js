@@ -4,6 +4,7 @@ import {useGetSlicesQuery} from '../services/slices';
 import {incrementScroller} from '../reducers/streamReducer';
 import {Button, Header} from 'semantic-ui-react';
 import {CreateSlice, SliceMenu} from '.';
+import {customDateFormat, howLongAgo} from '../util/helpers';
 
 const Tag = ({text, color = 'black'}) => {
   return (
@@ -19,27 +20,35 @@ const Slice = ({slice}) => {
   const thisDate = new Date(slice.createdAt);
 
   return (
-    <div className = 'slice-single-container'>
-      <div className = 'slice-single-top-row'>
+    <div>
+      <div className = 'slice-single-time-container'>
+        <div>{howLongAgo(thisDate)}</div>
+        <div className = 'slice-single-date-text'>
+          {customDateFormat(thisDate)}
+        </div>
+      </div>
+      <div className = 'slice-single-container'>
+        <div className = 'slice-single-top-row'>
+          <div className = 'slice-single-row'>
+            <Header size = 'medium'>{slice.title}</Header>
+            {slice.user.username}
+          </div>
+          <div>
+            <Button
+              basic
+              color = 'red'
+              compact
+              size = 'mini'>
+              delete
+            </Button>
+          </div>
+        </div>
         <div className = 'slice-single-row'>
-          <Header size = 'medium'>{slice.title}</Header>
-          {thisDate.toLocaleTimeString('fi-FI')} | {thisDate.toLocaleDateString('fi-FI')}
+          {slice.isMilestone && <Tag color = 'darkblue' text = 'milestone'/>}
+          {slice.isPublic && <Tag color = 'teal' text = 'public'/>}
         </div>
-        <div>
-          <Button
-            basic
-            color = 'red'
-            compact
-            size = 'mini'>
-            delete
-          </Button>
-        </div>
+        {slice.text}
       </div>
-      <div className = 'slice-single-row'>
-        {slice.isMilestone && <Tag color = 'darkblue' text = 'milestone'/>}
-        {slice.isPublic && <Tag color = 'teal' text = 'public'/>}
-      </div>
-      {slice.text}
     </div>
   );
 };

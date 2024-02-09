@@ -102,10 +102,22 @@
   border-width: 2px;
 }
 
+.slice-single-date-text {
+  color: grey;
+}
+
 .slice-single-row {
   display: flex;
   flex-direction: row;
   column-gap: 5px;
+}
+
+.slice-single-time-container {
+  margin-left: 10px;
+
+  display: flex;
+  flex-direction: row;
+  column-gap: 10px;
 }
 
 .slice-single-top-row {
@@ -117,7 +129,7 @@
 .slice-scroll-region {
   display: flex;
   flex-direction: column;
-  row-gap: 10px;
+  row-gap: 15px;
 
   overflow-y: scroll;
 }
