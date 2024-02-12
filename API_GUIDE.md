@@ -8,7 +8,7 @@ Creates a new user. Passwords are stored in the database as hashes (via bcrypt).
 >[!NOTE]
 >When a new user is created, the provided email must be confirmed before the user is able to log in (see below).
 
-#### Parameters:
+#### Body:
 - `username`
   - type: string 
   - required: true
@@ -39,7 +39,7 @@ Creates a new user. Passwords are stored in the database as hashes (via bcrypt).
 -  `lastName`
 -  `email`
 
-### POST `/confirm/:key`
+### POST `/confirm/{key}`
 
 Path used for links sent to new users to confirm the provided email address.
 
@@ -47,7 +47,7 @@ When a new user is created, a unique key is stored in the database, and a link c
 
 The user has 30 minutes to follow the link and confirm the provided email. If the email is not confirmed within 30 minutes, the link expires and the user data is removed from the database.
 
-#### Parameters:
+#### Body:
 - None
 
 #### Returns:
@@ -60,7 +60,7 @@ Deletes user identified in token. (This means that users can only authorize requ
 #### Headers:
 - `Authorization: Bearer <token>`
 
-#### Parameters:
+#### Body:
 - None
 
 #### Returns:
@@ -77,7 +77,7 @@ Used to log users in.
 
 Checks the provided password against the stored hash. Creates a new `ActiveSession` instance in the database and returns a bearer token for authenticating requests.
 
-#### Parameters:
+#### Body:
 - `username`
   - type: string
 - `password`
@@ -99,7 +99,7 @@ Removes active session corresponding with the provided token from the database.
 #### Headers:
 - `Authorization: Bearer <token>`
 
-#### Parameters:
+#### Body:
 - None
 
 #### Returns:
@@ -109,7 +109,7 @@ Removes active session corresponding with the provided token from the database.
 
 Enables sharing of slices with others.
 
-### PUT `/api/permissions/:id`
+### PUT `/api/permissions/{id}`
 
 Creates or modifies a `StreamUser` instance, which stores user permissions for the stream given with `id`. 
 
@@ -121,7 +121,7 @@ Creates or modifies a `StreamUser` instance, which stores user permissions for t
 #### Headers:
 - `Authorization: Bearer <token>`
 
-#### Parameters:
+#### Body:
 - `userId`
   - id of the user whose permissions are being created or modified
   - type: UUID v4
@@ -179,7 +179,7 @@ Creating user's information is sent via bearer token.
 #### Headers:
 - `Authorization: Bearer <token>`
 
-#### Parameters:
+#### Body:
 - `name`
   - type: string
   - required: true
@@ -192,14 +192,14 @@ Creating user's information is sent via bearer token.
   - UUID of user that created the stream
 - `name` 
 
-### DELETE `/api/streams/:id`
+### DELETE `/api/streams/{id}`
 
 If authorized, deletes stream with the given id from the database.
 
 #### Headers:
 - `Authorization: Bearer <token>`
 
-#### Parameters:
+#### Body:
   - None
 
 #### Returns:
@@ -207,14 +207,14 @@ If authorized, deletes stream with the given id from the database.
 
 ## Slice Creation and Deletion
 
-### POST `/api/slices/:id`
+### POST `/api/slices/{id}`
 
 Adds a new slice to the stream with the given `id` (if user has `write` permissions on that stream).
 
 #### Headers:
 - `Authorization: Bearer <token>`
 
-#### Parameters:
+#### Body:
 - `title`
   - type: string
   - required: false
@@ -248,7 +248,7 @@ Adds a new slice to the stream with the given `id` (if user has `write` permissi
 - `createdAt`
 - `updatedAt`    
 
-### DELETE `/api/slices/:id`
+### DELETE `/api/slices/{id}`
 
 Deletes slice with the given id.
 
@@ -258,7 +258,7 @@ Deletes slice with the given id.
 #### Headers:
 - `Authorization: Bearer <token>`
 
-#### Parameters:
+#### Body:
 - None
 
 #### Returns:
@@ -278,7 +278,7 @@ The user is identified via bear token.
 #### Headers:
 - `Authorization: Bearer <token>`
 
-#### Parameters:
+#### Body:
 - None
 
 #### Returns:
@@ -308,7 +308,30 @@ Array of `StreamUser` instances joined with their corresponding `Stream`:
   - `createdAt`
   - `updatedAt`   
 
-### POST `/api/slices/view/:id`
+### GET `/api/streams/my-permissions/{id}`
+
+View all permissions for stream with given `id`. Returns `404` for users with no permissions for that stream.
+
+#### Headers:
+- `Authorization: Bearer <token>`
+
+#### Body:
+- None
+
+#### Returns:
+- `StreamUser` instance (see above):
+  - `id`
+  - `streamId`
+  - `userId`
+  - `read`
+  - `write`
+  - `deleteOwn`
+  - `deleteAll`
+  - `admin`
+  - `createdAt`
+  - `updatedAt`
+
+### POST `/api/slices/view/{id}`
 
 View slices on stream with given `id`. Requires `read` permissions for that stream.
 
@@ -317,7 +340,7 @@ Slices are sorted by time created, with the most recent returned first.
 #### Headers:
 - `Authorization: Bearer <token>`
 
-#### Parameters:
+#### Body:
 - `limit`
   - maximum number of slices to return with the request 
   - type: integer 
