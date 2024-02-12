@@ -31,15 +31,19 @@ router.get('/mine', async (req, res) => {
 });
 
 // GET request to view all streams user has read permission for (requires USER token)
+// if id is provided, it only returns the one
 router.get('/read', async (req, res) => {
+  const queryParams = {
+    attributes: {exclude: ['userId', 'streamId']},
+    include: {
+      model: Stream
+    }};
+
   // thow an error if no token provided
   if (!req.decodedToken) return res.status(401).json({error: 'token missing'});
 
   const streams = await StreamUser.findAll({
-    attributes: {exclude: ['userId', 'streamId']},
-    include: {
-      model: Stream
-    },
+    ...queryParams,
     where: {
       [Op.and]: {
         read: true,
@@ -48,6 +52,30 @@ router.get('/read', async (req, res) => {
     }});
 
   res.json(streams);
+});
+
+// returns user's permissions for just the provided stream (if any)
+// used for settings in frontend (requires USER token)
+router.get('/my-permissions/:id', async (req, res) => {
+  const thisStreamId = req.params.id;
+
+  // thow an error if no token provided
+  if (!req.decodedToken) return res.status(401).json({error: 'token missing'});
+
+  const thisStream = await StreamUser.findOne({
+    where: {
+      [Op.and]: {
+        streamId: thisStreamId,
+        userId: req.decodedToken.id
+      }
+    }
+  });
+
+  if (!thisStream) {
+    return res.status(404).end();
+  }
+
+  res.json(thisStream);
 });
 
 // GET request to view all entries in a single stream (requires USER token)

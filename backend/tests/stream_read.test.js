@@ -6,7 +6,7 @@ const {Op} = require('sequelize');
 const {connectToDB, sequelize} = require('../util/db');
 const {StreamUser} = require('../models');
 const {addStream, addUser, clearDB, createPermissions, logInUser} = require('./util/functions');
-const {badToken, expiredUserTwoToken, stream, user} = require('./util/constants');
+const {badToken, expiredUserTwoToken, invalidId, stream, user} = require('./util/constants');
 
 // variables for user objects returned on login
 let userTwo;
@@ -101,6 +101,22 @@ describe('valid requests', () => {
     expect(sharedEntry.stream.creatorId).toBe(userTwo.id);
   });
 
+  test('returns single stream with all permissions', async() => {
+    const {body} = await api
+      .get(`/api/streams/my-permissions/${streamZero.id}`)
+      .set('Authorization', `Bearer ${userTwo.token}`)
+      .expect(200);
+
+    // returns everything as expected
+    expect(body.streamId).toBe(streamZero.id);
+    expect(body.userId).toBe(userTwo.id);
+    expect(body.read).toBe(true);
+    expect(body.write).toBe(true);
+    expect(body.deleteOwn).toBe(true);
+    expect(body.deleteAll).toBe(true);
+    expect(body.admin).toBe(true);
+  });
+
   test('does not return entries shared with non-read permissions', async () => {
     // first verify that userTwo has WRITE (not read) permissions on streamTwo in DB
     const thesePermissions = await StreamUser.findOne({
@@ -127,7 +143,7 @@ describe('valid requests', () => {
   });
 });
 
-describe('invalid requests', () => {
+describe('invalid requests (all streams)', () => {
   test('fails without token', async () => {
     const {body} = await api
       .get('/api/streams/read')
@@ -152,6 +168,59 @@ describe('invalid requests', () => {
       .expect(403);
 
     expect(body.error).toBe('login token has expired');
+  });
+});
+
+describe('invalid requests (single stream)', () => {
+  test('fails without token', async () => {
+    const {body} = await api
+      .get(`/api/streams/my-permissions/${streamZero.id}`)
+      .expect(401);
+
+    expect(body.error).toBe('token missing');
+  });
+
+  test('fails with a bad token', async () => {
+    const {body} = await api
+      .get(`/api/streams/my-permissions/${streamZero.id}`)
+      .set('Authorization', `Bearer ${badToken}`)
+      .expect(400);
+
+    expect(body.error).toEqual('jwt malformed');
+  });
+
+  test('fails with an expired token', async () => {
+    const {body} = await api
+      .get(`/api/streams/my-permissions/${streamZero.id}`)
+      .set('Authorization', `Bearer ${expiredUserTwoToken}`)
+      .expect(403);
+
+    expect(body.error).toBe('login token has expired');
+  });
+
+  test('fails when no id provided', async () => {
+    await api
+      .get('/api/streams/my-permissions/')
+      .set('Authorization', `Bearer ${userTwo.token}`)
+      .expect(404);
+  });
+
+  test('fails when bad id provided', async () => {
+    await api
+      .get(`/api/streams/my-permissions/${invalidId}`)
+      .set('Authorization', `Bearer ${userTwo.token}`)
+      .expect(404);
+  });
+
+  test('fails when user has no permissions', async () => { // same response as id not found
+    // new user with no permissions
+    await addUser(user.six);
+    const userSix = await logInUser(user.six);
+
+    await api
+      .get(`/api/streams/my-permissions/${streamZero.id}`)
+      .set('Authorization', `Bearer ${userSix.token}`)
+      .expect(404);
   });
 });
 
