@@ -340,6 +340,6 @@ Slices are sorted by time created, with the most recent returned first.
   - `isMilestone`
   - `createdAt`
   - `updatedAt`
-  - `User` instance with parameters:
+  - `User` instance with properties:
     - `username` 
 
