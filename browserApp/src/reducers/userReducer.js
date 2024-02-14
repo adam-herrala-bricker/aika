@@ -1,4 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
+import {clearSlice} from './sliceReducer';
+import {resetStream} from './streamReducer';
+import {resetView} from './viewReducer';
 import {appApi} from '../services/config';
 
 const defaultUser = {
@@ -45,7 +48,12 @@ export const logOut = (token) => {
     if (response.error) {
       console.log('something went wrong');
     }
+    // just clear everything
     dispatch(clearUser());
+    dispatch(clearSlice());
+    dispatch(resetStream());
+    dispatch(resetView());
+    await dispatch(appApi.util.resetApiState());
   };
 };
 

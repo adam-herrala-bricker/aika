@@ -73,7 +73,7 @@ const StreamInfo = () => {
         {permissionsResponse.data.admin && <ShareForm />}
       </div>
       <div>
-        {!result.isError &&
+        {!result.isError && permissionsResponse.data.admin &&
         <div className = 'stream-delete-container'>
           <Header size = 'small'>delete stream</Header>
           <Button
