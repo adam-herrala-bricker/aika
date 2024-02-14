@@ -141,6 +141,41 @@ describe('valid requests', () => {
     const isStreamTwo = body.find((entry) => entry.stream.id === streamTwo.id);
     expect(isStreamTwo).not.toBeDefined();
   });
+
+  test('view all permissions as admin', async () => {
+    const {body} = await api
+      .get(`/api/streams/all-permissions/${streamZero.id}`)
+      .set('Authorization', `Bearer ${userTwo.token}`)
+      .expect(200);
+
+    // returns everything as expected
+    expect(body).toMatchObject([
+      {
+        userId: userTwo.id,
+        // creator values
+        read: true,
+        write: true,
+        deleteOwn: true,
+        deleteAll: true,
+        admin: true,
+        user: {
+          username: userTwo.username
+        }
+      },
+      {
+        userId: userFive.id,
+        // values assigned in beforeAll()
+        read: true,
+        write: false,
+        deleteOwn: false,
+        deleteAll: false,
+        admin: false,
+        user: {
+          username: userFive.username
+        }
+      }
+    ]);
+  });
 });
 
 describe('invalid requests (all streams)', () => {
@@ -221,6 +256,17 @@ describe('invalid requests (single stream)', () => {
       .get(`/api/streams/my-permissions/${streamZero.id}`)
       .set('Authorization', `Bearer ${userSix.token}`)
       .expect(404);
+  });
+});
+
+describe('invalid requests (all permissions)', () => {
+  test('fail when no admin', async () => {
+    const {body} = await api
+      .get(`/api/streams/all-permissions/${streamZero.id}`)
+      .set('Authorization', `Bearer ${userFive.token}`)
+      .expect(403);
+
+    expect(body.error).toBe('admin permissions required');
   });
 });
 

@@ -23,6 +23,9 @@ User.belongsToMany(Stream, {through: StreamUser, as: 'connected_users'});
 Stream.hasMany(StreamUser, {foreignKey: 'streamId'});
 StreamUser.belongsTo(Stream, {foreignKey: 'streamId'});
 
+User.hasMany(StreamUser, {foreighKey: 'userId'});
+StreamUser.belongsTo(User, {foreignKey: 'userId'});
+
 Slice.belongsTo(User, {foreignKey: 'creatorId'});
 User.hasMany(Slice, {foreignKey: 'creatorId'});
 

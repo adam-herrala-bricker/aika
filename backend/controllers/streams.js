@@ -78,6 +78,25 @@ router.get('/my-permissions/:id', async (req, res) => {
   res.json(thisStream);
 });
 
+// returns all permisions on the provided stream
+// requires admin permissions on that stream (and a USER token)
+router.get('/all-permissions/:id', streamPermissions, async (req, res) => {
+  const streamId = req.params.id;
+  const userPermissions = req.permissions;
+
+  if (!userPermissions.admin) return res.status(403).json({error: 'admin permissions required'});
+
+  const foundPermissions = await StreamUser.findAll({
+    where: {streamId},
+    include: {
+      model: User,
+      attributes: ['username']
+    }
+  });
+
+  res.json(foundPermissions);
+});
+
 // GET request to view all entries in a single stream (requires USER token)
 router.get('/one/:id', streamPermissions, async (req, res) => {
   const streamId = req.params.id;
