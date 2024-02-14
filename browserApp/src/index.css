@@ -76,6 +76,32 @@
   column-gap: 5px;
 }
 
+.permission-bubble-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  column-gap: 5px;
+
+  margin-bottom: 10px;
+}
+
+.permission-bubble-yes, .permission-bubble-no {
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 5px;
+
+  padding: 2px;
+}
+
+.permission-bubble-yes {
+  color: darkgreen;
+}
+
+.permission-bubble-no {
+  color: lightgray;
+}
+
 .slice-button-container {
   display: flex;
   flex-direction: row;
@@ -135,7 +161,7 @@
 }
 
 .slice-view-container {
-  max-height: 70vh;
+  height: 70vh;
 
   display: flex;
   flex-direction: column;
@@ -145,7 +171,9 @@
   padding: 10px;
   display: flex;
   flex-direction: column;
-  align-self: flex-start;
+  align-self: stretch;
+  flex-grow: 1;
+  justify-content: space-between;
 }
 
 .stream-name-container {

@@ -10,6 +10,13 @@ export const streamApi = appApi.injectEndpoints({
       providesTags: ['Stream']
     }),
 
+    getPermissions: build.query({
+      query: (streamId) => ({
+        url: `/streams/my-permissions/${streamId}`,
+        method: 'GET'
+      })
+    }),
+
     newStream: build.mutation({
       query: (name) => ({
         url: '/streams',
@@ -32,5 +39,6 @@ export const streamApi = appApi.injectEndpoints({
 export const {
   useDeleteStreamMutation,
   useGetStreamsQuery,
+  useGetPermissionsQuery,
   useNewStreamMutation
 } = streamApi;
