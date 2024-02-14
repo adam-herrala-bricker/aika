@@ -1,5 +1,6 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import {useGetPermissionsQuery} from '../services/streams';
 import {useGetSlicesQuery} from '../services/slices';
 import {incrementScroller} from '../reducers/streamReducer';
 import {Button, Header} from 'semantic-ui-react';
@@ -56,6 +57,7 @@ const Slice = ({slice}) => {
 const Slices = () => {
   const dispatch = useDispatch();
   const {loadedId, loadedName, scroller} = useSelector((i) => i.stream);
+  const myPermissions = useGetPermissionsQuery(loadedId);
   // ref for element to add scroll event listener
   const scrollRef = React.useRef(0);
 
@@ -92,7 +94,7 @@ const Slices = () => {
   return (
     <div className = 'slice-view-container'>
       {loadedId && <SliceMenu stream = {{loadedName, loadedId}}/>}
-      <CreateSlice />
+      {myPermissions.write && <CreateSlice />}
       <div ref = {scrollRef} className = 'slice-scroll-region'>
         {data && data.map((slice) => <Slice key = {slice.id} slice = {slice}/>)}
       </div>
