@@ -269,7 +269,7 @@ Deletes slice with the given id.
 #### Returns:
   - `Status 204` (no body)
 
-## Stream and Slice Access
+## Stream, Slice, and Permission Access
 
 ### GET `/api/streams/read`
 
@@ -315,7 +315,7 @@ Array of `StreamUser` instances joined with their corresponding `Stream`:
 
 ### GET `/api/streams/my-permissions/{id}`
 
-View all permissions for stream with given `id`. Returns `404` for users with no permissions for that stream.
+Returns user's permissions for stream with given `id`. Returns `404` for users with no permissions for that stream.
 
 #### Headers:
 - `Authorization: Bearer <token>`
@@ -324,7 +324,30 @@ View all permissions for stream with given `id`. Returns `404` for users with no
 - None
 
 #### Returns:
-- `StreamUser` instance (see above):
+- `StreamUser` instance:
+  - `id`
+  - `streamId`
+  - `userId`
+  - `read`
+  - `write`
+  - `deleteOwn`
+  - `deleteAll`
+  - `admin`
+  - `createdAt`
+  - `updatedAt`
+
+### GET `/api/streams/all-permissions/{id}`
+
+Returns an array of ALL permissions for stream with given `id`. Requires admin permissions on that stream.
+
+#### Headers:
+- `Authorization: Bearer <token>`
+
+#### Body:
+- None
+
+#### Returns:
+- Array of `StreamUser` instances:
   - `id`
   - `streamId`
   - `userId`
