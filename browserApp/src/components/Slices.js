@@ -57,10 +57,10 @@ const Slice = ({slice}) => {
 const Slices = () => {
   const dispatch = useDispatch();
   const {loadedId, loadedName, scroller} = useSelector((i) => i.stream);
-  const myPermissions = useGetPermissionsQuery(loadedId);
   // ref for element to add scroll event listener
   const scrollRef = React.useRef(0);
 
+  const myPermissions = useGetPermissionsQuery(loadedId);
   const {data, isLoading, isError} = useGetSlicesQuery({
     streamId: loadedId,
     limit: scroller.limit,
@@ -94,7 +94,7 @@ const Slices = () => {
   return (
     <div className = 'slice-view-container'>
       {loadedId && <SliceMenu stream = {{loadedName, loadedId}}/>}
-      {myPermissions.write && <CreateSlice />}
+      {myPermissions?.data?.write && <CreateSlice />}
       <div ref = {scrollRef} className = 'slice-scroll-region'>
         {data && data.map((slice) => <Slice key = {slice.id} slice = {slice}/>)}
       </div>
