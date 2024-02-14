@@ -30,12 +30,11 @@ const ShareForm = () => {
   const sharing = useSelector((i) => i.sharing);
   const {loadedId} = useSelector((i) => i.stream);
   const [showConfirm, setShowConfirm] = React.useState(false);
-  const [setPermissions, result] = useSetPermissionsMutation();
-  console.log(result);
+  const [setPermissions] = useSetPermissionsMutation();
 
   // even handler
   const handleSubmit = () => {
-    setPermissions({streamId: loadedId, username: sharing.username});
+    setPermissions({streamId: loadedId, body: sharing});
     dispatch(resetSharing());
     setShowConfirm(true);
   };

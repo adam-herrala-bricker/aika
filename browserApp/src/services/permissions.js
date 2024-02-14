@@ -3,12 +3,12 @@ import {appApi} from './config';
 export const permissionApi = appApi.injectEndpoints({
   endpoints: (build) => ({
     setPermissions: build.mutation({
-      // options = streamId plus username
+      // options = streamId plus username and permission settings
       query: (options) => ({
         url: `/permissions/${options.streamId}`,
         method: 'PUT',
         body: {
-          username: options.username
+          ...options.body
         }
       }),
       invalidatesTags: ['Permission']

@@ -27,7 +27,7 @@ const userSlice = createSlice({
 
       return {
         ...state,
-        username : username,
+        username: username,
         userId: id,
         token: token,
       };

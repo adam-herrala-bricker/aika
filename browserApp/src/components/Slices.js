@@ -1,6 +1,6 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {useGetPermissionsQuery} from '../services/streams';
+import {useGetMyPermissionsQuery} from '../services/streams';
 import {useGetSlicesQuery} from '../services/slices';
 import {incrementScroller} from '../reducers/streamReducer';
 import {Button, Header} from 'semantic-ui-react';
@@ -60,7 +60,7 @@ const Slices = () => {
   // ref for element to add scroll event listener
   const scrollRef = React.useRef(0);
 
-  const myPermissions = useGetPermissionsQuery(loadedId);
+  const myPermissions = useGetMyPermissionsQuery(loadedId);
   const {data, isLoading, isError} = useGetSlicesQuery({
     streamId: loadedId,
     limit: scroller.limit,
