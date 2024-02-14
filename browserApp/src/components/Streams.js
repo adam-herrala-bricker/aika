@@ -35,7 +35,9 @@ const Stream = ({thisStream}) => {
       <Header size = 'small'>
         {thisStream.name}
       </Header>
-      {isOwner && <div>owner</div>}
+      {isOwner
+        ? <div>owner</div>
+        : <div>shared</div>}
     </MenuItem>
   );
 };
