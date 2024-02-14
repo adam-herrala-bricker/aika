@@ -1,14 +1,13 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {useNavigate} from 'react-router-dom';
 import {
   useDeleteStreamMutation,
   useGetPermissionsQuery
 } from '../services/streams';
 import {resetStream} from '../reducers/streamReducer';
-import {resetView} from '../reducers/viewReducer';
+import {resetView, setStreamSliceMain} from '../reducers/viewReducer';
 import {Button, Confirm, Header} from 'semantic-ui-react';
-import {NavButton, ShareForm} from '.';
+import {ShareForm} from '.';
 import {permissionTypes} from '../util/constants';
 
 
@@ -33,7 +32,6 @@ const ViewPermissions = ({permissionsResponse}) => {
 
 const StreamInfo = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [deleteStream, result] = useDeleteStreamMutation();
 
   const [isConfirm, setIsConfirm] = React.useState(false);
@@ -48,7 +46,6 @@ const StreamInfo = () => {
       await deleteStream(loadedId).unwrap();
       dispatch(resetView());
       dispatch(resetStream());
-      navigate('/');
     } catch (error) {
       setDeleteMessage(error.data.error);
       setDeleteButton(false); // hides the button
@@ -68,7 +65,9 @@ const StreamInfo = () => {
               {loadedName} settings
             </Header>
           </div>
-          <NavButton text = 'back' path = '/'/>
+          <Button onClick = {() => dispatch(setStreamSliceMain('slice'))}>
+            back
+          </Button>
         </div>
         <ViewPermissions permissionsResponse = {permissionsResponse}/>
         {permissionsResponse.data.admin && <ShareForm />}

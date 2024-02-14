@@ -2,7 +2,7 @@ import React from 'react';
 import {Route, Routes} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 import {setUser} from './reducers/userReducer';
-import {Entry, LogIn, MenuBar, Register, StreamInfo, StreamSliceView} from './components';
+import {Entry, LogIn, MenuBar, Register, StreamSliceView} from './components';
 
 const Home = ({thisUser}) => {
   return (
@@ -34,7 +34,6 @@ const App = () => {
             <Route path = '/' element = {<Home thisUser = {thisUser}/>}/>
             <Route path = '/login' element = {<LogIn />}/>
             <Route path = '/register' element = {<Register />} />
-            <Route path = '/stream-info' element = {<StreamInfo />}/>
           </Routes>
         </div>
       </div>

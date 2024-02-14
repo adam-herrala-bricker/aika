@@ -4,6 +4,8 @@ import {createSlice} from '@reduxjs/toolkit';
 const defaultView = {
   showSideMenu: true,
   showLoadMore: true,
+  // main component for StreamSliceView (other value = 'info')
+  streamSliceMain: 'slice',
   cachedDataLength: null // used to determined whether to show load more
 };
 
@@ -46,6 +48,13 @@ const viewSlice = createSlice({
       };
     },
 
+    setStreamSliceMain(state, action) {
+      return {
+        ...state,
+        streamSliceMain: action.payload
+      };
+    },
+
     toggleSideMenu(state) {
       return {
         ...state,
@@ -60,6 +69,7 @@ export const {
   resetView,
   setCachedDataLength,
   setShowLoadMore,
+  setStreamSliceMain,
   toggleSideMenu
 } = viewSlice.actions;
 
