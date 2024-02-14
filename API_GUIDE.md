@@ -347,7 +347,7 @@ Returns an array of ALL permissions for stream with given `id`. Requires admin p
 - None
 
 #### Returns:
-- Array of `StreamUser` instances:
+- Array of `StreamUser` instances joined with `User`:
   - `id`
   - `streamId`
   - `userId`
@@ -358,6 +358,8 @@ Returns an array of ALL permissions for stream with given `id`. Requires admin p
   - `admin`
   - `createdAt`
   - `updatedAt`
+  - `user`
+    - `username` 
 
 ### POST `/api/slices/view/{id}`
 
