@@ -111,7 +111,7 @@ Enables sharing of slices with others.
 
 ### PUT `/api/permissions/{id}`
 
-Creates or modifies a `StreamUser` instance, which stores user permissions for the stream given with `id`. 
+Creates or modifies a `StreamUser` instance, which stores user permissions for the stream given with `id`. The user can be identified with either `userId` or `username`, and if both are provided `userId` is ignored. 
 
 (Stream id is passed in the path because this route uses the same authorization middleware as requests to create new streams.)
 
@@ -125,7 +125,12 @@ Creates or modifies a `StreamUser` instance, which stores user permissions for t
 - `userId`
   - id of the user whose permissions are being created or modified
   - type: UUID v4
-  - required: true
+  - required if `username` is null
+- `username`
+  - username of user whose permissions are being created or modified
+  - type: string
+  - required: false
+  - if provided, `userId` is ignored
 - `read`
   - permission to read slices on the stream
   - type: boolean
