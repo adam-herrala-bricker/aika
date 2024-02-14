@@ -2,6 +2,7 @@ import {configureStore} from '@reduxjs/toolkit';
 import {setupListeners} from '@reduxjs/toolkit/query';
 import {appApi} from './services/config';
 import registrationReducer from './reducers/registrationReducer';
+import sharingReducer from './reducers/sharingReducer';
 import sliceReducer from './reducers/sliceReducer';
 import streamReducer from './reducers/streamReducer';
 import userReducer from './reducers/userReducer';
@@ -10,6 +11,7 @@ import viewReducer from './reducers/viewReducer';
 const store = configureStore({
   reducer: {
     registration: registrationReducer,
+    sharing: sharingReducer,
     slice: sliceReducer,
     stream: streamReducer,
     user: userReducer,

@@ -10,6 +10,7 @@ export const streamApi = appApi.injectEndpoints({
       providesTags: ['Stream']
     }),
 
+    // for the user's permissions on that stream
     getPermissions: build.query({
       query: (streamId) => ({
         url: `/streams/my-permissions/${streamId}`,

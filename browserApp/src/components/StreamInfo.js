@@ -8,20 +8,17 @@ import {
 import {resetStream} from '../reducers/streamReducer';
 import {resetView} from '../reducers/viewReducer';
 import {Button, Confirm, Header} from 'semantic-ui-react';
-import {NavButton} from '.';
+import {NavButton, ShareForm} from '.';
+import {permissionTypes} from '../util/constants';
 
-const ViewPermissions = () => {
-  const permissionTypes = ['read', 'write', 'deleteOwn', 'deleteAll', 'admin'];
-  const {loadedId} = useSelector((i) => i.stream);
-  const {data, isLoading} = useGetPermissionsQuery(loadedId);
 
-  if (isLoading) {
-    return null;
-  }
+
+const ViewPermissions = ({permissionsResponse}) => {
+  const {data} = permissionsResponse;
 
   return (
-    <div>
-      <Header size = 'tiny'>permissions</Header>
+    <div className = 'permissions-display-container'>
+      <Header size = 'small'>my permissions</Header>
       <div className = 'permission-bubble-container'>
         {permissionTypes.map((type) =>
           <div
@@ -34,7 +31,6 @@ const ViewPermissions = () => {
   );
 };
 
-
 const StreamInfo = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -44,6 +40,7 @@ const StreamInfo = () => {
   const [deleteButton, setDeleteButton] = React.useState('Delete');
   const [deleteMessage, setDeleteMessage] = React.useState('Are you sure you want to delete this stream?');
   const {loadedId, loadedName} = useSelector((i) => i.stream);
+  const permissionsResponse = useGetPermissionsQuery(loadedId);
 
   // event handler
   const handleDelete = async () => {
@@ -58,22 +55,34 @@ const StreamInfo = () => {
     }
   };
 
+  if (permissionsResponse.isLoading) {
+    return null;
+  }
+
   return (
     <div className = 'stream-info-container'>
       <div>
-        <Header size = 'medium'>
-          {loadedName} settings
-        </Header>
-        <ViewPermissions />
+        <div className = 'stream-info-header-container'>
+          <div>
+            <Header size = 'medium'>
+              {loadedName} settings
+            </Header>
+          </div>
+          <NavButton text = 'back' path = '/'/>
+        </div>
+        <ViewPermissions permissionsResponse = {permissionsResponse}/>
+        {permissionsResponse.data.admin && <ShareForm />}
       </div>
       <div>
         {!result.isError &&
-        <Button
-          onClick = {() => setIsConfirm(true)}
-          color = 'red'>
-          delete stream
-        </Button>}
-        <NavButton text = 'back' path = '/'/>
+        <div className = 'stream-delete-container'>
+          <Header size = 'small'>delete stream</Header>
+          <Button
+            onClick = {() => setIsConfirm(true)}
+            color = 'red'>
+            delete stream
+          </Button>
+        </div>}
         <Confirm
           confirmButton = {deleteButton}
           content = {deleteMessage}

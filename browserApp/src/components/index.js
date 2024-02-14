@@ -11,6 +11,7 @@ import Slices from './Slices'; // component for viewing slices
 import Streams from './Streams'; // displays streams in the side menu
 
 import StreamInfo from './StreamInfo'; // view info for a stream, set permissions, delete
+import ShareForm from './ShareForm'; // form used to share stream with new user
 
 import CreateSlice from './CreateSlice'; // component to create new slice
 import CreateStream from './CreateStream'; // component to create new stream
@@ -26,6 +27,7 @@ export {
   MenuBar,
   NavButton,
   Register,
+  ShareForm,
   SliceMenu,
   Slices,
   StreamInfo,

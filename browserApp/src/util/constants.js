@@ -71,3 +71,21 @@ export const timeLevels = [
     max: Infinity
   }
 ];
+
+// permission types used in StreamInfo and ShareForm
+export const permissionTypes = [
+  'read',
+  'write',
+  'deleteOwn',
+  'deleteAll',
+  'admin'
+];
+
+// popup text used in ShareForm
+export const permissionPopup = {
+  read: 'allows the user view slices on the stream',
+  write: 'allows the user add new slices to the stream',
+  deleteOwn: 'allows the user to delete slices that they added to the stream',
+  deleteAll: 'allows the user to delete any slices from the stream, as well as the entire stream',
+  admin: 'allows the user to share the stream with others and change user permissions'
+};

@@ -19,7 +19,7 @@ export const appApi = createApi({
 
   endpoints: () => ({}), // need empty endpoints here
 
-  tagTypes: ['Stream', 'Slice'], // used to 'invalidate' and update the cache
+  tagTypes: ['Permission', 'Stream', 'Slice'], // used to 'invalidate' and update the cache
 });
 
 // could put more here if we wanted
