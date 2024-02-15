@@ -13,23 +13,54 @@ import {
 } from 'semantic-ui-react';
 
 const CreateSlice = () => {
+  const maxTitleLen = 32;
+  const maxTextLen = 512;
   const dispatch = useDispatch();
   const [newSlice, result] = useNewSliceMutation();
   const thisSlice = useSelector((i) => i.slice);
   const {loadedId} = useSelector((i) => i.stream);
   const [hidden, setHidden] = React.useState(true);
+  const [titleError, setTitleError] = React.useState(false);
+  const [textError, setTextError] = React.useState(false);
 
   const buttonLabel = result.isError
     ? result.error.data.error
     : 'Slice';
 
-  // event handler
+  // event handlers
+  const handleCancel = () => {
+    dispatch(clearSlice());
+    setTitleError(false);
+    setTextError(false);
+    setHidden(true);
+  };
+
+  const handleTitleChange = (event) => {
+    if (event.target.value.length < maxTitleLen) {
+      setTitleError(false);
+      dispatch(updateSlice({title: event.target.value}));
+    } else {
+      setTitleError(true);
+    }
+  };
+
+  const handleTextChange = (event) => {
+    if (event.target.value.length < maxTextLen) {
+      setTextError(false);
+      dispatch(updateSlice({text: event.target.value}));
+    } else {
+      setTextError(true);
+    }
+  };
+
   const submitSlice = async () => {
     // resets the scroller so that query will get new slice
     dispatch(resetScroller());
     try {
       await newSlice({slice: thisSlice, streamId: loadedId}).unwrap();
       dispatch(clearSlice());
+      setTitleError(false);
+      setTextError(false);
       setHidden(true);
     } catch (error) {
       console.log(error); // will want to improve the error handling here
@@ -63,13 +94,14 @@ const CreateSlice = () => {
         <Header size = 'tiny'>Title</Header>
         <FormGroup>
           <FormInput
-            onChange = {(e) => dispatch(updateSlice({title: e.target.value}))}
+            error = {titleError}
             name = 'title'
+            onChange = {handleTitleChange}
             placeholder = 'Title'
             value = {thisSlice.title}/>
           <Button
             basic = {!thisSlice.isMilestone}
-            color = {thisSlice.isMilestone ? 'green' : 'vk'}
+            color = 'vk'
             onClick = {() => dispatch(updateSlice({isMilestone: !thisSlice.isMilestone}))}
             size = 'small'
             type = 'button'>
@@ -77,7 +109,7 @@ const CreateSlice = () => {
           </Button>
           <Button
             basic = {!thisSlice.isPublic}
-            color = {thisSlice.isPublic ? 'green' : 'vk'}
+            color = 'vk'
             onClick = {() => dispatch(updateSlice({isPublic: !thisSlice.isPublic}))}
             size = 'small'
             type = 'button'>
@@ -85,9 +117,10 @@ const CreateSlice = () => {
           </Button>
         </FormGroup>
         <FormTextArea
-          onChange = {(e) => dispatch(updateSlice({text: e.target.value}))}
+          error = {textError}
           label = 'Text'
           name = 'text'
+          onChange = {handleTextChange}
           placeholder = 'Text'
           value = {thisSlice.text}/>
         <div className = 'slice-button-container'>
@@ -99,7 +132,7 @@ const CreateSlice = () => {
           </Button>
           <Button
             fluid
-            onClick = {() => setHidden(true)}
+            onClick = {handleCancel}
             type = 'button'>
             Cancel
           </Button>
