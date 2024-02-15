@@ -49,8 +49,21 @@ export const sliceApi = appApi.injectEndpoints({
         body: slice
       }),
       invalidatesTags: ['Slice']
+    }),
+
+    deleteSlice: build.mutation({
+      query: (sliceId) => ({
+        url: `/slices/${sliceId}`,
+        method: 'DELETE'
+      }),
+
+      invalidatesTags: ['Slice']
     })
   })
 });
 
-export const {useGetSlicesQuery, useNewSliceMutation} = sliceApi;
+export const {
+  useDeleteSliceMutation,
+  useGetSlicesQuery,
+  useNewSliceMutation
+} = sliceApi;

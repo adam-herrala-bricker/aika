@@ -11,13 +11,15 @@ const ToggleSideMenu = ({thisUser}) => {
   }
 
   return (
-    <Button
-      basic
-      color = 'black'
-      compact
-      icon = 'content'
-      onClick = {() => dispatch(toggleSideMenu())}
-      size = 'huge'/>
+    <div className = 'toggle-side-button-container'>
+      <Button
+        basic
+        color = 'black'
+        compact
+        icon = 'content'
+        onClick = {() => dispatch(toggleSideMenu())}
+        size = 'huge'/>
+    </div>
   );
 };
 

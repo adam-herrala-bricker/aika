@@ -105,7 +105,7 @@ const StreamInfo = () => {
         {data.admin && <AllPermissions />}
       </div>
       <div>
-        {!result.isError && data.admin &&
+        {!result.isError && data.deleteAll &&
         <div className = 'stream-delete-container'>
           <Header size = 'small'>delete stream</Header>
           <Button
