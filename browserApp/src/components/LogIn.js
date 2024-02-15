@@ -57,7 +57,7 @@ const LogIn = () => {
             onChange = {(event) => setPassword(event.target.value)}
             placeholder = 'password' />
         </div>
-        <Button onClick = {handleSubmit}>{buttonLabel}</Button>
+        <Button onClick = {handleSubmit} primary>{buttonLabel}</Button>
         <NavButton text = 'cancel' path = '/'/>
       </div>
     </div>

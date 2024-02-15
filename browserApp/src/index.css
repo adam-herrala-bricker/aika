@@ -245,11 +245,15 @@
   box-shadow: none;
 }
 
-.generic-flex-column {
+.generic-flex-column, .registration-container {
   display: flex;
   flex-direction: column;
   row-gap: 5px;
 
-  min-width: 300px;
+  min-width: 350px;
   margin-bottom: 5px;
+}
+
+.registration-container {
+  margin-top: 20px;
 }

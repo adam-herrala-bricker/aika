@@ -16,6 +16,7 @@ const ShareOption = ({type}) => {
         <Button
           basic = {!sharing[type]}
           color = {sharing[type] ? 'vk' : 'grey'}
+          compact
           onClick = {() => dispatch(setSharing({[type]: !sharing[type]}))}
           type = 'button'>
           {type}
