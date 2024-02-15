@@ -2,7 +2,7 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useGetStreamsQuery} from '../services/streams';
 import {clearStreamCache, setStream} from '../reducers/streamReducer';
-import {closeSideMenu, resetScrollView} from '../reducers/viewReducer';
+import {closeSideMenu, resetView} from '../reducers/viewReducer';
 import {Header, MenuItem} from 'semantic-ui-react';
 import {CreateStream} from '.';
 
@@ -25,7 +25,8 @@ const Stream = ({thisStream}) => {
         id: thisStream.id
       }));
 
-      dispatch(resetScrollView()); // tracks whether to show 'load more' button
+      // return to default view when switching between streams
+      dispatch(resetView());
     }
     dispatch(closeSideMenu());
   };

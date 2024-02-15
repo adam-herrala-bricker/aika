@@ -109,6 +109,10 @@
   margin-bottom: 20px;
 }
 
+.permissions-shared-container {
+  margin-top: 25px;
+}
+
 .share-options-container {
   display: flex;
   flex-direction: row;
