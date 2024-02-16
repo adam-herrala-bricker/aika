@@ -4,6 +4,7 @@ import {createSlice} from '@reduxjs/toolkit';
 const defaultSlice = {
   title: '',
   text: '',
+  imageUrl: '',
   isMilestone: false,
   isPublic: false
 };

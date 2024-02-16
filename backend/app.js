@@ -23,6 +23,9 @@ app.use('/email-confirmation/:id', express.static('../browserConf/build'));
 app.use('/app', express.static('../browserApp/build'));
 app.use('/admin', express.static('../browserAdmin/build'));
 
+// static for downloading media
+app.use('/media', express.static('./temp/downloads/'));
+
 // custom middleware
 app.use(middleware.tokenExtractor);
 app.use(middleware.userExtractor);

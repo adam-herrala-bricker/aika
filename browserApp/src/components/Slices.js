@@ -4,7 +4,7 @@ import {appApi} from '../services/config';
 import {useGetMyPermissionsQuery} from '../services/streams';
 import {useDeleteSliceMutation, useGetSlicesQuery} from '../services/slices';
 import {incrementScroller, resetScroller} from '../reducers/streamReducer';
-import {Button, Confirm, Header} from 'semantic-ui-react';
+import {Button, Confirm, Header, Image} from 'semantic-ui-react';
 import {CreateSlice, SliceMenu} from '.';
 import {customDateFormat, howLongAgo} from '../util/helpers';
 
@@ -91,7 +91,16 @@ const Slice = ({slice, myPermissions}) => {
           {slice.isMilestone && <Tag color = 'darkblue' text = 'milestone'/>}
           {slice.isPublic && <Tag color = 'teal' text = 'public'/>}
         </div>
-        {slice.text}
+        <div>
+          {slice.text}
+        </div>
+        <div>
+          {slice.imageName &&
+          <Image
+            className = 'slice-image'
+            src = {`${BACKEND_URL}/media/${slice.id}_${slice.imageName}`}/> // eslint-disable-line no-undef
+          }
+        </div>
       </div>
     </div>
   );

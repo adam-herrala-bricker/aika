@@ -134,6 +134,11 @@
   margin-bottom: 10px;
 }
 
+.slice-image {
+  border-radius: 10px;
+  height: 400px;  
+}
+
 .slice-single-container {
   padding: 10px;
   display: flex;

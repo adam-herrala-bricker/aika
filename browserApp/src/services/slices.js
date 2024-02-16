@@ -43,11 +43,20 @@ export const sliceApi = appApi.injectEndpoints({
     }),
 
     newSlice: build.mutation({
-      query: ({slice, streamId}) => ({
-        url: `/slices/${streamId}`,
-        method: 'POST',
-        body: slice
-      }),
+      query: ({slice, streamId}) => {
+        // sending as form data
+        const formData = new FormData();
+        Object.keys(slice).forEach((key) => {
+          formData.append(key, slice[key]);
+        });
+
+        return {
+          url: `/slices/${streamId}`,
+          formData: true,
+          method: 'POST',
+          body: formData
+        };
+      },
       invalidatesTags: ['Slice']
     }),
 

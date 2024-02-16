@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useNewSliceMutation} from '../services/slices';
 import {resetScroller} from '../reducers/streamReducer';
 import {clearSlice, updateSlice} from '../reducers/sliceReducer';
+import {urlToBlob} from '../util/helpers';
 import {
   Button,
   Form,
@@ -53,11 +54,22 @@ const CreateSlice = () => {
     }
   };
 
+  const handleUpload = async (event) => {
+    // there will only ever be one file uploaded at a time
+    const imageUrl = URL.createObjectURL(event.target.files[0]);
+    dispatch(updateSlice({imageUrl}));
+  };
+
   const submitSlice = async () => {
     // resets the scroller so that query will get new slice
     dispatch(resetScroller());
+    const imageBlob = await urlToBlob(thisSlice.imageUrl);
     try {
-      await newSlice({slice: thisSlice, streamId: loadedId}).unwrap();
+      await newSlice({
+        slice: {
+          ...thisSlice,
+          image: imageBlob},
+        streamId: loadedId}).unwrap();
       dispatch(clearSlice());
       setTitleError(false);
       setTextError(false);
@@ -115,6 +127,13 @@ const CreateSlice = () => {
             type = 'button'>
               Public
           </Button>
+        </FormGroup>
+        <Header size = 'tiny'>Upload</Header>
+        <FormGroup>
+          <FormInput
+            multiple = {false}
+            onChange = {handleUpload}
+            type = 'file'/>
         </FormGroup>
         <FormTextArea
           error = {textError}

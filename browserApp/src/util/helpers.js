@@ -40,3 +40,15 @@ export const howLongAgo = (timeThen) => {
   return textOut;
 };
 
+// takes an object url and returns the blob
+export const urlToBlob = async (objectUrl) => {
+  if (!objectUrl) return null;
+
+  const objectResponse = await fetch(objectUrl);
+  const reBlobed = await objectResponse.blob();
+
+  // can now remove object url
+  URL.revokeObjectURL(objectUrl);
+
+  return reBlobed;
+};
