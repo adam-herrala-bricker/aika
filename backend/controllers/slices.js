@@ -1,4 +1,4 @@
-const {readFile, writeFile} = require('node:fs/promises');
+const {readFile, unlink, writeFile} = require('node:fs/promises');
 const router = require('express').Router();
 const multer = require('multer');
 const {Slice, User} = require('../models');
@@ -99,6 +99,9 @@ router.post('/:id', streamPermissions, uploadImage.single('image'), async (req, 
 
   // remove data from returned entry
   newEntry.imageData = null;
+
+  // delete temp file
+  await unlink(`${req.file.path}`);
 
   res.json(newEntry);
 });

@@ -25,19 +25,6 @@ const SliceImage = ({slice}) => {
   const heightIncrement = 10; // amount it changes by +/-
   const [imageHeight, setImageHeight] = React.useState(30);
 
-  // event handlers
-  const sizeDown = () => {
-    if (imageHeight > minHeight) {
-      setImageHeight(imageHeight - heightIncrement);
-    }
-  };
-
-  const sizeUp = () => {
-    if (imageHeight < maxHeight) {
-      setImageHeight(imageHeight + heightIncrement);
-    }
-  };
-
   return (
     <div className = 'slice-image-group-container'>
       <div
