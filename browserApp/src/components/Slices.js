@@ -18,6 +18,57 @@ const Tag = ({text, color = 'black'}) => {
   );
 };
 
+const SliceImage = ({slice}) => {
+  // max and min height the image can take
+  const maxHeight = 70;
+  const minHeight = 10;
+  const heightIncrement = 10; // amount it changes by +/-
+  const [imageHeight, setImageHeight] = React.useState(30);
+
+  // event handlers
+  const sizeDown = () => {
+    if (imageHeight > minHeight) {
+      setImageHeight(imageHeight - heightIncrement);
+    }
+  };
+
+  const sizeUp = () => {
+    if (imageHeight < maxHeight) {
+      setImageHeight(imageHeight + heightIncrement);
+    }
+  };
+
+  return (
+    <div className = 'slice-image-group-container'>
+      <div
+        className = 'slice-image-container'>
+        {
+          <Image
+            className = 'slice-image'
+            style = {{maxHeight: `${imageHeight}vh`}}
+            src = {`${BACKEND_URL}/media/${slice.id}_${slice.imageName}`}/> // eslint-disable-line no-undef
+        }
+      </div>
+      <div className = 'slice-image-size-button-container'>
+        <Button
+          compact
+          disabled = {imageHeight === maxHeight}
+          onClick = {() => setImageHeight(imageHeight + heightIncrement)}
+          size = 'mini'>
+          +
+        </Button>
+        <Button
+          compact
+          disabled = {imageHeight === minHeight}
+          onClick = {() => setImageHeight(imageHeight - heightIncrement)}
+          size = 'mini'>
+          -
+        </Button>
+      </div>
+    </div>
+  );
+};
+
 const Slice = ({slice, myPermissions}) => {
   const defaultDeleteMessage = 'Are you sure you want to delete this slice?';
 
@@ -94,13 +145,7 @@ const Slice = ({slice, myPermissions}) => {
         <div>
           {slice.text}
         </div>
-        <div>
-          {slice.imageName &&
-          <Image
-            className = 'slice-image'
-            src = {`${BACKEND_URL}/media/${slice.id}_${slice.imageName}`}/> // eslint-disable-line no-undef
-          }
-        </div>
+        {slice.imageName && <SliceImage slice = {slice}/>}
       </div>
     </div>
   );
