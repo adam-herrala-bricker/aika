@@ -4,10 +4,11 @@ import {appApi} from '../services/config';
 const defaultStream = {
   loadedName: null,
   loadedId: null,
+
   scroller: {
     limit: 5, // low for testing
     offset: 0,
-  }
+  },
 };
 
 const streamSlice = createSlice({

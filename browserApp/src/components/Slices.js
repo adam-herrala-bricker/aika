@@ -24,17 +24,43 @@ const SliceImage = ({slice}) => {
   const minHeight = 10;
   const heightIncrement = 10; // amount it changes by +/-
   const [imageHeight, setImageHeight] = React.useState(30);
+  const [imageSrc, setImageSrc] = React.useState(null);
+  const {token} = useSelector((i) => i.user);
+  const {loadedId} = useSelector((i) => i.stream);
+
+  // base url for image
+  const srcBase = `${BACKEND_URL}/media/${loadedId}/${slice.id}_${slice.imageName}`; // eslint-disable-line no-undef
+
+  // fetches image using using authorization header
+  React.useEffect(() => {
+    // function adding authorization header to image request
+    const srcAuthorized = async () => {
+      const headers = {'Authorization': `Bearer ${token}`};
+      const imageData = await fetch(srcBase, {headers});
+      const imageBlob = await imageData.blob();
+      const imageUrl = URL.createObjectURL(imageBlob);
+      setImageSrc(imageUrl);
+    };
+
+    srcAuthorized();
+
+    // don't want a bunch of image urls clogging up memory
+    return () => {
+      URL.revokeObjectURL(imageSrc);
+    };
+
+  }, [srcBase]);
+
+  if (!imageSrc) return null;
 
   return (
     <div className = 'slice-image-group-container'>
       <div
         className = 'slice-image-container'>
-        {
-          <Image
-            className = 'slice-image'
-            style = {{maxHeight: `${imageHeight}vh`}}
-            src = {`${BACKEND_URL}/media/${slice.id}_${slice.imageName}`}/> // eslint-disable-line no-undef
-        }
+        <Image
+          className = 'slice-image'
+          style = {{maxHeight: `${imageHeight}vh`}}
+          src = {imageSrc}/>
       </div>
       <div className = 'slice-image-size-button-container'>
         <Button
