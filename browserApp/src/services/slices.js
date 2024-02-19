@@ -4,10 +4,10 @@ import {sortSliceByDate} from '../util/helpers';
 export const sliceApi = appApi.injectEndpoints({
   endpoints: (build) => ({
     getSlices: build.query({
-      query: ({streamId, limit, offset}) => ({
+      query: ({streamId, limit, offset, search}) => ({
         url: `/slices/view/${streamId}`,
         method: 'POST',
-        body: {limit, offset}
+        body: {limit, offset, search}
       }),
 
       // modifies the cache key so it's only the streamId, not limit or offset

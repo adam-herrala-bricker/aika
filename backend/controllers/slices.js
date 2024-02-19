@@ -1,6 +1,7 @@
 const {readFile, unlink, writeFile} = require('node:fs/promises');
 const router = require('express').Router();
 const multer = require('multer');
+const {Op} = require('sequelize');
 const {Slice, User} = require('../models');
 const {slicePermissions, streamPermissions} = require('../util/middleware');
 
@@ -33,21 +34,36 @@ router.post('/view/:id', streamPermissions, async (req, res) => {
 
   const thisLimit = req.body.limit || defaultLimit;
   const thisOffset = req.body.offset || defaultOffset;
+  const thisSearch = req.body.search;
 
   if (!permissions.read) return res.status(403).json({error: 'read permission required'});
 
+  // set up where based on whether there's a search
+  let whereSearch = {};
+  if (thisSearch.length > 0) {
+    whereSearch = {
+      [Op.or]: {
+        title: {
+          [Op.iLike]: `%${thisSearch}%`
+        },
+        text: {
+          [Op.iLike]: `%${thisSearch}%`
+        }
+      }
+    };
+  }
+
   const slices = await Slice.findAll({
-    where: {streamId: streamId},
-    attributes: {
-      // exclude: ['imageData']
-    },
+    where: {
+      streamId: streamId,
+      ...whereSearch},
     include: {
       model: User,
       attributes: ['username', 'id']
     },
     limit: thisLimit,
     offset: thisOffset,
-    order: [['createdAt', 'DESC']]
+    order: [['createdAt', 'DESC']],
   });
 
   // load temp media for slices with images

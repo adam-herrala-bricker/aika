@@ -9,6 +9,8 @@ const defaultStream = {
     limit: 5, // low for testing
     offset: 0,
   },
+
+  search: '',
 };
 
 const streamSlice = createSlice({
@@ -24,6 +26,13 @@ const streamSlice = createSlice({
           ...state.scroller,
           offset: state.scroller.limit + state.scroller.offset
         }
+      };
+    },
+
+    setSearch(state, action) {
+      return {
+        ...state,
+        search: action.payload
       };
     },
 
@@ -49,7 +58,7 @@ const streamSlice = createSlice({
   }
 });
 
-export const {incrementScroller, setStream, resetScroller, resetStream} = streamSlice.actions;
+export const {incrementScroller, setSearch, setStream, resetScroller, resetStream} = streamSlice.actions;
 
 // clears the cache for this stream (used whenever switching between streams)
 export const clearStreamCache = (streamId) => {

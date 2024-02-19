@@ -166,7 +166,7 @@ const Slice = ({slice, myPermissions}) => {
 
 const Slices = () => {
   const dispatch = useDispatch();
-  const {loadedId, loadedName, scroller} = useSelector((i) => i.stream);
+  const {loadedId, loadedName, scroller, search} = useSelector((i) => i.stream);
   // ref for element to add scroll event listener
   const scrollRef = React.useRef(0);
 
@@ -174,7 +174,8 @@ const Slices = () => {
   const {data, isLoading, isError} = useGetSlicesQuery({
     streamId: loadedId,
     limit: scroller.limit,
-    offset: scroller.offset
+    offset: scroller.offset,
+    search: search
   });
 
   // used for infinite scrolling
