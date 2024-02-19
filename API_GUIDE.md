@@ -391,6 +391,10 @@ Slices are sorted by time created, with the most recent returned first.
   - type: integer
   - required: false
   - default: 0
+- `search`
+  - case insensitive substring searching for title + text
+  - type: string
+  - required: false
 
 #### Returns:
 - Array of `Slice` instances:
