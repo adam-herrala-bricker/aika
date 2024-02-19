@@ -256,7 +256,10 @@ Adds a new slice to the stream with the given `id` (if user has `write` permissi
 - `title`
 - `text`
 - `isPublic`
-- `isMilestone` 
+- `isMilestone`
+- `imageName`
+  - format: `{streamId}-{originalName}` 
+- `imageType` 
 - `createdAt`
 - `updatedAt`    
 
@@ -404,4 +407,22 @@ Slices are sorted by time created, with the most recent returned first.
   - `updatedAt`
   - `User` instance with properties:
     - `username` 
+
+## Media Access
+
+### GET `/media/{streamId}/{fileName}`
+
+Returns media for the given stream and file (subject to the same authorization and permission requirements as slices).
+
+>[!Important]
+>Remember to include the file extension in `fileName`
+
+#### Headers:
+- `Authorization: Bearer <token>`
+
+#### Body:
+- None
+
+#### Returns:
+- Blob
 
