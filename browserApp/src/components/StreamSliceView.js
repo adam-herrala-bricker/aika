@@ -4,7 +4,7 @@ import {closeSideMenu} from '../reducers/viewReducer';
 import {Menu, Segment, Sidebar, SidebarPusher, SidebarPushable} from 'semantic-ui-react';
 import {Streams, Slices, StreamInfo} from '.';
 
-const MenuSide = () => {
+const StreamSliceView = () => {
   const dispatch = useDispatch();
   const slicesRef = React.useRef(); // used to close menu on click
   const {showSideMenu, streamSliceMain} = useSelector((i) => i.view);
@@ -37,4 +37,4 @@ const MenuSide = () => {
   );
 };
 
-export default MenuSide;
+export default StreamSliceView;
