@@ -139,6 +139,10 @@
   height: 400px;  
 }
 
+.slice-image-preview {
+  margin-left: 15px;
+}
+
 .slice-single-container {
   padding: 10px;
   display: flex;

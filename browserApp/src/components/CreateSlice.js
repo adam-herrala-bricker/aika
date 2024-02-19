@@ -11,11 +11,13 @@ import {
   FormGroup,
   FormTextArea,
   Header,
+  Image,
 } from 'semantic-ui-react';
 
 const CreateSlice = () => {
   const maxTitleLen = 32;
   const maxTextLen = 512;
+  const defaultImageMessage = 'Upload image';
   const dispatch = useDispatch();
   const [newSlice, result] = useNewSliceMutation();
   const thisSlice = useSelector((i) => i.slice);
@@ -23,6 +25,7 @@ const CreateSlice = () => {
   const [hidden, setHidden] = React.useState(true);
   const [titleError, setTitleError] = React.useState(false);
   const [textError, setTextError] = React.useState(false);
+  const [imageName, setImageName] = React.useState(defaultImageMessage);
 
   const buttonLabel = result.isError
     ? result.error.data.error
@@ -33,6 +36,7 @@ const CreateSlice = () => {
     dispatch(clearSlice());
     setTitleError(false);
     setTextError(false);
+    setImageName(defaultImageMessage);
     setHidden(true);
   };
 
@@ -55,6 +59,7 @@ const CreateSlice = () => {
   };
 
   const handleUpload = async (event) => {
+    setImageName(event.target.files[0].name);
     // there will only ever be one file uploaded at a time
     const imageUrl = URL.createObjectURL(event.target.files[0]);
     dispatch(updateSlice({imageUrl}));
@@ -73,6 +78,7 @@ const CreateSlice = () => {
       dispatch(clearSlice());
       setTitleError(false);
       setTextError(false);
+      setImageName(defaultImageMessage);
       setHidden(true);
     } catch (error) {
       console.log(error); // will want to improve the error handling here
@@ -128,13 +134,31 @@ const CreateSlice = () => {
               Public
           </Button>
         </FormGroup>
-        <Header size = 'tiny'>Upload</Header>
+        <Header size = 'tiny'>Image</Header>
         <FormGroup>
           <FormInput
+            id = 'file'
             multiple = {false}
             onChange = {handleUpload}
+            style = {{display: 'none'}}
             type = 'file'/>
+          <Button
+            as = 'label'
+            basic
+            htmlFor = 'file'
+            type = 'button'>
+            {imageName}
+          </Button>
         </FormGroup>
+        {thisSlice.imageUrl !== '' &&
+        <FormGroup>
+          <div className = 'slice-image-preview'>
+            <Image
+              size = 'tiny'
+              src = {thisSlice.imageUrl}/>
+          </div>
+        </FormGroup>
+        }
         <FormTextArea
           error = {textError}
           label = 'Text'
