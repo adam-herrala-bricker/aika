@@ -216,8 +216,12 @@ If authorized, deletes stream with the given id from the database.
 
 Adds a new slice to the stream with the given `id` (if user has `write` permissions on that stream).
 
+>[!IMPORTANT]
+>Note that the content type is `multipart/form-data` for this request.
+
 #### Headers:
 - `Authorization: Bearer <token>`
+- `Content-Type: multipart/form-data`
 
 #### Body:
 - `title`
@@ -238,6 +242,9 @@ Adds a new slice to the stream with the given `id` (if user has `write` permissi
   - type boolean
   - required: false
   - default: false
+- `image`
+  - type: file
+  - required: false  
 
 #### Returns:
 - `id`
@@ -391,6 +398,8 @@ Slices are sorted by time created, with the most recent returned first.
   - `text`
   - `isPublic`
   - `isMilestone`
+  - `imageName`
+  - `imageType`
   - `createdAt`
   - `updatedAt`
   - `User` instance with properties:
