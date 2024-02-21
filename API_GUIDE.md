@@ -216,8 +216,8 @@ If authorized, deletes stream with the given id from the database.
 
 Adds a new slice to the stream with the given `id` (if user has `write` permissions on that stream).
 
->[!IMPORTANT]
->Note that the content type is `multipart/form-data` for this request.
+>[!NOTE]
+>If sending an image file, content-type must be `multipart/form-data`. However, when not sending a file, `application/json` will also work.
 
 #### Headers:
 - `Authorization: Bearer <token>`
