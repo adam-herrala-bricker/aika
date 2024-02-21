@@ -169,6 +169,12 @@ const fileName = {
       one: 'test-text001.txt'
     }
   },
+
+  bad: {
+    jpg: {
+      one: 'dave.jpg' // path to nothing
+    }
+  }
 };
 
 module.exports = {

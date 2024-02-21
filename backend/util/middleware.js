@@ -37,7 +37,7 @@ const staticAuthorization = async (req, res, next) => {
   // requires authorization
   if (!req.decodedToken) return res.status(401).json({error: 'token missing'});
 
-  if (!req.permissions.read) return res.status(403).json({error: 'read permissions requred'});
+  if (!req.permissions.read) return res.status(403).json({error: 'read permissions required'});
 
   next();
 };

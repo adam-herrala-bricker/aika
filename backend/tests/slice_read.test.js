@@ -3,6 +3,7 @@ const app = require('../app');
 const api = supertest(app);
 const {connectToDB, sequelize} = require('../util/db');
 const {
+  addImageSlice,
   addSlice,
   addStream,
   addUser,
@@ -11,7 +12,7 @@ const {
   createPermissions,
   logInUser
 } = require('./util/functions');
-const {badToken, expiredUserTwoToken, invalidId, slice, stream, user} = require('./util/constants');
+const {badToken, expiredUserTwoToken, fileName, invalidId, slice, stream, user} = require('./util/constants');
 
 // user objects
 let userTwo; // creator, has permissions
@@ -19,6 +20,9 @@ let userFive; // non-creator, lacks permissions
 
 // stream object
 let streamZero;
+
+// slice object
+let sliceZero;
 
 beforeAll(async () => {
   await connectToDB();
@@ -34,11 +38,12 @@ beforeAll(async () => {
   // tests make no changes to streams or slices, so only need to add once
   streamZero = await addStream(user.two, stream.zero);
 
-  // add four slices to streamZero (as userTwo)
-  await addSlice(userTwo, streamZero.id, slice.valid.zero);
+  // add four slices to streamZero (as userTwo), one of which is an image
+  sliceZero = await addImageSlice(userTwo, streamZero.id, slice.valid.zero, fileName.good.jpg.one);
   await addSlice(userTwo, streamZero.id, slice.valid.one);
   await addSlice(userTwo, streamZero.id, slice.valid.two);
   await addSlice(userTwo, streamZero.id, slice.valid.four); // skipping public
+
 });
 
 describe('valid requests', () => {
@@ -51,6 +56,12 @@ describe('valid requests', () => {
 
     // note that order matters: it should be display most recent first
     expect(body).toMatchObject([slice.valid.four, slice.valid.two, slice.valid.one, slice.valid.zero]);
+
+    // image metadata returned for slice.zero
+    const sliceZeroBody = body[3];
+    expect(sliceZeroBody.imageName).toBe(fileName.good.jpg.one);
+    expect(sliceZeroBody.imageType).toBe('image/jpeg');
+    expect(sliceZeroBody.imageData).toBe(null);
 
     // returns creating user too
     body.forEach((slice) => {
@@ -105,68 +116,149 @@ describe('valid requests', () => {
       expect(slice.user.username).toBe(userTwo.username);
     });
   });
+
+  test('request to image src path', async () => {
+    // need to view slice on stream first
+    await api
+      .post(`/api/slices/view/${streamZero.id}`)
+      .set('Authorization', `Bearer ${userTwo.token}`)
+      .expect(200);
+
+    // then verify that the src path works
+    await api
+      .get(`/media/${streamZero.id}/${sliceZero.id}_${fileName.good.jpg.one}`)
+      .set('Authorization', `Bearer ${userTwo.token}`)
+      .expect(200);
+  });
 });
 
 describe('invalid requests', () => {
-  test('missing token', async () => {
-    const {body} = await api
-      .post(`/api/slices/view/${streamZero.id}`)
-      .expect(401);
+  describe('POST to view stream', () => {
+    test('missing token', async () => {
+      const {body} = await api
+        .post(`/api/slices/view/${streamZero.id}`)
+        .expect(401);
 
-    expect(body.error).toBe('token missing');
+      expect(body.error).toBe('token missing');
+    });
+
+    test('bad token', async () => {
+      const {body} = await api
+        .post(`/api/slices/view/${streamZero.id}`)
+        .set('Authorization', `Bearer ${badToken}`)
+        .expect(400);
+
+      expect(body.error).toBe('jwt malformed');
+    });
+
+    test('expired token', async () => {
+      const {body} = await api
+        .post(`/api/slices/view/${streamZero.id}`)
+        .set('Authorization', `Bearer ${expiredUserTwoToken}`)
+        .expect(403);
+
+      expect(body.error).toBe('login token has expired');
+    });
+
+    test('no permissions for stream', async () => {
+      // make sure userFive has no permissions set for stream
+      await clearPermissions(userFive, streamZero);
+
+      // send request
+      const {body} = await api
+        .post(`/api/slices/view/${streamZero.id}`)
+        .set('Authorization', `Bearer ${userFive.token}`)
+        .expect(403);
+
+      expect(body.error).toBe('no user permissions for this stream');
+    });
+
+    test('read permission set to false', async () => {
+      // set read = false for userFive on streamZero
+      await createPermissions(userFive, streamZero, {read: false});
+
+      // send request
+      const {body} = await api
+        .post(`/api/slices/view/${streamZero.id}`)
+        .set('Authorization', `Bearer ${userFive.token}`)
+        .expect(403);
+
+      expect(body.error).toBe('read permission required');
+    });
+
+    test('bad stream id', async () => {
+      const {body} = await api
+        .post(`/api/slices/view/${invalidId}`)
+        .set('Authorization', `Bearer ${userTwo.token}`)
+        .expect(404);
+
+      expect(body.error).toBe('stream not found');
+    });
   });
 
-  test('bad token', async () => {
-    const {body} = await api
-      .post(`/api/slices/view/${streamZero.id}`)
-      .set('Authorization', `Bearer ${badToken}`)
-      .expect(400);
+  describe('GET for image src', () => {
+    beforeAll(async () => {
+      // viewing the stream --> temp image on server
+      await api
+        .post(`/api/slices/view/${streamZero.id}`)
+        .set('Authorization', `Bearer ${userTwo.token}`)
+        .expect(200);
+    });
 
-    expect(body.error).toBe('jwt malformed');
-  });
+    test('missing token', async () => {
+      const {body} = await api
+        .get(`/media/${streamZero.id}/${sliceZero.id}_${fileName.good.jpg.one}`)
+        .expect(401);
 
-  test('expired token', async () => {
-    const {body} = await api
-      .post(`/api/slices/view/${streamZero.id}`)
-      .set('Authorization', `Bearer ${expiredUserTwoToken}`)
-      .expect(403);
+      expect(body.error).toBe('token missing');
+    });
 
-    expect(body.error).toBe('login token has expired');
-  });
+    test('bad token', async () => {
+      const {body} = await api
+        .get(`/media/${streamZero.id}/${sliceZero.id}_${fileName.good.jpg.one}`)
+        .set('Authorization', `Bearer ${badToken}`)
+        .expect(400);
 
-  test('no permissions for stream', async () => {
-    // make sure userFive has no permissions set for stream
-    await clearPermissions(userFive, streamZero);
+      expect(body.error).toBe('jwt malformed');
+    });
 
-    // send request
-    const {body} = await api
-      .post(`/api/slices/view/${streamZero.id}`)
-      .set('Authorization', `Bearer ${userFive.token}`)
-      .expect(403);
+    test('expired token', async () => {
+      const {body} = await api
+        .get(`/media/${streamZero.id}/${sliceZero.id}_${fileName.good.jpg.one}`)
+        .set('Authorization', `Bearer ${expiredUserTwoToken}`)
+        .expect(403);
 
-    expect(body.error).toBe('no user permissions for this stream');
-  });
+      expect(body.error).toBe('login token has expired');
+    });
 
-  test('read permission set to false', async () => {
-    // set read = false for userFive on streamZero
-    await createPermissions(userFive, streamZero, {read: false});
+    test('no permissions for stream', async () => {
+      await clearPermissions(userFive, streamZero);
 
-    // send request
-    const {body} = await api
-      .post(`/api/slices/view/${streamZero.id}`)
-      .set('Authorization', `Bearer ${userFive.token}`)
-      .expect(403);
+      const {body} = await api
+        .get(`/media/${streamZero.id}/${sliceZero.id}_${fileName.good.jpg.one}`)
+        .set('Authorization', `Bearer ${userFive.token}`)
+        .expect(403);
 
-    expect(body.error).toBe('read permission required');
-  });
+      expect(body.error).toBe('no user permissions for this stream');
+    });
 
-  test('bad stream id', async () => {
-    const {body} = await api
-      .post(`/api/slices/view/${invalidId}`)
-      .set('Authorization', `Bearer ${userTwo.token}`)
-      .expect(404);
+    test('read permissions set to false', async () => {
+      await createPermissions(userFive, streamZero, {read: false});
 
-    expect(body.error).toBe('stream not found');
+      const {body} = await api
+        .get(`/media/${streamZero.id}/${sliceZero.id}_${fileName.good.jpg.one}`)
+        .set('Authorization', `Bearer ${userFive.token}`)
+        .expect(403);
+
+      expect(body.error).toBe('read permissions required');
+    });
+
+    test('bad image path', async () => {
+      await api
+        .get(`/media/${streamZero.id}/${sliceZero.id}_${fileName.bad.jpg.one}`)
+        .set('Authorization', `Bearer ${userTwo.token}`)
+        .expect(404);
+    });
   });
 });
 
