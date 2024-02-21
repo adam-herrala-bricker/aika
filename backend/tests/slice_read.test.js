@@ -117,6 +117,32 @@ describe('valid requests', () => {
     });
   });
 
+  test('search term queries title + text', async () => {
+    const {body} = await api
+      .post(`/api/slices/view/${streamZero.id}`)
+      .set('Authorization', `Bearer ${userTwo.token}`)
+      .send({
+        search: 'title'
+      })
+      .expect(200);
+
+    // these two slices have 'title' in them
+    expect(body).toMatchObject([slice.valid.one, slice.valid.zero]);
+  });
+
+  test('empty string search returns all slices', async () => {
+    const {body} = await api
+      .post(`/api/slices/view/${streamZero.id}`)
+      .set('Authorization', `Bearer ${userTwo.token}`)
+      .send({
+        search: ''
+      })
+      .expect(200);
+
+    // all slices on stream
+    expect(body).toMatchObject([slice.valid.four, slice.valid.two, slice.valid.one, slice.valid.zero]);
+  });
+
   test('request to image src path', async () => {
     // need to view slice on stream first
     await api
