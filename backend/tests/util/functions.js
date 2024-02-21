@@ -32,14 +32,18 @@ const addStream = async (user, stream) => {
 
 // creates a new slice on the given stream as the given user
 // user object is that returned by logInUser
+// (sends as multipart/form-data, without an image attachment)
 const addSlice = async (user, streamId, slice) => {
   const {body} = await api
     .post(`/api/slices/${streamId}`)
     .set('Authorization', `Bearer ${user.token}`)
-    .send(slice);
+    .field(slice);
 
   return body;
 };
+
+// same as above, but with an image attachment
+// const addImageSlice ...
 
 // logs the given user in, returns full user object
 const logInUser = async (user) => {
@@ -89,4 +93,12 @@ const clearPermissions = async (user, stream) => {
   });
 };
 
-module.exports = {addUser, addStream, addSlice, clearDB, clearPermissions, logInUser, createPermissions};
+module.exports = {
+  addUser,
+  addStream,
+  addSlice,
+  clearDB,
+  clearPermissions,
+  createPermissions,
+  logInUser,
+};

@@ -2,7 +2,15 @@ const supertest = require('supertest');
 const app = require('../app');
 const api = supertest(app);
 const {connectToDB, sequelize} = require('../util/db');
-const {addSlice, addStream, addUser, clearDB, clearPermissions, createPermissions, logInUser} = require('./util/functions');
+const {
+  addSlice,
+  addStream,
+  addUser,
+  clearDB,
+  clearPermissions,
+  createPermissions,
+  logInUser
+} = require('./util/functions');
 const {badToken, expiredUserTwoToken, invalidId, slice, stream, user} = require('./util/constants');
 
 // user objects

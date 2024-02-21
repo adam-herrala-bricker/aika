@@ -37,7 +37,7 @@ beforeAll(async () => {
   await createPermissions(userFive, streamZero, {write: true});
 });
 
-describe('valid requests', () => {
+describe('valid requests (json)', () => {
   describe('create single slice ...', () => {
     describe('on own stream', () => {
       test('title and text', async () => {
@@ -199,6 +199,8 @@ describe('valid requests', () => {
       });
     });
   });
+
+  // valid requests (multipart/form-data)
 
   describe('slices accumulate as expected', () => {
     beforeEach(async () => {

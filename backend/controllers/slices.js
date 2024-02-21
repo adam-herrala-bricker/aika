@@ -1,9 +1,10 @@
-const {readFile, unlink, writeFile} = require('node:fs/promises');
+const {unlink, writeFile} = require('node:fs/promises');
 const router = require('express').Router();
 const multer = require('multer');
 const {Op} = require('sequelize');
 const {Slice, User} = require('../models');
 const {slicePermissions, streamPermissions} = require('../util/middleware');
+const {readFileData} = require('../util/helpers');
 
 // for multer middleware
 const storageImage = multer.diskStorage({
@@ -29,6 +30,7 @@ router.get('/', async (req, res) => {
 router.post('/view/:id', streamPermissions, async (req, res) => {
   const defaultLimit = 10;
   const defaultOffset = 0;
+
   const streamId = req.params.id;
   const permissions = req.permissions;
 
@@ -40,7 +42,7 @@ router.post('/view/:id', streamPermissions, async (req, res) => {
 
   // set up where based on whether there's a search
   let whereSearch = {};
-  if (thisSearch.length > 0) {
+  if (thisSearch && thisSearch.length > 0) {
     whereSearch = {
       [Op.or]: {
         title: {
@@ -101,14 +103,9 @@ router.post('/:id', streamPermissions, uploadImage.single('image'), async (req, 
 
   const newEntry = await Slice.create({
     ...req.body,
-    imageData: await readFile(`./${req.file.path}`, (error) => {
-      if (error) {
-        // error handling goes here
-        console.log(error);
-      }
-    }),
-    imageName: req.file.originalname,
-    imageType: req.file.mimetype,
+    imageData: await readFileData(req.file?.path),
+    imageName: req.file?.originalname,
+    imageType: req.file?.mimetype,
     creatorId: creatorId,
     streamId: streamId,
   });
@@ -116,8 +113,10 @@ router.post('/:id', streamPermissions, uploadImage.single('image'), async (req, 
   // remove data from returned entry
   newEntry.imageData = null;
 
-  // delete temp file
-  await unlink(`${req.file.path}`);
+  if (req.file) {
+    // delete temp file
+    await unlink(`${req.file.path}`);
+  }
 
   res.json(newEntry);
 });

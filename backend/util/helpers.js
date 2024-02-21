@@ -1,4 +1,5 @@
 const crypto = require('node:crypto');
+const {readFile} = require('node:fs/promises');
 
 // helper to get a cryptographic key (used for email confirmation)
 const getCryptoKey = (length = 256) => {
@@ -14,4 +15,18 @@ const howLongAgoInMinutes = (targetEvent) => {
   return (timeNow-targetEvent)/minuteFactor;
 };
 
-module.exports = {getCryptoKey, howLongAgoInMinutes};
+// reads in file data when creating a new slice
+const readFileData = async (filePath) => {
+  if (!filePath) return null;
+
+  const imageData = await readFile(`./${filePath}`, (error) => {
+    if (error) {
+      // error handling goes here
+      console.log(error);
+    }
+  });
+
+  return imageData;
+};
+
+module.exports = {getCryptoKey, howLongAgoInMinutes, readFileData};
