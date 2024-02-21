@@ -25,11 +25,26 @@ const SliceImage = ({slice}) => {
   const heightIncrement = 10; // amount it changes by +/-
   const [imageHeight, setImageHeight] = React.useState(30);
   const [imageSrc, setImageSrc] = React.useState(null);
+  const [visible, setVisible] = React.useState(true); // used to cross fade images
+  const [changeDirection, setChangeDirection] = React.useState(null); // can be + or -
   const {token} = useSelector((i) => i.user);
   const {loadedId} = useSelector((i) => i.stream);
 
   // base url for image
   const srcBase = `${BACKEND_URL}/media/${loadedId}/${slice.id}_${slice.imageName}`; // eslint-disable-line no-undef
+
+  // event handlers
+  const handleFadeOut = (direction) => {
+    setVisible(false);
+    setChangeDirection(direction);
+  };
+
+  const handleFadeIn = () => {
+    if (changeDirection === '+') setImageHeight(imageHeight + heightIncrement);
+    if (changeDirection === '-') setImageHeight(imageHeight - heightIncrement);
+
+    setVisible(true);
+  };
 
   // fetches image using using authorization header
   React.useEffect(() => {
@@ -58,7 +73,11 @@ const SliceImage = ({slice}) => {
       <div
         className = 'slice-image-container'>
         <Transition
-          transitionOnMount = {false}>
+          animation = 'fade'
+          duration = {200}
+          onHide = {handleFadeIn}
+          transitionOnMount = {false}
+          visible = {visible}>
           <Image
             className = 'slice-image'
             style = {{maxHeight: `${imageHeight}vh`}}
@@ -69,17 +88,15 @@ const SliceImage = ({slice}) => {
         <Button
           compact
           disabled = {imageHeight === maxHeight}
-          onClick = {() => setImageHeight(imageHeight + heightIncrement)}
-          size = 'mini'>
-          +
-        </Button>
+          icon = 'plus'
+          onClick = {() => handleFadeOut('+')}
+          size = 'mini'/>
         <Button
           compact
           disabled = {imageHeight === minHeight}
-          onClick = {() => setImageHeight(imageHeight - heightIncrement)}
-          size = 'mini'>
-          -
-        </Button>
+          icon = 'minus'
+          onClick = {() => handleFadeOut('-')}
+          size = 'mini' />
       </div>
     </div>
   );
