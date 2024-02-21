@@ -4,7 +4,7 @@ import {appApi} from '../services/config';
 import {useGetMyPermissionsQuery} from '../services/streams';
 import {useDeleteSliceMutation, useGetSlicesQuery} from '../services/slices';
 import {incrementScroller, resetScroller} from '../reducers/streamReducer';
-import {Button, Confirm, Header, Image} from 'semantic-ui-react';
+import {Button, Confirm, Header, Image, Transition} from 'semantic-ui-react';
 import {CreateSlice, SliceMenu} from '.';
 import {customDateFormat, howLongAgo} from '../util/helpers';
 
@@ -57,10 +57,13 @@ const SliceImage = ({slice}) => {
     <div className = 'slice-image-group-container'>
       <div
         className = 'slice-image-container'>
-        <Image
-          className = 'slice-image'
-          style = {{maxHeight: `${imageHeight}vh`}}
-          src = {imageSrc}/>
+        <Transition
+          transitionOnMount = {false}>
+          <Image
+            className = 'slice-image'
+            style = {{maxHeight: `${imageHeight}vh`}}
+            src = {imageSrc}/>
+        </Transition>
       </div>
       <div className = 'slice-image-size-button-container'>
         <Button
@@ -116,21 +119,25 @@ const Slice = ({slice, myPermissions}) => {
   };
 
   return (
-    <div>
-      <div className = 'slice-single-time-container'>
-        <div>{howLongAgo(thisDate)}</div>
-        <div className = 'slice-single-date-text'>
-          {customDateFormat(thisDate)}
-        </div>
-      </div>
-      <div className = 'slice-single-container'>
-        <div className = 'slice-single-top-row'>
-          <div className = 'slice-single-row'>
-            <Header size = 'medium'>{slice.title}</Header>
-            {slice.user.username}
+    <Transition
+      animation = 'fade'
+      duration = {500}
+      transitionOnMount = {true}>
+      <div>
+        <div className = 'slice-single-time-container'>
+          <div>{howLongAgo(thisDate)}</div>
+          <div className = 'slice-single-date-text'>
+            {customDateFormat(thisDate)}
           </div>
-          <div>
-            {canDelete &&
+        </div>
+        <div className = 'slice-single-container'>
+          <div className = 'slice-single-top-row'>
+            <div className = 'slice-single-row'>
+              <Header size = 'medium'>{slice.title}</Header>
+              {slice.user.username}
+            </div>
+            <div>
+              {canDelete &&
             <div>
               <Button
                 basic
@@ -149,18 +156,19 @@ const Slice = ({slice, myPermissions}) => {
                 onConfirm = {handleDelete}
               />
             </div>}
+            </div>
           </div>
+          <div className = 'slice-single-row'>
+            {slice.isMilestone && <Tag color = 'darkblue' text = 'milestone'/>}
+            {slice.isPublic && <Tag color = 'teal' text = 'public'/>}
+          </div>
+          <div>
+            {slice.text}
+          </div>
+          {slice.imageName && <SliceImage slice = {slice}/>}
         </div>
-        <div className = 'slice-single-row'>
-          {slice.isMilestone && <Tag color = 'darkblue' text = 'milestone'/>}
-          {slice.isPublic && <Tag color = 'teal' text = 'public'/>}
-        </div>
-        <div>
-          {slice.text}
-        </div>
-        {slice.imageName && <SliceImage slice = {slice}/>}
       </div>
-    </div>
+    </Transition>
   );
 };
 
