@@ -137,6 +137,7 @@ const CreateSlice = () => {
         <Header size = 'tiny'>Image</Header>
         <FormGroup>
           <FormInput
+            accept = '.jpg, .png'
             id = 'file'
             multiple = {false}
             onChange = {handleUpload}
