@@ -4,7 +4,17 @@ const app = require('../app');
 const api = supertest(app);
 const {Slice} = require('../models');
 const {connectToDB, sequelize} = require('../util/db');
-const {addSlice, addStream, addUser, logInUser, clearDB, clearPermissions, createPermissions} = require('./util/functions');
+const {
+  addImageSlice,
+  addSlice,
+  addStream,
+  addUser,
+  logInUser,
+  clearDB,
+  clearPermissions,
+  createPermissions
+} = require('./util/functions');
+
 const {
   badToken,
   basePath,
@@ -394,6 +404,26 @@ describe('valid requests', () => {
         .expect(204);
 
       // confirm no longer in DB
+      const foundSlice = await Slice.findByPk(thisSlice.id);
+      expect(foundSlice).toBe(null);
+    });
+
+    test.only('of image slice', async () => {
+      // add slice to delete
+      const thisSlice = await addImageSlice(
+        userTwo,
+        streamZero.id,
+        slice.valid.zero,
+        fileName.good.jpg.one
+      );
+
+      // delete request
+      await api
+        .delete(`/api/slices/${thisSlice.id}`)
+        .set('Authorization', `Bearer ${userTwo.token}`)
+        .expect(204);
+
+      // slice no longer in DB
       const foundSlice = await Slice.findByPk(thisSlice.id);
       expect(foundSlice).toBe(null);
     });

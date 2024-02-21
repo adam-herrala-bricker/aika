@@ -1,9 +1,11 @@
+const {readFile} = require('node:fs/promises');
 const supertest = require('supertest');
 const app = require('../../app');
 const api = supertest(app);
 const bcrypt = require('bcrypt');
 const {Op} = require('sequelize');
 const {StreamUser, User} = require('../../models');
+const {basePath} = require('./constants');
 
 // clears the test DB of all entries
 const clearDB = async () => {
@@ -43,7 +45,19 @@ const addSlice = async (user, streamId, slice) => {
 };
 
 // same as above, but with an image attachment
-// const addImageSlice ...
+// (images are stored seperately from slice constants)
+const addImageSlice = async (user, streamId, slice, imageName) => {
+  const imageBuffer = await readFile(`${basePath}/${imageName}`);
+
+  const {body} = await api
+    .post(`/api/slices/${streamId}`)
+    .set('Authorization', `Bearer ${user.token}`)
+    .attach('image', imageBuffer, imageName)
+    .field(slice)
+    .expect(200);
+
+  return body;
+};
 
 // logs the given user in, returns full user object
 const logInUser = async (user) => {
@@ -97,6 +111,7 @@ module.exports = {
   addUser,
   addStream,
   addSlice,
+  addImageSlice,
   clearDB,
   clearPermissions,
   createPermissions,
