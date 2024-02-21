@@ -408,7 +408,7 @@ describe('valid requests', () => {
       expect(foundSlice).toBe(null);
     });
 
-    test.only('of image slice', async () => {
+    test('of image slice', async () => {
       // add slice to delete
       const thisSlice = await addImageSlice(
         userTwo,
@@ -628,7 +628,20 @@ describe('invalid requests', () => {
       });
     });
 
-    // file errors: wrong file type, bad path
+    describe('file errors', () => {
+      test('not permitted type', async () => {
+        const thisName = fileName.good.txt.one;
+        const fileBuffer = await readFile(`${basePath}/${thisName}`);
+
+        const {body} = await api
+          .post(`/api/slices/${streamZero.id}`)
+          .set('Authorization', `Bearer ${userTwo.token}`)
+          .attach('image', fileBuffer, thisName)
+          .expect(400);
+
+        expect(body.error).toBe('file type not permitted');
+      });
+    });
 
     describe('other delete errors', () => {
       test('unrecognized slice id', async () => {

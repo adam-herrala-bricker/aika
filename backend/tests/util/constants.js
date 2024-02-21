@@ -164,8 +164,11 @@ const fileName = {
   good: {
     jpg: {
       one: 'test-img001.jpg'
+    },
+    txt: {
+      one: 'test-text001.txt'
     }
-  }
+  },
 };
 
 module.exports = {
