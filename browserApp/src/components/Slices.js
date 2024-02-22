@@ -18,6 +18,16 @@ const Tag = ({text, color = 'black'}) => {
   );
 };
 
+const TagGroup = ({slice}) => {
+
+  return (
+    <div className = 'slice-single-row'>
+      {slice.isMilestone && <Tag color = 'darkblue' text = 'milestone'/>}
+      {slice.isPublic && <Tag color = 'teal' text = 'public'/>}
+    </div>
+  );
+};
+
 const SliceImage = ({slice}) => {
   // max and min height the image can take
   const maxHeight = 70;
@@ -29,8 +39,6 @@ const SliceImage = ({slice}) => {
   const [changeDirection, setChangeDirection] = React.useState(null); // can be + or -
   const {token} = useSelector((i) => i.user);
   const {loadedId} = useSelector((i) => i.stream);
-
-
 
   // event handlers
   const handleFadeOut = (direction) => {
@@ -86,19 +94,22 @@ const SliceImage = ({slice}) => {
             src = {imageSrc}/>
         </Transition>
       </div>
-      <div className = 'slice-image-size-button-container'>
-        <Button
-          compact
-          disabled = {imageHeight === maxHeight}
-          icon = 'plus'
-          onClick = {() => handleFadeOut('+')}
-          size = 'mini'/>
-        <Button
-          compact
-          disabled = {imageHeight === minHeight}
-          icon = 'minus'
-          onClick = {() => handleFadeOut('-')}
-          size = 'mini' />
+      <div className = 'slice-image-bottom-row'>
+        <TagGroup slice = {slice}/>
+        <div className = 'slice-image-size-button-container'>
+          <Button
+            compact
+            disabled = {imageHeight === maxHeight}
+            icon = 'plus'
+            onClick = {() => handleFadeOut('+')}
+            size = 'mini'/>
+          <Button
+            compact
+            disabled = {imageHeight === minHeight}
+            icon = 'minus'
+            onClick = {() => handleFadeOut('-')}
+            size = 'mini' />
+        </div>
       </div>
     </div>
   );
@@ -177,13 +188,10 @@ const Slice = ({slice, myPermissions}) => {
             </div>}
             </div>
           </div>
-          <div className = 'slice-single-row'>
-            {slice.isMilestone && <Tag color = 'darkblue' text = 'milestone'/>}
-            {slice.isPublic && <Tag color = 'teal' text = 'public'/>}
-          </div>
           <div>
             {slice.text}
           </div>
+          {!slice.imageName && <TagGroup slice = {slice} />}
           {slice.imageName && <SliceImage slice = {slice}/>}
         </div>
       </div>

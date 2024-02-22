@@ -138,6 +138,12 @@
   border-radius: 10px; 
 }
 
+.slice-image-bottom-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .slice-image-container {
   display: flex;
   justify-content: center;
@@ -251,7 +257,7 @@
   width: fit-content;
   border-style: solid;
   border-radius: 5px;
-  border-width: 2px;
+  border-width: 1px;
 }
 
 .create-stream-container {
