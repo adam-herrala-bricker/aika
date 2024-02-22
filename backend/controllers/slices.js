@@ -16,7 +16,19 @@ const storageImage = multer.diskStorage({
   },
 });
 
-const uploadImage = multer({storage: storageImage});
+const uploadImage = multer({
+  storage: storageImage,
+  fileFilter: (req, file, cb) => {
+    const permittedTypes = ['image/jpeg', 'image/png'];
+    const fileType = file.mimetype;
+
+    if (permittedTypes.includes(fileType)) {
+      return cb(null, true);
+    }
+
+    return cb(new Error('file type not permitted')); // reject by default
+  }
+});
 
 
 // GET request for all slices (will require ADMIN token)
@@ -89,7 +101,6 @@ router.post('/view/:id', streamPermissions, async (req, res) => {
 
 // POST request to create new slice
 router.post('/:id', streamPermissions, uploadImage.single('image'), async (req, res) => {
-  const permittedFileTypes = ['image/jpeg', 'image/png'];
   const creatorId = req.decodedToken.id;
   const streamId = req.params.id;
   const permissions = req.permissions;
@@ -100,12 +111,6 @@ router.post('/:id', streamPermissions, uploadImage.single('image'), async (req, 
 
   if (!permissions.write) {
     return res.status(403).json({error: 'user cannot write to this stream'});
-  }
-
-  if (req.file) {
-    if (!permittedFileTypes.includes(req.file.mimetype)) {
-      return res.status(400).json({error: 'file type not permitted'});
-    }
   }
 
   const newEntry = await Slice.create({

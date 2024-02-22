@@ -120,6 +120,8 @@ const errorHandler = (error, request, response, next) => {
     return response.status(400).json({error: error.message});
   } else if (error.message === 'expired token') {
     return response.status(403).json({error: 'login token has expired'});
+  } else if (error.message === 'file type not permitted') {
+    return response.status(400).json({error: error.message});
   }
 
   next(error);
