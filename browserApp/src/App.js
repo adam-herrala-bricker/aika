@@ -1,7 +1,7 @@
 import React from 'react';
 import {Route, Routes} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
-import {logOut, setUser, updateTokenExpiry} from './reducers/userReducer';
+import {manageAutoLogout, setUser} from './reducers/userReducer';
 import {Entry, LogIn, MenuBar, Register, StreamSliceView} from './components';
 
 const Home = ({thisUser}) => {
@@ -24,25 +24,12 @@ const App = () => {
   }
 
   // simple timer to keep track of token expiry
-  const [timerTicks, setTimerTicks] = React.useState(0);
-  const timeoutRate = thisUser.minutesUntilTokenExpires > 3 ? 60*1000 : 1000;
-
   React.useEffect(() => {
     if (thisUser !== 'guest') {
-      dispatch(updateTokenExpiry());
-
-      if (thisUser.minutesUntilTokenExpires <= .05) { // just before 0
-        dispatch(logOut());
-      }
-
-      const thisTimeout = setTimeout(() => {
-        setTimerTicks(timerTicks + 1);
-      }, timeoutRate); // every minute/second
-
+      const thisTimeout = dispatch(manageAutoLogout(thisUser.minutesUntilTokenExpires));
       return () => {clearTimeout(thisTimeout);};
     }
-
-  }, [thisUser.token, timerTicks]);
+  }, [thisUser]);
 
   return (
     <div className = 'outer-container'>

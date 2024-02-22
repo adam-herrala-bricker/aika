@@ -35,7 +35,8 @@ const userSlice = createSlice({
         username: username,
         userId: id,
         token: token,
-        tokenCreatedAt: tokenCreatedAt
+        tokenCreatedAt: tokenCreatedAt,
+        minutesUntilTokenExpires: tokenLifeInMinutes - howLongAgoInMinutes(tokenCreatedAt)
       };
     },
 
@@ -71,6 +72,21 @@ export const logOut = (token) => {
     dispatch(resetStream());
     dispatch(resetView());
     await dispatch(appApi.util.resetApiState());
+  };
+};
+
+export const manageAutoLogout = (minutesUntilTokenExpires) => {
+  return (dispatch) => {
+    const timeoutRate = minutesUntilTokenExpires > 3 ? 60*1000 : 1000;
+    if (minutesUntilTokenExpires <= .05) { // just before 0
+      dispatch(logOut());
+    }
+
+    const thisTimeout = setTimeout(() => {
+      dispatch(updateTokenExpiry());
+    }, timeoutRate);
+
+    return thisTimeout;
   };
 };
 
