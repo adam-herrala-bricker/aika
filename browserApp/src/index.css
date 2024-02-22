@@ -260,6 +260,10 @@
   border-color: lightgray;
 }
 
+.username-container {
+  text-align: end;
+}
+
 .ui.input.stretchy {
   flex-grow: 1;
 }

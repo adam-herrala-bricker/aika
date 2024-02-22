@@ -3,11 +3,16 @@ import {clearSlice} from './sliceReducer';
 import {resetStream} from './streamReducer';
 import {resetView} from './viewReducer';
 import {appApi} from '../services/config';
+import {howLongAgoInMinutes} from '../util/helpers';
+
+const tokenLifeInMinutes = 10000; // slightly under one week;
 
 const defaultUser = {
   username: 'guest',
   userId: null,
   token: null,
+  tokenCreatedAt: null,
+  minutesUntilTokenExpires: tokenLifeInMinutes
 };
 
 const userSlice = createSlice({
@@ -20,7 +25,7 @@ const userSlice = createSlice({
   reducers: {
     setUser(state, action) {
       const thisUser = action.payload;
-      const {username, id, token} = thisUser;
+      const {username, id, token, tokenCreatedAt} = thisUser;
 
       // add user to local storage
       window.localStorage.setItem('aikaUser', JSON.stringify(thisUser));
@@ -30,17 +35,29 @@ const userSlice = createSlice({
         username: username,
         userId: id,
         token: token,
+        tokenCreatedAt: tokenCreatedAt
       };
     },
 
     clearUser() {
       window.localStorage.removeItem('aikaUser');
       return {...defaultUser};
+    },
+
+    updateTokenExpiry(state) {
+      if (state.username === 'guest') {
+        return state;
+      }
+      // only update expiry if user loaded
+      return {
+        ...state,
+        minutesUntilTokenExpires: tokenLifeInMinutes - howLongAgoInMinutes(state.tokenCreatedAt)
+      };
     }
   }
 });
 
-export const {clearUser, setUser} = userSlice.actions;
+export const {clearUser, setUser, updateTokenExpiry} = userSlice.actions;
 
 export const logOut = (token) => {
   return async (dispatch) => {

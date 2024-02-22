@@ -1,11 +1,17 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {Button, Header} from 'semantic-ui-react';
+import {Button, Header, Popup} from 'semantic-ui-react';
 import {logOut} from '../reducers/userReducer';
 import {ToggleSideMenu} from '.';
+import {howLongUntil} from '../util/helpers';
 
 const LogOutButton = ({thisUser}) => {
   const dispatch = useDispatch();
+  const {minutesUntilTokenExpires} = useSelector((i) => i.user);
+  const countdown = howLongUntil(minutesUntilTokenExpires);
+  const warningThreshold = 5; // time in minutes
+  const isWarning = minutesUntilTokenExpires < warningThreshold;
+  const buttonText = isWarning ? `logout - ${countdown}`: 'logout';
 
   // event handler
   const handleLogout = () => {
@@ -18,12 +24,19 @@ const LogOutButton = ({thisUser}) => {
 
   return (
     <div>
-      <Button
-        compact
-        fluid
-        onClick = {handleLogout}>
-        log out
-      </Button>
+      <Popup
+        content = {`You will be automatically logged out in ${countdown}.`}
+        disabled = {!isWarning}
+        trigger = {
+          <Button
+            compact
+            fluid
+            negative = {isWarning}
+            onClick = {handleLogout}>
+            {buttonText}
+          </Button>
+        }/>
+
     </div>
   );
 };
@@ -34,7 +47,7 @@ const UserDisplay = ({thisUser}) => {
   }
 
   return (
-    <div>
+    <div className = 'username-container'>
       {thisUser.username}
     </div>
   );
