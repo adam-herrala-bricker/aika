@@ -39,6 +39,6 @@ const registrationSlice = createSlice({
   }
 });
 
-export const {clearPasswords, updateRegistration} = registrationSlice.actions;
+export const {clearPasswords, clearRegistration, updateRegistration} = registrationSlice.actions;
 
 export default registrationSlice.reducer;

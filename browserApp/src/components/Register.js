@@ -5,7 +5,7 @@ import {useNavigate} from 'react-router';
 import {useRegisterUserMutation} from '../services/users';
 import {Button, Form, FormField, Header, Input} from 'semantic-ui-react';
 import {NavButton} from '.';
-import {clearPasswords, updateRegistration} from '../reducers/registrationReducer';
+import {clearPasswords, clearRegistration, updateRegistration} from '../reducers/registrationReducer';
 
 const TextField = ({varName, dispName, type = 'text', ...props}) => {
   const dispatch = useDispatch();
@@ -52,6 +52,7 @@ const RegistrationForm = ({setIsRegistered}) => {
     try {
       await registerUser(thisRegistration).unwrap();
       setIsRegistered(true);
+      dispatch(clearRegistration());
     } catch (error) {
       console.log(error);
     }

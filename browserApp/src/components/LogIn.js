@@ -4,7 +4,7 @@ import {useDispatch} from 'react-redux';
 import {useNavigate} from 'react-router';
 import {useLoginUserMutation} from '../services/users';
 import {setUser} from '../reducers/userReducer';
-import {Button, Header} from 'semantic-ui-react';
+import {Button, Header, Form} from 'semantic-ui-react';
 import {NavButton} from '.';
 
 const LogIn = () => {
@@ -38,7 +38,7 @@ const LogIn = () => {
   }
 
   return (
-    <div>
+    <Form onSubmit = {handleSubmit}>
       <Header size = 'large'>Log In</Header>
       <div className = 'generic-flex-column'>
         <div className = 'ui input'>
@@ -57,10 +57,10 @@ const LogIn = () => {
             onChange = {(event) => setPassword(event.target.value)}
             placeholder = 'password' />
         </div>
-        <Button onClick = {handleSubmit} primary>{buttonLabel}</Button>
+        <Button type = 'submit' primary>{buttonLabel}</Button>
         <NavButton text = 'cancel' path = '/'/>
       </div>
-    </div>
+    </Form>
   );
 };
 
