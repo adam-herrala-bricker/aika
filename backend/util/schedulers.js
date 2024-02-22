@@ -1,5 +1,6 @@
 // these are all functions to schedule things at regular intervals
 const {CronJob} = require('cron');
+const {readdir, stat, unlink} = require('node:fs/promises');
 const {ActiveConfirmation, ActiveSession, User} = require('../models');
 const {howLongAgoInMinutes} = require('./helpers');
 
@@ -41,6 +42,26 @@ const pruneSessions = async (after = 10080) => {
   return pruneCount;
 };
 
+// function used to prune temp media after 5 minutes
+// (don't need to keep this on server)
+const pruneMedia = async (after = 5) => {
+  const mediaPath = './temp/downloads';
+  const mediaFiles = await readdir(mediaPath);
+
+  let pruneCount = 0;
+  for await (const file of mediaFiles) {
+    const fileStats = await stat(`${mediaPath}/${file}`);
+
+    if (howLongAgoInMinutes(fileStats.birthtime) > after) {
+      await unlink(`${mediaPath}/${file}`);
+      console.log(`temp media pruned: ${file}`);
+      pruneCount ++;
+    }
+  }
+
+  return pruneCount;
+};
+
 // scheduler for prune functions
 const prune = new CronJob(
   '0 */5 * * * *', // fire every five minutes on the minute
@@ -50,8 +71,9 @@ const prune = new CronJob(
 
     const confirmationsPruned = await pruneConfirmations();
     const sessionsPruned = await pruneSessions();
+    const mediaPruned = await pruneMedia();
 
-    if (confirmationsPruned + sessionsPruned === 0) {
+    if (confirmationsPruned + sessionsPruned + mediaPruned === 0) {
       console.log('nothing pruned');
     }
   }

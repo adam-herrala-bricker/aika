@@ -30,8 +30,7 @@ const SliceImage = ({slice}) => {
   const {token} = useSelector((i) => i.user);
   const {loadedId} = useSelector((i) => i.stream);
 
-  // base url for image
-  const srcBase = `${BACKEND_URL}/media/${loadedId}/${slice.id}_${slice.imageName}`; // eslint-disable-line no-undef
+
 
   // event handlers
   const handleFadeOut = (direction) => {
@@ -48,6 +47,9 @@ const SliceImage = ({slice}) => {
 
   // fetches image using using authorization header
   React.useEffect(() => {
+    // base url for image
+    const srcBase = `${BACKEND_URL}/media/${loadedId}/${slice.id}_${slice.imageName}`; // eslint-disable-line no-undef
+
     // function adding authorization header to image request
     const srcAuthorized = async () => {
       const headers = {'Authorization': `Bearer ${token}`};
@@ -64,7 +66,7 @@ const SliceImage = ({slice}) => {
       URL.revokeObjectURL(imageSrc);
     };
 
-  }, [srcBase]);
+  }, [slice]);
 
   if (!imageSrc) return null;
 
