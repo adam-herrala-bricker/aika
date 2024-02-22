@@ -89,6 +89,8 @@ Checks the provided password against the stored hash. Creates a new `ActiveSessi
 - `username`
 - `token`
   - Bearer token for authenticating user requests
+- `tokenCreatedAt`
+  - type: date  
 
 ### DELETE `/api/login`
 
