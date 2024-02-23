@@ -1,6 +1,7 @@
 {
   "scripts": {
     "dev": "NODE_ENV=development nodemon index.js",
+    "start": "NODE_ENV=production node index.js",
     "test": "NODE_ENV=testing jest --verbose --runInBand",
     "lint": "eslint .",
     "migration:down": "node ./util/rollback.js"

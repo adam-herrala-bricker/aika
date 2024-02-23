@@ -36,3 +36,6 @@ jobs:
         run: cd backend && npm run test
       - name: Decompose test DB
         run: cd testingDB && docker compose down
+      - name: Deploy to production
+        if: ${{ github.event_name == 'push'}} #only deploy on push (to main)
+        run: curl ${{ secrets.RENDER_DEPLOY_HOOK }}
