@@ -210,7 +210,7 @@ const Slices = () => {
   const scrollRef = React.useRef(0);
 
   const myPermissions = useGetMyPermissionsQuery(loadedId);
-  const {data, isLoading, isError} = useGetSlicesQuery({
+  const {data, isLoading, isError, isFetching} = useGetSlicesQuery({
     streamId: loadedId,
     limit: scroller.limit,
     offset: scroller.offset,
@@ -245,6 +245,7 @@ const Slices = () => {
     <div className = 'slice-view-container'>
       {loadedId && <SliceMenu stream = {{loadedName, loadedId}}/>}
       {myPermissions?.data?.write && <CreateSlice />}
+      {(search.length > 0 && !isFetching && !isLoading && data.length === 0) && <div>no slices found</div>}
       <div ref = {scrollRef} className = 'slice-scroll-region'>
         {data && data.map((slice) =>
           <Slice
