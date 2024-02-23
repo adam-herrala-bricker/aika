@@ -170,6 +170,10 @@
   justify-content: flex-end;
 }
 
+.slice-no-search-results{
+  margin-left: 10px;
+}
+
 .slice-single-column {
   display: flex;
   flex-direction: column;

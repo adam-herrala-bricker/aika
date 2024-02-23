@@ -245,7 +245,8 @@ const Slices = () => {
     <div className = 'slice-view-container'>
       {loadedId && <SliceMenu stream = {{loadedName, loadedId}}/>}
       {myPermissions?.data?.write && <CreateSlice />}
-      {(search.length > 0 && !isFetching && !isLoading && data.length === 0) && <div>no slices found</div>}
+      {(search.length > 0 && !isFetching && !isLoading && data.length === 0) &&
+        <div className = 'slice-no-search-results'>no slices found</div>}
       <div ref = {scrollRef} className = 'slice-scroll-region'>
         {data && data.map((slice) =>
           <Slice
