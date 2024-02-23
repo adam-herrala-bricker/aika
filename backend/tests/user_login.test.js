@@ -29,6 +29,7 @@ describe('valid requests', () => {
     // returns expected content
     expect(body.id).toBeDefined();
     expect(body.token).toBeDefined();
+    expect(body.tokenCreatedAt).toBeDefined();
     expect(body.username).toEqual(user.two.username);
 
     // verify active session stored in DB

@@ -24,6 +24,21 @@ Slice.init({
     }
   },
 
+  imageData: {
+    type: DataTypes.BLOB('long'),
+    allowNull: true
+  },
+
+  imageName: {
+    type: DataTypes.TEXT,
+    allowNull: true
+  },
+
+  imageType: {
+    type: DataTypes.TEXT,
+    allowNull: true
+  },
+
   isPublic: {
     type: DataTypes.BOOLEAN,
     allowNull: false,

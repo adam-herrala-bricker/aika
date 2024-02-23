@@ -1,4 +1,9 @@
-const {GMAIL_ADDRESS, GMAIL_CLIENT_ID, GMAIL_CLIENT_SECRET, GMAIL_REFRESH_TOKEN} = require('../util/config');
+const {
+  GMAIL_ADDRESS,
+  GMAIL_CLIENT_ID,
+  GMAIL_CLIENT_SECRET,
+  GMAIL_REFRESH_TOKEN
+} = require('../util/config');
 
 const auth = {
   type: 'OAuth2',

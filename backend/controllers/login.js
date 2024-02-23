@@ -47,10 +47,13 @@ router.post('/', async (req, res) => {
   const token = jwt.sign(userObject, USER_SECRET);
 
   // add user id + token to active sessions
-  await ActiveSession.create({userId: thisUser.id, token: token});
+  const thisSession = await ActiveSession.create({userId: thisUser.id, token: token});
 
   // then send respond
-  res.status(200).send({...userObject, token});
+  res.status(200).send({
+    ...userObject,
+    tokenCreatedAt: thisSession.createdAt,
+    token});
 });
 
 // DELETE request to logout (token is passed in header)

@@ -12,6 +12,8 @@
 **/build/*.png
 **/build/*.eot
 
+backend/temp/**
+
 **/node_modules/
 **/pgdata/**
 *.rest

@@ -18,14 +18,22 @@ app.use(express.json());
 // outputs traffic to console
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 
-// static FE builds (note redirect: false doesn't seem to work)
-app.use('/email-confirmation/:id', express.static('../browserConf/build', {redirect: false}));
-app.use('/app', express.static('../browserApp/build', {redirect: false}));
-app.use('/admin', express.static('../browserAdmin/build', {redirect: false}));
+// static FE builds
+app.use('/email-confirmation/:id', express.static('../browserConf/build'));
+app.use('/app', express.static('../browserApp/build'));
+app.use('/admin', express.static('../browserAdmin/build'));
 
 // custom middleware
 app.use(middleware.tokenExtractor);
 app.use(middleware.userExtractor);
+
+// static for downloading media
+app.use(
+  '/media/:id/',
+  middleware.streamPermissions,
+  middleware.staticAuthorization,
+  express.static('./temp/downloads/')
+);
 
 // routes
 app.use('/confirm', confirmRouter);

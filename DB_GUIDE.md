@@ -44,16 +44,19 @@ flowchart LR
             SU9(created_at)
             SU10(updated_at)
         end
-        subgraph Entry
-            E1(id)
-            E2(creator_id)
-            E3(stream_id)
-            E4(title)
-            E5(text)
-            E6(is_public)
-            E7(is_milestone)
-            E8(created_at)
-            E9(updated_at)
+        subgraph Slice
+            SL1(id)
+            SL2(creator_id)
+            SL3(stream_id)
+            SL4(title)
+            SL5(text)
+            SL6(is_public)
+            SL7(is_milestone)
+            SL8(created_at)
+            SL9(updated_at)
+            SL10(image_data)
+            SL11(image_name)
+            SL12(image_type)
         end
         subgraph ActiveConfirm
             AC1(id)
@@ -67,7 +70,7 @@ flowchart LR
     SU3---U1
     S2---U1
     SU2---S1
-    S1---E3
-    E2---U1
+    S1---SL3
+    SL2---U1
     U1---AC2
 ```

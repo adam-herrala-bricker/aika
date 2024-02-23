@@ -157,9 +157,31 @@ const stream = {
   }
 };
 
+// base path for file testing (note this is from /backend)
+const basePath = './tests/media';
+
+const fileName = {
+  good: {
+    jpg: {
+      one: 'test-img001.jpg'
+    },
+    txt: {
+      one: 'test-text001.txt'
+    }
+  },
+
+  bad: {
+    jpg: {
+      one: 'dave.jpg' // path to nothing
+    }
+  }
+};
+
 module.exports = {
   badToken,
+  basePath,
   expiredUserTwoToken,
+  fileName,
   invalidId,
   slice,
   stream,

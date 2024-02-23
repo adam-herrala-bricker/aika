@@ -1,11 +1,11 @@
 const Sequelize = require('sequelize');
 const {Umzug, SequelizeStorage} = require('umzug');
-const {DB_URI, NODE_ENV} = require('./config');
+const {DB_URI} = require('./config');
 
 console.log(DB_URI);
 // this is the sequelize instance that will be used everywhere
 const sequelize = new Sequelize(DB_URI, {
-  logging: NODE_ENV === 'testing' ? false : true
+  logging: false
 });
 
 // config for migration

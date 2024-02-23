@@ -1,10 +1,30 @@
+const {readFile} = require('node:fs/promises');
 const supertest = require('supertest');
 const app = require('../app');
 const api = supertest(app);
 const {Slice} = require('../models');
 const {connectToDB, sequelize} = require('../util/db');
-const {addSlice, addStream, addUser, logInUser, clearDB, clearPermissions, createPermissions} = require('./util/functions');
-const {badToken, expiredUserTwoToken, invalidId, slice, stream, user} = require('./util/constants');
+const {
+  addImageSlice,
+  addSlice,
+  addStream,
+  addUser,
+  logInUser,
+  clearDB,
+  clearPermissions,
+  createPermissions
+} = require('./util/functions');
+
+const {
+  badToken,
+  basePath,
+  expiredUserTwoToken,
+  fileName,
+  invalidId,
+  slice,
+  stream,
+  user
+} = require('./util/constants');
 
 // user objects
 let userTwo;
@@ -39,7 +59,7 @@ beforeAll(async () => {
 
 describe('valid requests', () => {
   describe('create single slice ...', () => {
-    describe('on own stream', () => {
+    describe('on own stream (json)', () => {
       test('title and text', async () => {
         const {body} = await api
           .post(`/api/slices/${streamZero.id}`)
@@ -171,7 +191,7 @@ describe('valid requests', () => {
     });
 
     // not going to test every slice permutation here
-    describe('on shared stream', () => {
+    describe('on shared stream (json)', () => {
       test('ordinary slice', async () => {
         const {body} = await api
           .post(`/api/slices/${streamZero.id}`)
@@ -196,6 +216,97 @@ describe('valid requests', () => {
           expect(entry).toHaveProperty('createdAt');
           expect(entry).toHaveProperty('updatedAt');
         });
+      });
+    });
+
+    describe('on own stream (multipart/form-data)', () => {
+      test('image only', async () => {
+        // path from /backend (!!)
+        const fileBuffer = await readFile(`${basePath}/${fileName.good.jpg.one}`);
+
+        const {body} = await api
+          .post(`/api/slices/${streamZero.id}`)
+          .set('Authorization', `Bearer ${userTwo.token}`)
+          .attach('image', fileBuffer, fileName.good.jpg.one)
+          .expect(200);
+
+        // returns expected body
+        expect(body.imageName).toBe(fileName.good.jpg.one);
+        expect(body.imageType).toBe('image/jpeg');
+        expect(body.imageData).toBe(null); // this is critical
+        expect(body.streamId).toBe(streamZero.id);
+        expect(body.creatorId).toBe(userTwo.id);
+
+        // expected data in DB
+        const sliceDB = await Slice.findByPk(body.id);
+        expect(sliceDB.imageName).toBe(fileName.good.jpg.one);
+        expect(sliceDB.imageType).toBe('image/jpeg');
+        expect(sliceDB.imageData).toBeDefined(); // data is here
+        expect(sliceDB.imageData.byteLength).toBe(fileBuffer.byteLength);
+        expect(sliceDB.streamId).toBe(streamZero.id);
+        expect(sliceDB.creatorId).toBe(userTwo.id);
+      });
+
+      test('fields only', async () => {
+        const {body} = await api
+          .post(`/api/slices/${streamZero.id}`)
+          .set('Authorization', `Bearer ${userTwo.token}`)
+          .field(slice.valid.zero) // field --> multipart/form-data
+          .expect(200);
+
+        // expected body
+        expect(body.title).toBe(slice.valid.zero.title);
+        expect(body.text).toBe(slice.valid.zero.text);
+        expect(body.isMilestone).toBe(false); // default
+        expect(body.isPublic).toBe(false); // default
+        expect(body.imageName).toBe(null);
+        expect(body.imageType).toBe(null);
+        expect(body.imageData).toBe(null);
+        expect(body.streamId).toBe(streamZero.id);
+        expect(body.creatorId).toBe(userTwo.id);
+
+        // expected data in DB
+        const sliceDB = await Slice.findByPk(body.id);
+        expect(sliceDB.title).toBe(slice.valid.zero.title);
+        expect(sliceDB.text).toBe(slice.valid.zero.text);
+        expect(sliceDB.isMilestone).toBe(false); // default
+        expect(sliceDB.isPublic).toBe(false); // default
+        expect(sliceDB.imageName).toBe(null);
+        expect(sliceDB.imageType).toBe(null);
+        expect(sliceDB.imageData).toBe(null);
+        expect(sliceDB.streamId).toBe(streamZero.id);
+        expect(sliceDB.creatorId).toBe(userTwo.id);
+      });
+
+      test('image + fields', async () => {
+        const fileBuffer = await readFile(`${basePath}/${fileName.good.jpg.one}`);
+
+        const {body} = await api
+          .post(`/api/slices/${streamZero.id}`)
+          .set('Authorization', `Bearer ${userTwo.token}`)
+          .attach('image', fileBuffer, fileName.good.jpg.one)
+          .field(slice.valid.zero)
+          .expect(200);
+
+        // expected body
+        expect(body.imageName).toBe(fileName.good.jpg.one);
+        expect(body.imageType).toBe('image/jpeg');
+        expect(body.imageData).toBe(null);
+        expect(body.title).toBe(slice.valid.zero.title);
+        expect(body.text).toBe(slice.valid.zero.text);
+        expect(body.streamId).toBe(streamZero.id);
+        expect(body.creatorId).toBe(userTwo.id);
+
+        // expected data in DB
+        const sliceDB = await Slice.findByPk(body.id);
+        expect(sliceDB.imageName).toBe(fileName.good.jpg.one);
+        expect(sliceDB.imageType).toBe('image/jpeg');
+        expect(sliceDB.imageData).toBeDefined(); // data is here
+        expect(sliceDB.imageData.byteLength).toBe(fileBuffer.byteLength);
+        expect(sliceDB.title).toBe(slice.valid.zero.title);
+        expect(sliceDB.text).toBe(slice.valid.zero.text);
+        expect(sliceDB.streamId).toBe(streamZero.id);
+        expect(sliceDB.creatorId).toBe(userTwo.id);
       });
     });
   });
@@ -293,6 +404,26 @@ describe('valid requests', () => {
         .expect(204);
 
       // confirm no longer in DB
+      const foundSlice = await Slice.findByPk(thisSlice.id);
+      expect(foundSlice).toBe(null);
+    });
+
+    test('of image slice', async () => {
+      // add slice to delete
+      const thisSlice = await addImageSlice(
+        userTwo,
+        streamZero.id,
+        slice.valid.zero,
+        fileName.good.jpg.one
+      );
+
+      // delete request
+      await api
+        .delete(`/api/slices/${thisSlice.id}`)
+        .set('Authorization', `Bearer ${userTwo.token}`)
+        .expect(204);
+
+      // slice no longer in DB
       const foundSlice = await Slice.findByPk(thisSlice.id);
       expect(foundSlice).toBe(null);
     });
@@ -494,6 +625,21 @@ describe('invalid requests', () => {
         // property not in DB
         const sliceDB = await Slice.findByPk(body.id);
         expect(sliceDB).not.toHaveProperty('thisIsNotInTheModel');
+      });
+    });
+
+    describe('file errors', () => {
+      test('not permitted type', async () => {
+        const thisName = fileName.good.txt.one;
+        const fileBuffer = await readFile(`${basePath}/${thisName}`);
+
+        const {body} = await api
+          .post(`/api/slices/${streamZero.id}`)
+          .set('Authorization', `Bearer ${userTwo.token}`)
+          .attach('image', fileBuffer, thisName)
+          .expect(400);
+
+        expect(body.error).toBe('file type not permitted');
       });
     });
 

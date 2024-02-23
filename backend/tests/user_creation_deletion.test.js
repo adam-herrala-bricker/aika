@@ -150,7 +150,7 @@ describe('invalid user requests', () => {
         })
         .expect(400);
 
-      expect(response.body.error).toContain('entry must be unique');
+      expect(response.body.error).toContain('username already taken');
     });
 
     test('duplicate email', async () => {
@@ -163,7 +163,7 @@ describe('invalid user requests', () => {
         })
         .expect(400);
 
-      expect(response.body.error).toContain('entry must be unique');
+      expect(response.body.error).toContain('email already taken');
     });
   });
 

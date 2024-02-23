@@ -3,7 +3,7 @@ const webpack = require('webpack');
 
 const config = (env, argv) => {
   const backend_url = argv.mode === 'production'
-    ? 'http://localhost:3001' // change when we have a production BE
+    ? 'https://aika-1l2h.onrender.com'
     : 'http://localhost:3001';
 
   return {
@@ -35,7 +35,7 @@ const config = (env, argv) => {
     },
     plugins: [
       new webpack.DefinePlugin({
-        BACKEND_URL: JSON.stringify(backend_url)
+        BACKEND_URL: JSON.stringify(backend_url) // makes BACKEND_URL a global var
       })
     ]
   };

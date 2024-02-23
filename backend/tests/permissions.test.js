@@ -32,7 +32,7 @@ beforeEach(async () => {
 });
 
 describe('valid requests (user has admin permissions)', () => {
-  test('add with default permissions', async () => {
+  test('add with default permissions (via userId)', async () => {
     // request to add permissions
     const {body} = await api
       .put(`/api/permissions/${streamZero.id}`)
@@ -59,7 +59,7 @@ describe('valid requests (user has admin permissions)', () => {
     });
   });
 
-  test('add with non-default permissions', async () => {
+  test('add with non-default permissions (via userId)', async () => {
     const {body} = await api
       .put(`/api/permissions/${streamZero.id}`)
       .set('Authorization', `Bearer ${userTwo.token}`)
@@ -91,7 +91,7 @@ describe('valid requests (user has admin permissions)', () => {
 
   });
 
-  test('modify existing permissions', async () => {
+  test('modify existing permissions (via userId)', async () => {
     // add default permissions
     await api
       .put(`/api/permissions/${streamZero.id}`)
@@ -131,16 +131,54 @@ describe('valid requests (user has admin permissions)', () => {
       expect(obj.admin).toBe(false); // default + specified
     });
   });
+
+  test('set via username', async () => {
+    const {body} = await api
+      .put(`/api/permissions/${streamZero.id}`)
+      .set('Authorization', `Bearer ${userTwo.token}`)
+      .send({username: userFive.username})
+      .expect(200);
+
+    // returns expected data
+    expect(body.userId).toBe(userFive.id);
+    expect(body.streamId).toBe(streamZero.id);
+    expect(body.read).toBe(true); // default values
+    expect(body.write).toBe(false);
+    expect(body.deleteOwn).toBe(false);
+    expect(body.deleteAll).toBe(false);
+    expect(body.admin).toBe(false);
+
+    // expected data in DB
+    const permissionsDB = await StreamUser.findByPk(body.id);
+    expect(permissionsDB.userId).toBe(userFive.id);
+    expect(permissionsDB.streamId).toBe(streamZero.id);
+    expect(permissionsDB.read).toBe(true); // default values
+    expect(permissionsDB.write).toBe(false);
+    expect(permissionsDB.deleteOwn).toBe(false);
+    expect(permissionsDB.deleteAll).toBe(false);
+    expect(permissionsDB.admin).toBe(false);
+  });
+
+  test('userId ignored when username provided', async () => {
+    const {body} = await api
+      .put(`/api/permissions/${streamZero.id}`)
+      .set('Authorization', `Bearer ${userTwo.token}`)
+      .send({
+        username: userFive.username,
+        userId: invalidId})
+      .expect(200);
+    expect(body.userId).toBe(userFive.id);
+  });
 });
 
 describe('invalid requests', () => {
-  test('missing userId', async () => {
+  test('missing userId + username', async () => {
     const {body} = await api
       .put(`/api/permissions/${streamZero.id}`)
       .set('Authorization', `Bearer ${userTwo.token}`)
       .expect(400);
 
-    expect(body.error).toBe('userId missing');
+    expect(body.error).toBe('user info missing');
   });
 
   test('missing streamId', async () => {
@@ -159,6 +197,16 @@ describe('invalid requests', () => {
       .expect(404);
 
     expect(body.error).toBe('invalid userId');
+  });
+
+  test('invalid username', async () => {
+    const {body} = await api
+      .put(`/api/permissions/${streamZero.id}`)
+      .set('Authorization', `Bearer ${userTwo.token}`)
+      .send({username: 'dave'})
+      .expect(404);
+
+    expect(body.error).toBe('invalid username');
   });
 
   test('invalid streamId', async () => {
