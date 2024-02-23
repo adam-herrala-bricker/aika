@@ -28,6 +28,8 @@ jobs:
         run: cd backend && npm ci
       - name: Backend linting
         run: cd backend && npm run lint
+      - name: Build temp media folder
+        run: cd backend && bash build_temp_media_folder.sh
       - name: Compose test DB
         run: cd testingDB && docker compose up -d
       - name: Backend integration testing
