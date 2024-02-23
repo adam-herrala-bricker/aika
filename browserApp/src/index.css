@@ -142,6 +142,8 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+
+  margin-top: 10px;
 }
 
 .slice-image-container {
@@ -168,6 +170,12 @@
   justify-content: flex-end;
 }
 
+.slice-single-column {
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
+}
+
 .slice-single-container {
   padding: 10px;
   display: flex;
@@ -177,6 +185,8 @@
   border-style: solid;
   border-radius: 10px;
   border-width: 2px;
+
+  background-color:#FAFAFA;
 }
 
 .slice-single-date-text {
@@ -201,6 +211,8 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+
+  margin-bottom: 5px;
 }
 
 .slice-scroll-region {
@@ -211,8 +223,17 @@
   overflow-y: scroll;
 }
 
+.slice-text-container {
+  margin-bottom: 15px;
+}
+
+.slice-username-container {
+  color:darkslategray;
+  margin-bottom: 10px;
+}
+
 .slice-view-container {
-  height: 70vh;
+  height: 80vh;
 
   display: flex;
   flex-direction: column;

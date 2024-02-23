@@ -162,9 +162,13 @@ const Slice = ({slice, myPermissions}) => {
         </div>
         <div className = 'slice-single-container'>
           <div className = 'slice-single-top-row'>
-            <div className = 'slice-single-row'>
-              <Header size = 'medium'>{slice.title}</Header>
-              {slice.user.username}
+            <div className = 'slice-single-column'>
+              <div className = 'slice-username-container'>
+                <i>{slice.user.username}</i>
+              </div>
+              <div>
+                <Header size = 'medium'>{slice.title}</Header>
+              </div>
             </div>
             <div>
               {canDelete &&
@@ -188,7 +192,7 @@ const Slice = ({slice, myPermissions}) => {
             </div>}
             </div>
           </div>
-          <div>
+          <div className = 'slice-text-container'>
             {slice.text}
           </div>
           {!slice.imageName && <TagGroup slice = {slice} />}
