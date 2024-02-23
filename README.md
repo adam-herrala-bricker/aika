@@ -1,7 +1,9 @@
 # Aika
 
+Browser app (early testing): https://aika-1l2h.onrender.com/app/
+
 > [!NOTE]
-> Aika is currently under development. A link will be added here once testing opens to the public.
+> Aika is currently under development. The test version demonstrates basic features as a proof-of-concept. However, data added to the test version is not persisted.
 
 ## About
 
