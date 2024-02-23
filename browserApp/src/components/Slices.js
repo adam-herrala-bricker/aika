@@ -219,26 +219,33 @@ const Slices = () => {
 
   // used for infinite scrolling
   React.useLayoutEffect(() => { // critical that this is a layout effect!
-    const onScroll = () => {
-      const {clientHeight, scrollHeight, scrollTop} = scrollRef.current;
+    if (!isError && !isLoading && !myPermissions.isLoading) {
+      const onScroll = () => {
+        const {clientHeight, scrollHeight, scrollTop} = scrollRef.current;
 
-      const scrolledToBottom = scrollTop + clientHeight >= scrollHeight;
-      if (scrolledToBottom && !isLoading) {
-        dispatch(incrementScroller());
-      }
-    };
+        const scrolledToBottom = scrollTop + clientHeight >= scrollHeight;
+        if (scrolledToBottom && !isLoading) {
+          dispatch(incrementScroller());
+        }
+      };
 
-    scrollRef.current.addEventListener('scroll', onScroll);
+      scrollRef.current.addEventListener('scroll', onScroll);
 
-    return () => {
-      scrollRef.current.removeEventListener('scroll', onScroll);
-    };
+      return () => {
+        scrollRef.current.removeEventListener('scroll', onScroll);
+      };
+    }
+
   }, [data, scrollRef]);
 
   // error
   if (isError) {
     console.log(data);
     return <div>error loading data</div>;
+  }
+
+  if (isLoading || myPermissions.isLoading) {
+    return <div>loading ...</div>;
   }
 
   return (
