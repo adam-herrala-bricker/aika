@@ -33,7 +33,7 @@ const SliceImage = ({slice}) => {
   const maxHeight = 70;
   const minHeight = 10;
   const heightIncrement = 10; // amount it changes by +/-
-  const [imageHeight, setImageHeight] = React.useState(30);
+  const [imageHeight, setImageHeight] = React.useState(50);
   const [imageSrc, setImageSrc] = React.useState(null);
   const [visible, setVisible] = React.useState(true); // used to cross fade images
   const [changeDirection, setChangeDirection] = React.useState(null); // can be + or -
