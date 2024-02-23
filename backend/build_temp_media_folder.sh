@@ -4,6 +4,6 @@ mkdir temp &&
 mkdir temp/uploads &&
 mkdir temp/downloads
 
-echo "Media folder built for backend testing!" &&
+echo "Temp media folder built for backend testing!" &&
 
-ls media -R
+ls temp -R
