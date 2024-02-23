@@ -13,7 +13,7 @@
   padding: 5px;
 
   max-width: 600px;
-  min-height: 70vh;
+  min-height: 80vh;
 
   display: flex;
   flex-grow: 1;
@@ -251,7 +251,7 @@
   flex-grow: 1;
   justify-content: flex-start;
 
-  height: 70vh;
+  height: 80vh;
   overflow-y: scroll;
 }
 
