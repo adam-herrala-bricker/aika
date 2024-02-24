@@ -4,8 +4,15 @@ import {NavButton} from '.';
 const Entry = () => {
   return (
     <div className = 'generic-flex-column'>
-      <NavButton text = 'log in' path = '/login'/>
-      <NavButton text = 'register' path = '/register'/>
+      <NavButton
+        color = 'vk'
+        text = 'log in'
+        path = '/login'/>
+      <NavButton
+        basic
+        color = 'black'
+        text = 'register'
+        path = '/register'/>
     </div>
   );
 };

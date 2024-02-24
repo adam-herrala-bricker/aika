@@ -57,14 +57,16 @@ const MenuBar = () => {
   const thisUser = useSelector((i) => i.user);
 
   return (
-    <div className = 'menu-bar-container'>
+    <div className = {thisUser.username === 'guest'
+      ? 'menu-bar-container-flex'
+      : 'menu-bar-container-grid'}>
       <ToggleSideMenu thisUser = {thisUser}/>
-      <div>
+      <div className = 'menu-bar-text'>
         <Header size = 'huge'>
           Aika
         </Header>
       </div>
-      <div>
+      <div className = 'menu-bar-user-group'>
         <UserDisplay thisUser = {thisUser}/>
         <LogOutButton thisUser = {thisUser}/>
       </div>
