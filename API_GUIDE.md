@@ -371,7 +371,7 @@ Returns an array of ALL permissions for stream with given `id`. Requires admin p
   - `createdAt`
   - `updatedAt`
   - `user`
-    - `username` 
+    - `username`
 
 ### POST `/api/slices/view/{id}`
 
@@ -412,7 +412,9 @@ Slices are sorted by time created, with the most recent returned first.
   - `createdAt`
   - `updatedAt`
   - `User` instance with properties:
-    - `username` 
+    - `username`
+    - `firstName`
+    - `lastName` 
 
 ## Media Access
 

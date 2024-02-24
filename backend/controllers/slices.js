@@ -73,7 +73,7 @@ router.post('/view/:id', streamPermissions, async (req, res) => {
       ...whereSearch},
     include: {
       model: User,
-      attributes: ['username', 'id']
+      attributes: ['username', 'id', 'firstName', 'lastName']
     },
     limit: thisLimit,
     offset: thisOffset,
