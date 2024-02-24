@@ -54,7 +54,22 @@
   border-color: lightgray;
 }
 
-.menu-bar-container {
+.menu-bar-container-flex {
+  padding: 10px;
+
+  display: flex;
+
+  flex-direction: row;
+
+  justify-content: center;
+  align-self: stretch;
+  align-items: center;
+
+  border-bottom-style: solid;
+
+}
+
+.menu-bar-container-grid {
   padding: 10px;
 
   display: grid;
