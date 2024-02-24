@@ -59,12 +59,12 @@ const MenuBar = () => {
   return (
     <div className = 'menu-bar-container'>
       <ToggleSideMenu thisUser = {thisUser}/>
-      <div>
+      <div className = 'menu-bar-text'>
         <Header size = 'huge'>
           Aika
         </Header>
       </div>
-      <div>
+      <div className = 'menu-bar-user-group'>
         <UserDisplay thisUser = {thisUser}/>
         <LogOutButton thisUser = {thisUser}/>
       </div>

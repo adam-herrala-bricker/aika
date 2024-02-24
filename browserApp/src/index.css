@@ -51,7 +51,10 @@
 .menu-bar-container {
   padding: 10px;
 
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+
+
   flex-direction: row;
   column-gap: 10px;
 
@@ -60,6 +63,14 @@
   align-items: center;
 
   border-bottom-style: solid;
+}
+
+.menu-bar-text {
+  justify-self: center;
+}
+
+.menu-bar-user-group {
+  justify-self: end;
 }
 
 .menu-side-container {
