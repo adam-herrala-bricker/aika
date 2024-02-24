@@ -6,6 +6,8 @@
   align-items: safe center;
 
   overflow-y: scroll;
+
+  background-color: white;
 }
 
 .app-container {
@@ -24,6 +26,8 @@
 
   border-style: solid;
   border-radius: 10px;
+
+  background-color: white;
 }
 
 .body-container-centered {
@@ -190,7 +194,7 @@
   border-radius: 10px;
   border-width: 2px;
 
-  background-color:#FAFAFA;
+  background-color: #FAFAFA;
 }
 
 .slice-single-date-text {
@@ -216,7 +220,33 @@
   flex-direction: row;
   justify-content: space-between;
 
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: gray;
+
   margin-bottom: 5px;
+  padding-bottom: 5px;
+}
+
+.slice-single-user-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 50px;
+  height: 50px;
+  margin-right: 15px;
+
+  border-style: solid;
+  border-radius: 10px;
+  border-width: 1px;
+  border-color: darkgray;
+
+  background-color: #E2E2E2;
+}
+
+.slice-single-user-button-text {
+  font-size: 32px;
 }
 
 .slice-scroll-region {
@@ -227,12 +257,20 @@
   overflow-y: scroll;
 }
 
+.slice-tag-solo-container {
+  margin-top: 0px;
+}
+
 .slice-text-container {
-  margin-bottom: 15px;
+  margin-bottom: 10px;
+}
+
+.slice-user-group {
+  display: flex;
 }
 
 .slice-username-container {
-  color:darkslategray;
+  color: slategray;
   margin-bottom: 10px;
 }
 

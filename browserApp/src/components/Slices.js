@@ -162,12 +162,17 @@ const Slice = ({slice, myPermissions}) => {
         </div>
         <div className = 'slice-single-container'>
           <div className = 'slice-single-top-row'>
-            <div className = 'slice-single-column'>
-              <div className = 'slice-username-container'>
-                <i>{slice.user.username}</i>
+            <div className = 'slice-user-group'>
+              <div className = 'slice-single-user-button'>
+                <div className = 'slice-single-user-button-text'>
+                  {slice.user.firstName[0]}
+                </div>
               </div>
-              <div>
-                <Header size = 'medium'>{slice.title}</Header>
+              <div className = 'slice-single-column'>
+                {`${slice.user.firstName} ${slice.user.lastName}`}
+                <div className = 'slice-username-container'>
+                  <i>{slice.user.username}</i>
+                </div>
               </div>
             </div>
             <div>
@@ -192,10 +197,13 @@ const Slice = ({slice, myPermissions}) => {
             </div>}
             </div>
           </div>
+          <div>
+            <Header size = 'medium'>{slice.title}</Header>
+          </div>
           <div className = 'slice-text-container'>
             {slice.text}
           </div>
-          {!slice.imageName && <TagGroup slice = {slice} />}
+          {!slice.imageName && <div className = 'slice-tag-solo-container'><TagGroup slice = {slice} /></div>}
           {slice.imageName && <SliceImage slice = {slice}/>}
         </div>
       </div>
