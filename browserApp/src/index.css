@@ -48,6 +48,12 @@
   align-self: stretch;
 }
 
+.create-stream-container {
+  border-top-style: solid;
+  border-width: 1px;
+  border-color: lightgray;
+}
+
 .menu-bar-container {
   padding: 10px;
 
@@ -164,6 +170,17 @@
 .slice-image-container {
   display: flex;
   justify-content: center;
+}
+
+.slice-image-container-border {
+  display: flex;
+  justify-content: center;
+
+  border-style: solid;
+  border-width: 1px;
+  border-color: lightgray;
+  border-radius: 10px;
+  padding: 10px;
 }
 
 .slice-image-group-container {
@@ -334,10 +351,10 @@
   border-width: 1px;
 }
 
-.create-stream-container {
-  border-top-style: solid;
-  border-width: 1px;
-  border-color: lightgray;
+.tag-group {
+  display: flex;
+  flex-direction: row;
+  column-gap: 5px;
 }
 
 .username-container {
