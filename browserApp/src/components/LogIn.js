@@ -43,6 +43,8 @@ const LogIn = () => {
       <div className = 'generic-flex-column'>
         <div className = 'ui input'>
           <input
+            autoCapitalize = 'off'
+            autoCorrect = 'off'
             type = 'text'
             name = 'username'
             value = {username}
