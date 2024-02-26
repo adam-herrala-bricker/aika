@@ -7,7 +7,7 @@ const baseLink = NODE_ENV === 'production'
   : 'http://localhost:3001/email-confirmation';
 
 const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
+  host: 'mail.nastytoboggan.com',
   port: 465,
   secure: true,
   auth
@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
 
 const sendConfirmationEmail = (addressTo, confKey='no link provided') => {
   transporter.sendMail({
-    from: 'nasty.toboggan@gmail.com',
+    from: 'Nasty Toboggan <info@nastytoboggan.com>',
     to: addressTo,
     subject: 'Aika - Email Confirmation',
     text: `${confText} ${baseLink}/${confKey}`
