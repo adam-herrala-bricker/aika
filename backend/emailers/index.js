@@ -6,16 +6,16 @@ const baseLink = NODE_ENV === 'production'
   ? 'https://aika-1l2h.onrender.com/email-confirmation'
   : 'http://localhost:3001/email-confirmation';
 
-const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 465,
-  secure: true,
-  auth
-});
-
 const sendConfirmationEmail = (addressTo, confKey='no link provided') => {
-  transporter.sendMail({
-    from: 'nasty.toboggan@gmail.com',
+  const transporter = nodemailer.createTransport({
+    host: 'mail.nastytoboggan.com',
+    port: 465,
+    secure: true,
+    auth
+  });
+
+  return transporter.sendMail({
+    from: 'Nasty Toboggan <info@nastytoboggan.com>',
     to: addressTo,
     subject: 'Aika - Email Confirmation',
     text: `${confText} ${baseLink}/${confKey}`
