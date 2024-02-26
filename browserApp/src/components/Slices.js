@@ -234,7 +234,7 @@ const Slices = () => {
       const onScroll = () => {
         const {clientHeight, scrollHeight, scrollTop} = scrollRef.current;
 
-        const scrolledToBottom = scrollTop + clientHeight >= scrollHeight;
+        const scrolledToBottom = scrollTop + clientHeight >= scrollHeight - 10;
         if (scrolledToBottom && !isLoading) {
           dispatch(incrementScroller());
         }

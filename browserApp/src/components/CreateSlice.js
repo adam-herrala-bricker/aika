@@ -110,7 +110,9 @@ const CreateSlice = () => {
       <Header size = 'medium'>New Slice</Header>
       <Form onSubmit = {submitSlice}>
         <Header size = 'tiny'>Title</Header>
-        <FormGroup>
+        <FormGroup
+          className = 'slice-create-title-group'
+          inline>
           <FormInput
             error = {titleError}
             name = 'title'
@@ -121,7 +123,6 @@ const CreateSlice = () => {
             basic = {!thisSlice.isMilestone}
             color = 'vk'
             onClick = {() => dispatch(updateSlice({isMilestone: !thisSlice.isMilestone}))}
-            size = 'small'
             type = 'button'>
               Milestone
           </Button>
@@ -129,7 +130,6 @@ const CreateSlice = () => {
             basic = {!thisSlice.isPublic}
             color = 'vk'
             onClick = {() => dispatch(updateSlice({isPublic: !thisSlice.isPublic}))}
-            size = 'small'
             type = 'button'>
               Public
           </Button>
@@ -160,13 +160,15 @@ const CreateSlice = () => {
           </div>
         </FormGroup>
         }
-        <FormTextArea
-          error = {textError}
-          label = 'Text'
-          name = 'text'
-          onChange = {handleTextChange}
-          placeholder = 'Text'
-          value = {thisSlice.text}/>
+        <div className = 'slice-create-text-area'>
+          <FormTextArea
+            error = {textError}
+            label = 'Text'
+            name = 'text'
+            onChange = {handleTextChange}
+            placeholder = 'Text'
+            value = {thisSlice.text}/>
+        </div>
         <div className = 'slice-button-container'>
           <Button
             fluid

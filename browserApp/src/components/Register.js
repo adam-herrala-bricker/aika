@@ -21,6 +21,8 @@ const TextField = ({varName, dispName, type = 'text', ...props}) => {
     <FormField>
       <label>{dispName}</label>
       <Input
+        autoCapitalize = 'off'
+        autoCorrect = 'off'
         type = {type}
         name = {varName}
         value = {thisRegistration[varName]}
