@@ -46,7 +46,18 @@ router.post('/', async (req, res) => {
 
   // send confirmation email (if not testing)
   if (NODE_ENV !== 'testing') {
-    sendConfirmationEmail(newUser.email, thisConf.key);
+    try {
+      await sendConfirmationEmail(newUser.email, thisConf.key);
+    } catch (error) {
+      console.log('error in sending email');
+      console.log(error);
+
+      // remove entries from DB if error sending email
+      await ActiveConfirmation.destroy({where: {id: thisConf.id}});
+      await User.destroy({where: {id: newUser.id}});
+
+      return res.status(400).json({error: 'error sending confirmation email'});
+    }
   }
 
   res.json({
