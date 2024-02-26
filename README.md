@@ -1,6 +1,6 @@
 # Aika
 
-- Browser app (early testing): https://aika-1l2h.onrender.com/app/
+- Browser app (early testing): https://nastytoboggan.com/app
   - (may require a few seconds to spin up) 
 
 > [!NOTE]
