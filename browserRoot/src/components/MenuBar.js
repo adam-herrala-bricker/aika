@@ -22,14 +22,14 @@ const MenuBar = () => {
         <MenuItem
           name = 'about'
           onClick = {() => navigate('/about')}>
-          <div className = {pathname === '/about' ? 'menu-item-active' : 'menu-item-passive'}>
+          <div className = {pathname.includes('about') ? 'menu-item-active' : 'menu-item-passive'}>
             About
           </div>
         </MenuItem>
         <MenuItem
           name = 'Aika'
           onClick = {() => navigate('/aika')}>
-          <div className = {pathname === '/aika' ? 'menu-item-active' : 'menu-item-passive'}>
+          <div className = {pathname.includes('aika') ? 'menu-item-active' : 'menu-item-passive'}>
             Aika
           </div>
         </MenuItem>
