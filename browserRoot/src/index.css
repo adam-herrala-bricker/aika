@@ -12,6 +12,13 @@
   font-family: Helvetica, sans-serif;
 }
 
+.app-space-between {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 .about-container {
   padding: 10px;
 
@@ -64,6 +71,19 @@
   font-weight: 100;
 }
 
+.footer-container {
+  align-self: center;
+  color: #F2A0A0;
+  font-size: small;
+  font-weight: 100;
+}
+
+.home-container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 30px;
+}
+
 .menu-bar-container {
   margin-bottom: 10px;
 }
@@ -88,6 +108,22 @@
 
   text-shadow: #F24949 2px 2px;
   font-size: 3em;
+}
+
+.slogan-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  align-self: center;
+  
+  background-color: #F24949;
+  color: #F2F1F0;
+  text-shadow: #400101 1px 1px;
+
+  font-weight: 800;
+
+  height: 4px;
 }
 
 .title-container {
