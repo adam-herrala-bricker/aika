@@ -2,7 +2,7 @@
 const text = {
   aboutNT: {
     p1: "The Nasty Toboggan project is the brainchild of Adam Herrala Bricker, an academic philosopher and developer based in Turku, Finland.",
-    p2: "An experiment in organic, human-scaled development, Nasty Toboggan is ambivilent to growth and dispositionally anti-hype.",
+    p2: "An experiment in organic, human-scaled development, Nasty Toboggan is ambivalent to growth and dispositionally anti-hype.",
     p3: "You won't find Nasty Toboggan on the block chain, rushing to shoehorn in wonky AI features, or—heaven forbid—advertising. Nasty Toboggan is too busy quietly, deliberately, building things that work. Occasionally those things get sticky, but we really can't help that."
   },
 
@@ -15,7 +15,7 @@ const text = {
   points: {
     longHaul: {
       p1: "The internet is haunted by the ghosts of countless good, popular products, taken offline not because they weren't commercially viable, but because they just weren't profitable enough.",
-      p2: "Aika is different. The developers behind Aika created it specifically to use themselves, with a pricing model that can keep the lights on at any scale. It's not going anywhere"
+      p2: "Aika is different. The developers behind Aika created it specifically to use themselves, with a pricing model that can keep the lights on at any scale. It's not going anywhere."
     },
 
     noAI: {
