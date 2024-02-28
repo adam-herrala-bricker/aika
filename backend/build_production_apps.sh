@@ -8,6 +8,9 @@ cd ../browserApp && npm ci && npm run build &&
 # email confirmation mini-app
 cd ../browserConf && npm ci && npm run build &&
 
+# NT root app
+cd ../browserRoot && npm ci && npm run build &&
+
 # now backend setup
 cd ../backend && npm ci && bash build_temp_media_folder.sh &&
 

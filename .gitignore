@@ -11,6 +11,7 @@
 **/build/*.ttf
 **/build/*.png
 **/build/*.eot
+**/build/*.jpg
 
 backend/temp/**
 
