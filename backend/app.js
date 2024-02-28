@@ -19,7 +19,11 @@ app.use(express.json());
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 
 // static FE builds
+app.use('/', express.static('../browserRoot/build'));
+app.use(['/aika', '/about'], express.static('../browserRoot/build')); // need these to work with router on refresh
+
 app.use('/email-confirmation/:id', express.static('../browserConf/build'));
+
 app.use('/app', express.static('../browserApp/build'));
 app.use('/admin', express.static('../browserAdmin/build'));
 
