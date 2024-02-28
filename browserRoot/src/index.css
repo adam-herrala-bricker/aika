@@ -1,6 +1,6 @@
 .app-container {
   padding: 5px;
-  height: 100vh;
+  min-height: 100vh;
 
   display: flex;
   flex-direction: column;
@@ -60,22 +60,54 @@
   width: 300px;
 }
 
-.about-text {
-  align-self: flex-end;
+.aika-container {
+  padding: 10px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.aika-points-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  gap: 10px;
+  margin-bottom: 50px;
+}
+
+.bubble-container, .bubble-container-fixed {
   background-color: #F2F1F0;
   box-shadow: 3px 3px #F20505;
   border-radius: 10px;
   color: #400101;
-  max-width: 300px;
   padding: 10px;
   font-weight: 100;
+
+  align-self: stretch;
+}
+
+.bubble-container-fixed {
+  max-width: 300px;
+}
+
+.bubble-title {
+  font-size: medium;
+  font-weight: 800;
+
+  border-bottom-style: solid;
+  border-color: #400101;
+  border-width: 2px;
+
+  margin-bottom: 10px;
 }
 
 .footer-container {
   align-self: center;
-  color: #F2A0A0;
+  color: #F2F1F0;
   font-size: small;
   font-weight: 100;
+  opacity: 75%;
 }
 
 .home-container {
@@ -124,6 +156,8 @@
   font-weight: 800;
 
   height: 4px;
+  padding-left: 1px;
+  padding-right: 1px;
 }
 
 .title-container {
