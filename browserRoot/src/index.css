@@ -1,0 +1,58 @@
+.app-container {
+  padding: 5px;
+  height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  background-color: #400101;
+  align-self: stretch;
+}
+
+.menu-bar-container {
+  margin-bottom: 10px;
+}
+
+.menu-item-active, .menu-item-passive {
+  border-bottom-style: solid;
+  padding-bottom: 10px;
+}
+
+.menu-item-active {
+  border-color: #F2A0A0;
+}
+
+.menu-item-passive {
+  border-color: transparent;
+  
+}
+
+.title-container {
+  margin-top: 20vh;
+  display: flex;
+  flex-wrap: wrap;
+
+  justify-content: center;
+  align-items: center;
+
+  height: 200px;
+}
+
+.title-text {
+  font-family: Helvetica, sans-serif;
+  font-size: 6em;
+  font-weight: 100;
+
+  text-wrap: wrap;
+
+  text-decoration-line: line-through;
+  text-decoration-thickness: 20px;
+  text-shadow: #F24949 5px 5px;
+
+  color: #F2F1F0;
+}
+
+.ui.menu.menu-settings {
+  background-color: #400101;
+}
