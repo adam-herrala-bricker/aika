@@ -34,24 +34,26 @@
 }
 
 .about-image {
-  border-radius: 10px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
   object-fit: cover;
 }
 
 .about-image-caption {
   border-right-style: solid;
   border-bottom-style: solid;
+
   border-bottom-right-radius: 10px;
-  border-color: #F2A0A0;
   border-width: 2px;
 
+  border-color: #F2F1F0;
+
   color: #F2F1F0;
-  box-shadow: 1px 1px #F2F1F0;
+  box-shadow: -2px -2px #F24949 inset;
   font-weight: 100;
   font-size: small;
 
   padding: 5px;
-  width: 290px;
 }
 
 .about-image-group {
