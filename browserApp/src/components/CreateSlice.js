@@ -25,6 +25,7 @@ const CreateSlice = () => {
   const [hidden, setHidden] = React.useState(true);
   const [titleError, setTitleError] = React.useState(false);
   const [textError, setTextError] = React.useState(false);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [imageName, setImageName] = React.useState(defaultImageMessage);
 
   const buttonLabel = result.isError
@@ -68,6 +69,7 @@ const CreateSlice = () => {
   const submitSlice = async () => {
     // resets the scroller so that query will get new slice
     dispatch(resetScroller());
+    setIsSubmitting(true);
     const imageBlob = await urlToBlob(thisSlice.imageUrl);
     try {
       await newSlice({
@@ -83,6 +85,7 @@ const CreateSlice = () => {
     } catch (error) {
       console.log(error); // will want to improve the error handling here
     }
+    setIsSubmitting(false);
   };
 
   // reset error after 5 seconds
@@ -155,6 +158,7 @@ const CreateSlice = () => {
         <FormGroup>
           <div className = 'slice-image-preview'>
             <Image
+              rounded
               size = 'tiny'
               src = {thisSlice.imageUrl}/>
           </div>
@@ -171,6 +175,7 @@ const CreateSlice = () => {
         </div>
         <div className = 'slice-button-container'>
           <Button
+            loading = {isSubmitting}
             fluid
             primary
             type = 'submit'>
@@ -180,7 +185,7 @@ const CreateSlice = () => {
             fluid
             onClick = {handleCancel}
             type = 'button'>
-            Cancel
+            {isSubmitting ? 'Back' : 'Cancel'}
           </Button>
         </div>
       </Form>
