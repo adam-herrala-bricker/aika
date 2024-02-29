@@ -318,6 +318,7 @@
 
 .slice-text-container {
   margin-bottom: 10px;
+  white-space: break-spaces;
 }
 
 .slice-user-group {
