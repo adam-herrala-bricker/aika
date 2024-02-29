@@ -2,7 +2,7 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNewSliceMutation} from '../services/slices';
 import {resetScroller} from '../reducers/streamReducer';
-import {clearSlice, updateSlice} from '../reducers/sliceReducer';
+import {clearImage, clearSlice, updateSlice} from '../reducers/sliceReducer';
 import {urlToBlob} from '../util/helpers';
 import {
   Button,
@@ -43,6 +43,12 @@ const CreateSlice = () => {
     setTextError(false);
     setImageName(defaultImageMessage);
     setHidden(true);
+  };
+
+  const handleClearImage = () => {
+    setImageName(defaultImageMessage);
+    setImageType(null);
+    dispatch(clearImage());
   };
 
   const handleTitleChange = (event) => {
@@ -158,6 +164,13 @@ const CreateSlice = () => {
             type = 'button'>
             {imageName}
           </Button>
+          {thisSlice.imageUrl !== '' && <Button
+            basic
+            color = {wrongFileType ? 'red' : 'vk'}
+            onClick = {handleClearImage}
+            type = 'button'>
+            clear
+          </Button>}
           {wrongFileType && <Label
             basic
             color = 'red'

@@ -128,7 +128,6 @@ const Slice = ({slice, myPermissions}) => {
   const [isConfirm, setIsConfirm] = React.useState(false);
   const [deleteMessage, setDeleteMessage] = React.useState(defaultDeleteMessage);
   const [deleteSlice, result] = useDeleteSliceMutation();
-  console.log(slice.text);
 
   const canDelete = myPermissions.deleteAll
     || (myPermissions.deleteOwn && username === slice.user.username);
