@@ -3,19 +3,6 @@ const {Op} = require('sequelize');
 const {Entry, Slice, Stream, StreamUser, User} = require('../models');
 const {streamPermissions} = require('../util/middleware');
 
-// GET request to see all streams (will require ADMIN token)
-router.get('/', async (req, res) => {
-  const streams = await Stream.findAll({
-    attributes: {exclude: ['creatorId']},
-    include: {
-      model: User,
-      attributes: ['id', 'username']
-    }
-  });
-
-  res.json(streams);
-});
-
 // GET request to view user's own streams (requires USER token)
 router.get('/mine', async (req, res) => {
   const streams = await Stream.findAll({

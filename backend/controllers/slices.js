@@ -30,14 +30,6 @@ const uploadImage = multer({
   }
 });
 
-
-// GET request for all slices (will require ADMIN token)
-router.get('/', async (req, res) => {
-  const allSlices = await Slice.findAll({});
-
-  res.json(allSlices);
-});
-
 // POST request to view X slices in a stream, starting at Y (requires USER token)
 router.post('/view/:id', streamPermissions, async (req, res) => {
   const defaultLimit = 10;

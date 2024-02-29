@@ -182,7 +182,7 @@
 }
 
 .slice-image {
-  border-radius: 10px; 
+  border-radius: 10px;
 }
 
 .slice-image-bottom-row {
@@ -220,6 +220,7 @@
 
 .slice-image-preview {
   margin-left: 15px;
+  margin-top: 5px;
 }
 
 .slice-image-size-button-container {
@@ -317,6 +318,7 @@
 
 .slice-text-container {
   margin-bottom: 10px;
+  white-space: break-spaces;
 }
 
 .slice-user-group {

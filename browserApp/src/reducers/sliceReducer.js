@@ -19,6 +19,16 @@ const sliceSlice = createSlice({
       return defaultSlice;
     },
 
+    clearImage(state) {
+      // this frees up memory
+      URL.revokeObjectURL(state.imageUrl);
+
+      return {
+        ...state,
+        imageUrl: defaultSlice.imageUrl
+      };
+    },
+
     updateSlice(state, action) {
       return {
         ...state,
@@ -28,6 +38,6 @@ const sliceSlice = createSlice({
   }
 });
 
-export const {clearSlice, updateSlice} = sliceSlice.actions;
+export const {clearImage, clearSlice, updateSlice} = sliceSlice.actions;
 
 export default sliceSlice.reducer;

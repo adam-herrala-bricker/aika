@@ -2,7 +2,7 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNewSliceMutation} from '../services/slices';
 import {resetScroller} from '../reducers/streamReducer';
-import {clearSlice, updateSlice} from '../reducers/sliceReducer';
+import {clearImage, clearSlice, updateSlice} from '../reducers/sliceReducer';
 import {urlToBlob} from '../util/helpers';
 import {
   Button,
@@ -12,6 +12,7 @@ import {
   FormTextArea,
   Header,
   Image,
+  Label
 } from 'semantic-ui-react';
 
 const CreateSlice = () => {
@@ -25,7 +26,11 @@ const CreateSlice = () => {
   const [hidden, setHidden] = React.useState(true);
   const [titleError, setTitleError] = React.useState(false);
   const [textError, setTextError] = React.useState(false);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [imageName, setImageName] = React.useState(defaultImageMessage);
+  const [imageType, setImageType] = React.useState(null);
+
+  const wrongFileType = imageType && !['image/jpeg', 'image/png'].includes(imageType);
 
   const buttonLabel = result.isError
     ? result.error.data.error
@@ -38,6 +43,12 @@ const CreateSlice = () => {
     setTextError(false);
     setImageName(defaultImageMessage);
     setHidden(true);
+  };
+
+  const handleClearImage = () => {
+    setImageName(defaultImageMessage);
+    setImageType(null);
+    dispatch(clearImage());
   };
 
   const handleTitleChange = (event) => {
@@ -60,6 +71,7 @@ const CreateSlice = () => {
 
   const handleUpload = async (event) => {
     setImageName(event.target.files[0].name);
+    setImageType(event.target.files[0].type);
     // there will only ever be one file uploaded at a time
     const imageUrl = URL.createObjectURL(event.target.files[0]);
     dispatch(updateSlice({imageUrl}));
@@ -68,6 +80,7 @@ const CreateSlice = () => {
   const submitSlice = async () => {
     // resets the scroller so that query will get new slice
     dispatch(resetScroller());
+    setIsSubmitting(true);
     const imageBlob = await urlToBlob(thisSlice.imageUrl);
     try {
       await newSlice({
@@ -83,6 +96,7 @@ const CreateSlice = () => {
     } catch (error) {
       console.log(error); // will want to improve the error handling here
     }
+    setIsSubmitting(false);
   };
 
   // reset error after 5 seconds
@@ -150,11 +164,26 @@ const CreateSlice = () => {
             type = 'button'>
             {imageName}
           </Button>
+          {thisSlice.imageUrl !== '' && <Button
+            basic
+            color = {wrongFileType ? 'red' : 'vk'}
+            onClick = {handleClearImage}
+            type = 'button'>
+            clear
+          </Button>}
+          {wrongFileType && <Label
+            basic
+            color = 'red'
+            pointing = 'left'
+            size = 'large'>
+            must be .jpg or .png
+          </Label>}
         </FormGroup>
         {thisSlice.imageUrl !== '' &&
         <FormGroup>
           <div className = 'slice-image-preview'>
             <Image
+              rounded
               size = 'tiny'
               src = {thisSlice.imageUrl}/>
           </div>
@@ -171,6 +200,7 @@ const CreateSlice = () => {
         </div>
         <div className = 'slice-button-container'>
           <Button
+            loading = {isSubmitting}
             fluid
             primary
             type = 'submit'>
@@ -180,7 +210,7 @@ const CreateSlice = () => {
             fluid
             onClick = {handleCancel}
             type = 'button'>
-            Cancel
+            {isSubmitting ? 'Back' : 'Cancel'}
           </Button>
         </div>
       </Form>
