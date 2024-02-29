@@ -5,29 +5,6 @@ const {sendConfirmationEmail} = require('../emailers');
 const {getCryptoKey} = require('../util/helpers');
 const {NODE_ENV} = require('../util/config');
 
-// GET request for users (can search by username in query)
-router.get('/', async (req, res) => {
-  const username = req.query.username;
-  let where = {};
-
-  if (username) {
-    where = {username};
-  }
-  const users = await User.findAll({
-    attributes: {exclude: ['passwordHash']},
-    include: [{
-      model: ActiveSession,
-      attributes: ['id', 'token', 'createdAt']
-    }, {
-      model: Stream,
-      attributes: ['id', 'name', 'createdAt', 'updatedAt']
-    }],
-    where
-  });
-
-  res.json(users);
-});
-
 // POST request to create a new user
 router.post('/', async (req, res) => {
   const {username, firstName, lastName, email, password} = req.body;
