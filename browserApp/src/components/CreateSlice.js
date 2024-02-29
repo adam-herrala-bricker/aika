@@ -12,6 +12,7 @@ import {
   FormTextArea,
   Header,
   Image,
+  Label
 } from 'semantic-ui-react';
 
 const CreateSlice = () => {
@@ -27,6 +28,9 @@ const CreateSlice = () => {
   const [textError, setTextError] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [imageName, setImageName] = React.useState(defaultImageMessage);
+  const [imageType, setImageType] = React.useState(null);
+
+  const wrongFileType = imageType && !['image/jpeg', 'image/png'].includes(imageType);
 
   const buttonLabel = result.isError
     ? result.error.data.error
@@ -61,6 +65,7 @@ const CreateSlice = () => {
 
   const handleUpload = async (event) => {
     setImageName(event.target.files[0].name);
+    setImageType(event.target.files[0].type);
     // there will only ever be one file uploaded at a time
     const imageUrl = URL.createObjectURL(event.target.files[0]);
     dispatch(updateSlice({imageUrl}));
@@ -153,6 +158,13 @@ const CreateSlice = () => {
             type = 'button'>
             {imageName}
           </Button>
+          {wrongFileType && <Label
+            basic
+            color = 'red'
+            pointing = 'left'
+            size = 'large'>
+            must be .jpg or .png
+          </Label>}
         </FormGroup>
         {thisSlice.imageUrl !== '' &&
         <FormGroup>
