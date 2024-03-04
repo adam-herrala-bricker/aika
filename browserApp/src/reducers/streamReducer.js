@@ -10,6 +10,8 @@ const defaultStream = {
     offset: 0,
   },
 
+  lastScrolled: 0, // date last scrolled
+
   search: '',
 };
 
@@ -20,13 +22,21 @@ const streamSlice = createSlice({
 
   reducers: {
     incrementScroller(state) {
-      return {
-        ...state,
-        scroller: {
-          ...state.scroller,
-          offset: state.scroller.limit + state.scroller.offset
-        }
-      };
+      const debounce = 1000; // time in ms
+      const timeNow = new Date();
+      const timeThen = new Date(state.lastScrolled);
+
+      // won't increment if within debounce period
+      if (timeNow - timeThen > debounce) {
+        return {
+          ...state,
+          scroller: {
+            ...state.scroller,
+            offset: state.scroller.limit + state.scroller.offset
+          },
+          lastScrolled: timeNow.toISOString()
+        };
+      }
     },
 
     setSearch(state, action) {
