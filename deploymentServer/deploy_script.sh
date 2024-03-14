@@ -9,4 +9,6 @@ cd /home/adam/aika && git pull &&
 cd ./backend && bash build_production_apps.sh &&
 
 # reload app in pm2
-cd /home/adam && pm2 startOrGracefulReload nt.config.js
+cd /home/adam && pm2 startOrGracefulReload nt.config.js &&
+
+echo "Successfully deployed latest version!"
