@@ -1,7 +1,6 @@
 # Aika
 
 - Browser app (early testing): https://nastytoboggan.com/app
-  - (may require a few seconds to spin up) 
 
 > [!NOTE]
 > Aika is currently under development. The test version demonstrates basic features as a proof-of-concept. However, data added to the test version is not persisted.
@@ -28,6 +27,15 @@ Aika is a multi-modal, temporal slicing app. It is designed for applications whe
 - Tracking complex, time sensitive operations. 
 
 ### What's under the hood?
+- Frontend: React
+  - Redux
+  - RTK Query 
 - Backend: NodeJS
+  - Express
 - Database: PostgreSQL
   - Development + Testing: Containerized via the [Official Postgres Docker Image](https://www.docker.com/blog/how-to-use-the-postgres-docker-official-image/)
+  - Production: Postgres on Ubuntu
+- Production Server: Ubuntu Server
+  - Nginx
+  - PM2
+- DNS: Cloudflare 

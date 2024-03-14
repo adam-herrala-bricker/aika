@@ -3,7 +3,7 @@ const webpack = require('webpack');
 
 const config = (env, argv) => {
   const backend_url = argv.mode === 'production'
-    ? 'https://aika-1l2h.onrender.com'
+    ? 'https://nastytoboggan.fi'
     : 'http://localhost:3001';
 
   return {

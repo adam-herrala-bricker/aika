@@ -3,7 +3,7 @@ const {auth, confText} = require('./config');
 const {NODE_ENV} = require('../util/config');
 
 const baseLink = NODE_ENV === 'production'
-  ? 'https://nastytoboggan.com/email-confirmation'
+  ? 'https://nastytoboggan.fi/email-confirmation'
   : 'http://localhost:3001/email-confirmation';
 
 const sendConfirmationEmail = (addressTo, confKey='no link provided') => {
