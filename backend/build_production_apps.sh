@@ -11,6 +11,9 @@ cd ../browserConf && npm ci && npm run build &&
 # NT root app
 cd ../browserRoot && npm ci && npm run build &&
 
+## deployment server
+cd ../deploymentServer && npm ci &&
+
 # now backend setup
 cd ../backend && npm ci && bash build_temp_media_folder.sh &&
 
