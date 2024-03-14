@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const {exec} = require('node:child_process');
+const {execFile} = require('node:child_process');
 
 const {DEPLOY_KEY} = require('../util/config');
 
@@ -11,7 +11,7 @@ router.get('/:id', async (req, res) => {
   } else if (providedKey !== DEPLOY_KEY) {
     return res.status(400).json({error: 'Bad deploy key'});
   }
-  exec('bash deploy_script.sh', (err, stdout, stderr) => {
+  execFile('bash deploy_script.sh', (err, stdout, stderr) => {
     // something has gone wrong
     if (err) {
       console.log(`exec error: ${err}`)
