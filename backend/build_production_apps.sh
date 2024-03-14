@@ -3,13 +3,13 @@
 echo "Running production build script"
 
 # browser app
-cd ../browserApp && npm ci && npm run build &&
+cd ../browserApp && npm install && npm run build &&
 
 # email confirmation mini-app
-cd ../browserConf && npm ci && npm run build &&
+cd ../browserConf && npm install && npm run build &&
 
 # NT root app
-cd ../browserRoot && npm ci && npm run build &&
+cd ../browserRoot && npm install && npm run build &&
 
 ## deployment server
 cd ../deploymentServer && npm ci &&
