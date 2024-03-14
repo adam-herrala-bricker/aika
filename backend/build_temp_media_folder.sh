@@ -1,9 +1,9 @@
 #!/bin/bash
 
-mkdir temp &&
-mkdir temp/uploads &&
-mkdir temp/downloads
+mkdir -p temp &&
+mkdir -p temp/uploads &&
+mkdir -p temp/downloads
 
 echo "Temp media folder built for backend testing!" &&
 
-ls temp -R
+ls -R temp

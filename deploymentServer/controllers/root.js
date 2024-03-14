@@ -12,14 +12,18 @@ router.get('/:id', async (req, res) => {
     return res.status(400).json({error: 'Bad deploy key'});
   }
 
-  const deploy = spawn('bash', ['deploy_script.sh'], {shell: true});
+  const deploy = spawn('bash',
+  ['deploy_script.sh'],
+  {shell: true, detached: true}
+  
+  );
 
   deploy.stdout.on('data', (data) => {
     console.log(data.toString());
   })
 
   deploy.stderr.on('data', (data) => {
-    console.log(data);
+    console.log(data.toString());
   })
 
   res.status(200).send();
