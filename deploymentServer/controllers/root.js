@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const {execFile} = require('node:child_process');
+const {exec, spawn} = require('node:child_process');
 
 const {DEPLOY_KEY} = require('../util/config');
 
@@ -11,7 +11,21 @@ router.get('/:id', async (req, res) => {
   } else if (providedKey !== DEPLOY_KEY) {
     return res.status(400).json({error: 'Bad deploy key'});
   }
-  execFile('bash deploy_script.sh', (err, stdout, stderr) => {
+
+  const deploy = spawn('bash', ['deploy_script.sh'], {shell: true});
+
+  deploy.stdout.on('data', (data) => {
+    console.log(data.toString());
+  })
+
+  deploy.stderr.on('data', (data) => {
+    console.log(data);
+  })
+
+  res.status(200).send();
+
+  /*
+  exec('bash deploy_script.sh', (err, stdout, stderr) => {
     // something has gone wrong
     if (err) {
       console.log(`exec error: ${err}`)
@@ -23,6 +37,7 @@ router.get('/:id', async (req, res) => {
     console.log(stdout);
     res.status(200).send();
   })
+  */
 })
 
 module.exports = router;
