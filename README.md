@@ -9,6 +9,22 @@
 
 Aika is a multi-modal, temporal slicing app. It is designed for applications where long-term storage, data privacy, and fine-grained access controls are a priority.
 
+### What's under the hood?
+- Frontend: React
+  - Redux
+  - RTK Query
+  - Bundlers: ESbuild (email confirmation mini-app), Webpack (everything else)
+- Backend: NodeJS
+  - Express
+  - Testing: Jest
+- Database: PostgreSQL
+  - Development + Testing: Containerized via the [Official Postgres Docker Image](https://www.docker.com/blog/how-to-use-the-postgres-docker-official-image/)
+  - Production: Postgres on Ubuntu
+- Production Server: Ubuntu Server
+  - Nginx
+  - PM2
+- DNS: Cloudflare 
+
 ### When might you want to use Aika?
 - Your data is associated with a moment in time (short text, photos, videos, audio, the weather, a location, etc.).
 - You want to tightly control who can view your data, typically only yourself or a small group of people. 
@@ -24,18 +40,4 @@ Aika is a multi-modal, temporal slicing app. It is designed for applications whe
 ### What are a few examples of when Aika might be useful?
 - Capturing big (and small) moments over the course of a childhood.
 - Documenting discrete events in long-term projects.
-- Tracking complex, time sensitive operations. 
-
-### What's under the hood?
-- Frontend: React
-  - Redux
-  - RTK Query 
-- Backend: NodeJS
-  - Express
-- Database: PostgreSQL
-  - Development + Testing: Containerized via the [Official Postgres Docker Image](https://www.docker.com/blog/how-to-use-the-postgres-docker-official-image/)
-  - Production: Postgres on Ubuntu
-- Production Server: Ubuntu Server
-  - Nginx
-  - PM2
-- DNS: Cloudflare 
+- Tracking complex, time sensitive operations.

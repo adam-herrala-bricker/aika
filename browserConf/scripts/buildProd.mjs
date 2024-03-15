@@ -3,6 +3,7 @@ import * as esbuild from 'esbuild';
 const result = await esbuild.build({
   entryPoints: ['./src/index.jsx'],
   bundle: true,
+  minify: true,
   outdir: './build/static',
   loader: {
     '.png': 'dataurl',
