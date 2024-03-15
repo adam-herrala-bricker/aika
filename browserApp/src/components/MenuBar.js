@@ -63,7 +63,7 @@ const MenuBar = () => {
       <ToggleSideMenu thisUser = {thisUser}/>
       <div className = 'menu-bar-text'>
         <Header size = 'huge'>
-          Aika
+          Aika!
         </Header>
       </div>
       <div className = 'menu-bar-user-group'>
