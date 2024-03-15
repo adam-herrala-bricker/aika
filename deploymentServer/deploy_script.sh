@@ -1,6 +1,8 @@
 #!/bin/bash
 
 # note: this will not work if you try to run it on a dev machine
+echo "Node version:"
+node -v
 
 # get latest version from git
 cd /home/adam/aika && git pull &&

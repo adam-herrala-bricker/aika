@@ -17,12 +17,14 @@ router.get('/:id', async (req, res) => {
   const processVars = process.env;
   delete processVars.PORT;
   delete processVars.NODE_ENV;
-  console.log(processVars);
 
   const deploy = spawn('bash',
-  ['deploy_script.sh'],
-  {shell: true, detached: true, env: {...processVars}}
-  
+    ['deploy_script.sh'],
+    {
+      shell: true, 
+      detached: true, 
+      env: {...processVars}
+    }
   );
 
   deploy.stdout.on('data', (data) => {
@@ -34,21 +36,6 @@ router.get('/:id', async (req, res) => {
   })
 
   res.status(200).send();
-
-  /*
-  exec('bash deploy_script.sh', (err, stdout, stderr) => {
-    // something has gone wrong
-    if (err) {
-      console.log(`exec error: ${err}`)
-      return res.status(400).json({error: err});
-    } else if (stderr) {
-      console.log(`std error: ${stderr}`)
-      return res.status(400).json({error: stderr});
-    }
-    console.log(stdout);
-    res.status(200).send();
-  })
-  */
 })
 
 module.exports = router;
