@@ -14,7 +14,7 @@ router.get('/:id', async (req, res) => {
 
   const deploy = spawn('bash',
   ['deploy_script.sh'],
-  {shell: true, detached: true, env: null}
+  {shell: true, detached: true, env: {}}
   
   );
 
