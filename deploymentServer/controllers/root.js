@@ -12,11 +12,12 @@ router.get('/:id', async (req, res) => {
     return res.status(400).json({error: 'Bad deploy key'});
   }
 
-  // need to prevent the env variables we give /deploymentServer (i.e. PORT)
+  // need to prevent the env variables we give /deploymentServer
   // from injecting into the environment of the process itself
   const processVars = process.env;
-  delete processVars.PORT
-  console.log(processVars)
+  delete processVars.PORT;
+  delete processVars.NODE_ENV;
+  console.log(processVars);
 
   const deploy = spawn('bash',
   ['deploy_script.sh'],
