@@ -6,10 +6,10 @@ echo "Running production build script"
 cd ../browserApp && npm ci --include=dev && npm run build &&
 
 # email confirmation mini-app
-cd ../browserConf && npm install && npm run build &&
+cd ../browserConf && npm ci --include=dev && npm run build &&
 
 # NT root app
-cd ../browserRoot && npm install && npm run build &&
+cd ../browserRoot && npm ci --include=dev && npm run build &&
 
 ## deployment server
 cd ../deploymentServer && npm ci &&
