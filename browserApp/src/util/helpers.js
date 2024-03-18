@@ -77,3 +77,6 @@ export const urlToBlob = async (objectUrl) => {
 
   return reBlobed;
 };
+
+// truncates text over N characters by adding ... in middle
+

@@ -333,7 +333,7 @@
 }
 
 .slice-view-container {
-  max-height: 80vh;
+  height: 80vh;
 
   display: flex;
   flex-direction: column;
@@ -347,7 +347,7 @@
   flex-grow: 1;
   justify-content: flex-start;
 
-  max-height: 80vh;
+  height: 80vh;
   overflow-y: scroll;
 }
 
