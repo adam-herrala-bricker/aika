@@ -29,8 +29,11 @@ const CreateSlice = () => {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [imageName, setImageName] = React.useState(defaultImageMessage);
   const [imageType, setImageType] = React.useState(null);
+  const [imageSize, setImageSize] = React.useState(null);
 
   const wrongFileType = imageType && !['image/jpeg', 'image/png'].includes(imageType);
+  const fileTooLarge = imageSize && imageSize > 10 * 1000000; // 10M
+  const fileError = wrongFileType || fileTooLarge;
 
   const buttonLabel = result.isError
     ? result.error.data.error
@@ -41,13 +44,16 @@ const CreateSlice = () => {
     dispatch(clearSlice());
     setTitleError(false);
     setTextError(false);
-    setImageName(defaultImageMessage);
+
+    handleClearImage();
+
     setHidden(true);
   };
 
   const handleClearImage = () => {
     setImageName(defaultImageMessage);
     setImageType(null);
+    setImageSize(null);
     dispatch(clearImage());
   };
 
@@ -72,6 +78,8 @@ const CreateSlice = () => {
   const handleUpload = async (event) => {
     setImageName(event.target.files[0].name);
     setImageType(event.target.files[0].type);
+    setImageSize(event.target.files[0].size);
+    console.log(event.target.files[0]);
     // there will only ever be one file uploaded at a time
     const imageUrl = URL.createObjectURL(event.target.files[0]);
     dispatch(updateSlice({imageUrl}));
@@ -166,17 +174,17 @@ const CreateSlice = () => {
           </Button>
           {thisSlice.imageUrl !== '' && <Button
             basic
-            color = {wrongFileType ? 'red' : 'vk'}
+            color = {fileError ? 'red' : 'vk'}
             onClick = {handleClearImage}
             type = 'button'>
             clear
           </Button>}
-          {wrongFileType && <Label
+          {fileError && <Label
             basic
             color = 'red'
             pointing = 'left'
             size = 'large'>
-            must be .jpg or .png
+            {wrongFileType ? 'must be .jpg or .png' : 'max size 10M'}
           </Label>}
         </FormGroup>
         {thisSlice.imageUrl !== '' &&
@@ -200,6 +208,7 @@ const CreateSlice = () => {
         </div>
         <div className = 'slice-button-container'>
           <Button
+            disabled = {fileError}
             loading = {isSubmitting}
             fluid
             primary
