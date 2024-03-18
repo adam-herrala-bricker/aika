@@ -13,8 +13,10 @@ const Home = ({thisUser}) => {
 };
 
 const App = () => {
+  const mobileBreakpoint = 600; // width in px to swith from browser to mobile view
   const dispatch = useDispatch();
   const thisUser = useSelector((i) => i.user);
+  const [appWidth, setAppWidth] = React.useState(window.innerWidth);
 
   // keep user logged in on refresh
   const loggedInUserJSON = window.localStorage.getItem('aikaUser');
@@ -31,9 +33,22 @@ const App = () => {
     }
   }, [thisUser]);
 
+  // lets us watch the width of the window (to trigger breakpoint)
+  React.useEffect(() => {
+    const onResize = (event) => {
+      setAppWidth(event.target.innerWidth);
+    };
+
+    window.addEventListener('resize', onResize);
+
+    return () => {
+      window.removeEventListener('resize', onResize);
+    };
+  }, []);
+
   return (
     <div className = 'outer-container'>
-      <div className = 'app-container'>
+      <div className = {appWidth > mobileBreakpoint ? 'app-container-browser' : 'app-container-mobile'}>
         <MenuBar />
         <div className = {thisUser.username === 'guest'
           ? 'body-container-centered'
