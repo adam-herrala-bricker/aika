@@ -130,6 +130,15 @@
   column-gap: 5px;
 }
 
+.menu-slice-text {
+  overflow: hidden;
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+
+  max-width: 100px;
+}
+
 .permission-bubble-container {
   display: flex;
   flex-direction: row;

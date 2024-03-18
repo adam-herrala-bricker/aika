@@ -25,7 +25,9 @@ const SliceMenu = ({stream}) => {
         compact
         onClick = {handleStreamSelect}>
         <Header inverted>
-          {stream.loadedName}
+          <div className = 'menu-slice-text'>
+            {stream.loadedName}
+          </div>
         </Header>
       </Button>
       <Input
