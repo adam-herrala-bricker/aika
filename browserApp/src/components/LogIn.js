@@ -4,7 +4,7 @@ import {useDispatch} from 'react-redux';
 import {useNavigate} from 'react-router';
 import {useLoginUserMutation} from '../services/users';
 import {setUser} from '../reducers/userReducer';
-import {Button, Header, Form} from 'semantic-ui-react';
+import {Button, Header, Form, FormField, Input} from 'semantic-ui-react';
 import {NavButton} from '.';
 
 const LogIn = () => {
@@ -38,11 +38,11 @@ const LogIn = () => {
   }
 
   return (
-    <Form onSubmit = {handleSubmit}>
-      <Header size = 'large'>Log In</Header>
-      <div className = 'generic-flex-column'>
-        <div className = 'ui input'>
-          <input
+    <div className = 'generic-flex-column'>
+      <Form onSubmit = {handleSubmit}>
+        <Header size = 'large'>Log In</Header>
+        <FormField>
+          <Input
             autoCapitalize = 'off'
             autoCorrect = 'off'
             type = 'text'
@@ -50,19 +50,21 @@ const LogIn = () => {
             value = {username}
             onChange = {(event) => setUsername(event.target.value)}
             placeholder = 'username' />
-        </div>
-        <div className = 'ui input'>
-          <input
+        </FormField>
+        <FormField>
+          <Input
             type = 'password'
             name = 'password'
             value = {password}
             onChange = {(event) => setPassword(event.target.value)}
             placeholder = 'password' />
+        </FormField>
+        <div className = 'generic-flex-column'>
+          <Button type = 'submit' primary>{buttonLabel}</Button>
+          <NavButton text = 'cancel' path = '/'/>
         </div>
-        <Button type = 'submit' primary>{buttonLabel}</Button>
-        <NavButton text = 'cancel' path = '/'/>
-      </div>
-    </Form>
+      </Form>
+    </div>
   );
 };
 

@@ -333,7 +333,7 @@
 }
 
 .slice-view-container {
-  height: 80vh;
+  max-height: 80vh;
 
   display: flex;
   flex-direction: column;
@@ -347,7 +347,7 @@
   flex-grow: 1;
   justify-content: flex-start;
 
-  height: 80vh;
+  max-height: 80vh;
   overflow-y: scroll;
 }
 
@@ -407,12 +407,17 @@
 .generic-flex-column, .registration-container {
   display: flex;
   flex-direction: column;
-  row-gap: 5px;
 
-  min-width: 350px;
+  flex-grow: 1;
+  max-width: 350px;
+  
+  row-gap: 5px;
   margin-bottom: 5px;
 }
 
 .registration-container {
   margin-top: 20px;
+
+  height: 80vh;
+  overflow-y: scroll;
 }
