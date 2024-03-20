@@ -88,7 +88,8 @@
 .menu-bar-container-grid {
   min-height: 10vh;
 
-  padding: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
