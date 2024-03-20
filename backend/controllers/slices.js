@@ -78,7 +78,7 @@ router.post('/view/:id', streamPermissions, async (req, res) => {
     if (slice.imageData) {
       // create new sharp instance --> web res
       const webResData = sharp(slice.imageData);
-      webResData.resize({width: 1024, withoutEnlargement: true});
+      webResData.resize({height: 1024, width: 1024, fit: 'outside', withoutEnlargement: true});
 
       // save web res image to temp folder
       await webResData.toFile(`./temp/downloads/${slice.id}_${slice.imageName}`);
