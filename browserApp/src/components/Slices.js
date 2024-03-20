@@ -33,7 +33,7 @@ const SliceImage = ({slice}) => {
   const maxHeight = 70;
   const minHeight = 10;
   const heightIncrement = 10; // amount it changes by +/-
-  const borderThreshold = 30; // min size for a border to kick in
+  const borderThreshold = 20; // min size for a border to kick in
   const [imageHeight, setImageHeight] = React.useState(40);
   const [imageSrc, setImageSrc] = React.useState(null);
   const [visible, setVisible] = React.useState(true); // used to cross fade images
@@ -77,7 +77,14 @@ const SliceImage = ({slice}) => {
 
   }, [slice]);
 
-  if (!imageSrc) return null;
+  // keeps the slice at the right height while the image is loading
+  if (!imageSrc) return (
+    <div className = 'slice-image-group-container'>
+      <div className = 'slice-image' style = {{height: `${imageHeight}vh`}}>
+      </div>
+      <TagGroup slice = {slice} />
+    </div>
+  );
 
   return (
     <div className = 'slice-image-group-container'>
@@ -87,13 +94,14 @@ const SliceImage = ({slice}) => {
           : 'slice-image-container-border'}>
         <Transition
           animation = 'fade'
-          duration = {200}
+          duration = {300}
+          mountOnShow = {false}
           onHide = {handleFadeIn}
-          transitionOnMount = {false}
+          transitionOnMount = {true}
           visible = {visible}>
           <Image
             className = 'slice-image'
-            style = {{maxHeight: `${imageHeight}vh`}}
+            style = {{height: `${imageHeight}vh`}}
             src = {imageSrc}/>
         </Transition>
       </div>

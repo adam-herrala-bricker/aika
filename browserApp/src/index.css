@@ -211,6 +211,7 @@
 
 .slice-image {
   border-radius: 10px;
+  object-fit: cover;
 }
 
 .slice-image-bottom-row {
