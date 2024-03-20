@@ -6,6 +6,7 @@
   align-items: safe center;
 
   overflow-y: scroll;
+  scrollbar-width: none;
 
   background-color: white;
 }
@@ -340,6 +341,7 @@
   row-gap: 15px;
 
   overflow-y: scroll;
+  scrollbar-width: none;
 }
 
 .slice-tag-solo-container {
@@ -376,7 +378,9 @@
   justify-content: flex-start;
 
   height: 85vh;
+
   overflow-y: scroll;
+  scrollbar-width: none;
 }
 
 .stream-info-header-container {
@@ -430,6 +434,8 @@
   border-radius: 0;
 
   box-shadow: none;
+
+  scrollbar-width: none;
 }
 
 .generic-flex-column, .registration-container {
@@ -447,5 +453,7 @@
   margin-top: 20px;
 
   height: 80vh;
+
   overflow-y: scroll;
+  scrollbar-width: none;
 }
