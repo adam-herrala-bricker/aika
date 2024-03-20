@@ -79,7 +79,6 @@ const CreateSlice = () => {
     setImageName(event.target.files[0].name);
     setImageType(event.target.files[0].type);
     setImageSize(event.target.files[0].size);
-    console.log(event.target.files[0]);
     // there will only ever be one file uploaded at a time
     const imageUrl = URL.createObjectURL(event.target.files[0]);
     dispatch(updateSlice({imageUrl}));

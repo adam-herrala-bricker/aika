@@ -55,6 +55,14 @@ const Streams = () => {
     );
   }
 
+  if (!data) {
+    return (
+      <div>
+        something went wrong
+      </div>
+    );
+  }
+
   return (
     <div>
       <MenuItem>
