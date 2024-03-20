@@ -60,15 +60,16 @@ const SliceImage = ({slice}) => {
     const srcBase = `${BACKEND_URL}/media/${loadedId}/${slice.id}_${slice.imageName}`; // eslint-disable-line no-undef
 
     // function adding authorization header to image request
-    const srcAuthorized = async () => {
+    const fetchAuthorized = async () => {
       const headers = {'Authorization': `Bearer ${token}`};
-      const imageData = await fetch(srcBase, {headers});
+      const imageData = await fetch(srcBase, {cache: 'force-cache', headers});
       const imageBlob = await imageData.blob();
       const imageUrl = URL.createObjectURL(imageBlob);
+
       setImageSrc(imageUrl);
     };
 
-    srcAuthorized();
+    fetchAuthorized();
 
     // don't want a bunch of image urls clogging up memory
     return () => {
