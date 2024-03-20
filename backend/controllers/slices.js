@@ -1,6 +1,7 @@
 const {unlink, writeFile} = require('node:fs/promises');
 const router = require('express').Router();
 const multer = require('multer');
+const sharp = require('sharp');
 const {Op} = require('sequelize');
 const {Slice, User} = require('../models');
 const {slicePermissions, streamPermissions} = require('../util/middleware');
@@ -75,13 +76,23 @@ router.post('/view/:id', streamPermissions, async (req, res) => {
   // load temp media for slices with images
   for await (const slice of slices) {
     if (slice.imageData) {
+      // create new sharp instance
+      const webResData = sharp(slice.imageData);
+      webResData.resize({width: 1024, withoutEnlargement: true});
+
+      // save web res image to temp folder
+      await webResData.toFile(`./temp/downloads/${slice.id}_${slice.imageName}`);
+
+
       // one image per slice --> can safely id image by slice id + name
+      /*
       await writeFile(`./temp/downloads/${slice.id}_${slice.imageName}`, slice.imageData, (error) => {
         if (error) {
           // error handling goes here
           console.log(error);
         }
       });
+      */
       // don't return image data to FE
       slice.imageData = null;
     }
