@@ -165,7 +165,7 @@ const Slice = ({slice, myPermissions}) => {
       animation = 'fade'
       duration = {500}
       transitionOnMount = {true}>
-      <div>
+      <div className = 'slice-single-super-container'>
         <div className = 'slice-single-time-container'>
           <div>{howLongAgo(thisDate)}</div>
           <div className = 'slice-single-date-text'>
