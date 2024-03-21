@@ -293,10 +293,6 @@
   column-gap: 5px;
 }
 
-.slice-single-super-container {
-  scroll-snap-align: start;
-}
-
 .slice-single-time-container {
   margin-left: 10px;
 
@@ -346,7 +342,6 @@
 
   overflow-y: scroll;
   scrollbar-width: none;
-  scroll-snap-type: y proximity;
 }
 
 .slice-tag-solo-container {
