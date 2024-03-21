@@ -55,13 +55,15 @@ The user has 30 minutes to follow the link and confirm the provided email. If th
 
 ### DELETE `/api/users`
 
-Deletes user identified in token. (This means that users can only authorize requests to delete themselves).
+Deletes user identified in token. (This means that users can only authorize requests to delete themselves). User's password is also required.
 
 #### Headers:
 - `Authorization: Bearer <token>`
 
 #### Body:
-- None
+- `password` 
+  - type: string
+  - required: true 
 
 #### Returns:
 - `Status 204` (no body)
