@@ -8,7 +8,7 @@ const user = {
     firstName: 'test',
     lastName: 'zero',
     email: 'test.zero@example.com',
-    password: 'example'
+    password: 'example0'
   },
 
   one: {
@@ -16,7 +16,7 @@ const user = {
     firstName: 'test',
     lastName: 'one',
     email: 'test.one@example.com',
-    password: 'example'
+    password: 'example1'
   },
 
   // note: user two already has confirmed email
@@ -26,7 +26,7 @@ const user = {
     firstName: 'test',
     lastName: 'two',
     email: 'test.two@example.com',
-    password: 'example',
+    password: 'example2',
     emailConfirmed: true
   },
 
@@ -46,7 +46,7 @@ const user = {
     firstName: 'test',
     lastName: 'four',
     email: 'test.four@example.com',
-    password: 'example',
+    password: 'example4',
     emailConfirmed: true,
     isDisabled: true,
   },
@@ -58,7 +58,7 @@ const user = {
     firstName: 'test',
     lastName: 'five',
     email: 'test.five@example.com',
-    password: 'example',
+    password: 'example5',
     emailConfirmed: true,
   },
 
@@ -68,7 +68,7 @@ const user = {
     firstName: 'test',
     lastName: 'six',
     email: 'test.six@example.com',
-    password: 'example',
+    password: 'example6',
     emailConfirmed: true,
   }
 };

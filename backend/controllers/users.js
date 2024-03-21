@@ -46,7 +46,7 @@ router.post('/', async (req, res) => {
   });
 });
 
-// DELETE request to remove a user identified in token (requires USER token)
+// DELETE request to remove a user identified in token (requires USER token + user's password)
 // note: this route only allows users to delete themselves
 // a seperate route will be needed for admin deletion of users
 router.delete('/', async (req, res) => {
@@ -56,10 +56,24 @@ router.delete('/', async (req, res) => {
   }
 
   const thisID = req.decodedToken.id;
+  const providedPW = req.body.password;
+
+  // no password included with request
+  if (!providedPW) return res.status(400).json({error: 'password required'});
+
   const thisUser = await User.findByPk(thisID);
 
   // no user with that ID
   if (!thisUser) return res.status(404).json({error: 'user not found'});
+
+  // check provided password against password hash in DB
+  const passwordCorrect = thisUser === null
+    ? false
+    : await bcrypt.compare(providedPW, thisUser.passwordHash);
+
+  if (!passwordCorrect) {
+    return res.status(404).json({error: 'password incorrect'});
+  }
 
   // remove everything associated with that user
   await ActiveConfirmation.destroy({where: {userId: thisID}});

@@ -116,6 +116,7 @@ describe('valid user requests', () => {
     await api
       .delete('/api/users/')
       .set('Authorization', `Bearer ${thisUser.token}`)
+      .send({password: user.two.password})
       .expect(204);
 
     // confirm that the user is gone
@@ -327,6 +328,35 @@ describe('invalid user requests', () => {
 
     });
 
+    test('cannot delete without providing password', async () => {
+      // request to delete
+      const {body} = await api
+        .delete('/api/users/')
+        .set('Authorization', `Bearer ${thisUser.token}`)
+        .expect(400);
+
+      expect(body.error).toBe('password required');
+
+      // user is still in DB
+      const isUser = await User.findByPk(thisUser.id);
+      expect(isUser.id).toBe(thisUser.id);
+    });
+
+    test('cannot delete if password is incorrect', async () => {
+      // request to delete
+      const {body} = await api
+        .delete('/api/users/')
+        .set('Authorization', `Bearer ${thisUser.token}`)
+        .send({password: 'this_is_the_wrong_password'})
+        .expect(404);
+
+      expect(body.error).toBe('password incorrect');
+
+      // user is still in DB
+      const isUser = await User.findByPk(thisUser.id);
+      expect(isUser.id).toBe(thisUser.id);
+    });
+
     test('can only delete self', async () => {
       // add + log in second user
       await addUser(user.five);
@@ -336,6 +366,7 @@ describe('invalid user requests', () => {
       await api
         .delete('/api/users')
         .set('Authorization', `Bearer ${userFive.token}`)
+        .send({password: user.five.password})
         .expect(204);
 
       // user five is gone
