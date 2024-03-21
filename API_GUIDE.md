@@ -421,6 +421,12 @@ Slices are sorted by time created, with the most recent returned first.
   - type: integer
   - required: false
   - default: 0
+- `res`
+  - resolution of image to generate for the slice (if it includes one)
+  - type: string
+  - required: false
+  - value options: 'web', 'full'
+  - default: 'web'  
 - `search`
   - case insensitive substring searching for title + text
   - type: string
