@@ -103,10 +103,13 @@ Used to log users in.
 Checks the provided password against the stored hash. Creates a new `ActiveSession` instance in the database and returns a bearer token for authenticating requests.
 
 #### Body:
-- `username`
+- `credentials`
+  - either username or email 
   - type: string
+  - required: true
 - `password`
   - type: string
+  - required: true
 
 #### Returns:
 - `id`
