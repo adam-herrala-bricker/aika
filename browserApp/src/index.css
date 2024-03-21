@@ -44,7 +44,6 @@
   height: 100vh;
 
   border-top-style: solid;
-  border-bottom-style: solid;
   border-width: 15px;
 }
 
@@ -86,9 +85,7 @@
   border-bottom-style: solid;
 }
 
-.menu-bar-container-grid {
-  min-height: 10vh;
-
+.menu-bar-container-grid {  
   padding-top: 10px;
   padding-bottom: 10px;
 
@@ -363,7 +360,8 @@
 }
 
 .slice-view-container {
-  height: 85vh;
+  max-height: 90vh;
+  padding-bottom: 10px;
 
   display: flex;
   flex-direction: column;
