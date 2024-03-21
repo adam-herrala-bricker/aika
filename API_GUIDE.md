@@ -1,5 +1,8 @@
 # API Guide
 
+>[!IMPORTANT]
+>The stable base URL for the API is https://nastytoboggan.com. Its domestic counterpart, https://nastytoboggan.fi, is sometimes used to trial new features and may not always behave as expected.
+
 ## User Creation and Deletion
 
 ### POST `/api/users`
