@@ -70,7 +70,7 @@ describe('valid user requests', () => {
     const responseBadLogin = await api
       .post('/api/login')
       .send({
-        username: user.one.username,
+        credentials: user.one.username,
         password: user.one.password
       })
       .expect(403);
@@ -98,7 +98,7 @@ describe('valid user requests', () => {
     await api
       .post('/api/login')
       .send({
-        username: user.one.username,
+        credentials: user.one.username,
         password: user.one.password
       })
       .expect(200);
@@ -123,7 +123,7 @@ describe('valid user requests', () => {
     const logInOld = await api
       .post('/api/login')
       .send({
-        username: user.two.username,
+        credentials: user.two.username,
         password: user.two.password
       })
       .expect(404);
@@ -134,7 +134,7 @@ describe('valid user requests', () => {
     await api
       .post('/api/login')
       .send({
-        username: user.two.username,
+        credentials: user.two.username,
         password: newPassword
       })
       .expect(200);
@@ -524,7 +524,7 @@ describe('invalid user requests', () => {
       const {body} = await api
         .post('/api/login')
         .send({
-          username: user.two.username,
+          credentials: user.two.username,
           password: newPassword
         })
         .expect(404);
@@ -535,7 +535,7 @@ describe('invalid user requests', () => {
       await api
         .post('/api/login')
         .send({
-          username: user.two.username,
+          credentials: user.two.username,
           password: user.two.password
         })
         .expect(200);

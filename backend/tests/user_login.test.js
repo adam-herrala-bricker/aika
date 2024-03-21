@@ -17,11 +17,11 @@ beforeEach(async () => {
 });
 
 describe('valid requests', () => {
-  test('login', async () => {
+  test('login with username', async () => {
     const {body} = await api
       .post('/api/login')
       .send({
-        username: user.two.username,
+        credentials: user.two.username,
         password: user.two.password
       })
       .expect(200);
@@ -39,12 +39,33 @@ describe('valid requests', () => {
 
   });
 
+  test('login with email', async () => {
+    const {body} = await api
+      .post('/api/login')
+      .send({
+        credentials: user.two.email,
+        password: user.two.password
+      })
+      .expect(200);
+
+    // returns expected content
+    expect(body.id).toBeDefined();
+    expect(body.token).toBeDefined();
+    expect(body.tokenCreatedAt).toBeDefined();
+    expect(body.username).toEqual(user.two.username);
+
+    // verify active session stored in DB
+    const thisSession = await ActiveSession.findOne({where: {token: body.token}});
+    expect(thisSession).not.toBeNull();
+    expect(thisSession.userId).toBe(body.id);
+  });
+
   test('logout', async () => {
     // log in first
     const {body} = await api
       .post('/api/login')
       .send({
-        username: user.two.username,
+        credentials: user.two.username,
         password: user.two.password
       })
       .expect(200);
@@ -74,7 +95,7 @@ describe('invalid requests', () => {
     const {body} = await api
       .post('/api/login')
       .send({
-        username: 'wrong.username',
+        credentials: 'wrong.username',
         password: user.two.password
       })
       .expect(404);
@@ -86,7 +107,7 @@ describe('invalid requests', () => {
     const {body} = await api
       .post('/api/login')
       .send({
-        username: user.two.username,
+        credentials: user.two.username,
         password: 'wrongPassword1138'
       })
       .expect(404);
@@ -101,7 +122,7 @@ describe('invalid requests', () => {
     const {body} = await api
       .post('/api/login')
       .send({
-        username: user.two.username,
+        credentials: user.two.username,
         password: user.three.password
       })
       .expect(404);
@@ -116,7 +137,7 @@ describe('invalid requests', () => {
     const {body} = await api
       .post('/api/login')
       .send({
-        username: user.four.username,
+        credentials: user.four.username,
         password: user.four.password,
       })
       .expect(403);
@@ -131,7 +152,7 @@ describe('invalid requests', () => {
     const {body} = await (api)
       .post('/api/login')
       .send({
-        username: user.zero.username,
+        credentials: user.zero.username,
         password: user.zero.password
       })
       .expect(403);
