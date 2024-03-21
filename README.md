@@ -7,7 +7,7 @@
 
 Aika is a multi-modal, temporal slicing app. It is designed for applications where long-term storage, data privacy, and fine-grained access controls are a priority.
 
-### What's under the hood?
+### What's in the tech stack?
 - Frontend: React
   - Redux
   - RTK Query
