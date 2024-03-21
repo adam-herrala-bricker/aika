@@ -452,7 +452,7 @@ Slices are sorted by time created, with the most recent returned first.
 
 ## Media Access
 
-### GET `/media/{streamId}/{fileName}`
+### GET `/media/{streamId}/{sliceID}_{res}_{fileName}`
 
 Returns media for the given stream and file (subject to the same authorization and permission requirements as slices).
 
