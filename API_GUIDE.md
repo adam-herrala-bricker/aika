@@ -71,6 +71,26 @@ Deletes user identified in token. (This means that users can only authorize requ
 #### Returns:
 - `Status 204` (no body)
 
+## User Updates
+
+### PUT `/api/users/change-password`
+
+Allows users to change their own password. As with deletion, users are IDed via the token used for authentication, so it is only possible for users to delete themselves.
+
+#### Headers:
+- `Authorization: Bearer <token>`
+
+#### Body:
+- `oldPassword` 
+  - type: string
+  - required: true
+- `newPassword`
+  - type: string
+  - required: true 
+
+#### Returns:
+- `Status 200` (no body)
+
 ## Log-in and Log-out
 
 >[!NOTE]
