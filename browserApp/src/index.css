@@ -474,6 +474,12 @@
   opacity: 1 !important;
 }
 
+.ui.header.header-truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 .ui.input.stretchy {
   flex-grow: 1;
 }

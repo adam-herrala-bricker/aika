@@ -35,7 +35,9 @@ const Stream = ({thisStream}) => {
 
   return (
     <MenuItem onClick = {handleClick}>
-      <Header size = 'small'>
+      <Header
+        className = 'header-truncate'
+        size = 'small'>
         {thisStream.name}
       </Header>
       {isOwner
