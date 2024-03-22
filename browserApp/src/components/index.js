@@ -22,10 +22,13 @@ import CreateStream from './CreateStream'; // component to create new stream
 import NavButton from './NavButton'; // button specifically for nagivating via a route
 import ToggleSideMenu from './ToggleSideMenu'; // button just to toggle side menu
 
+import ExpandBox from './ExpandBox'; // wrapper for a box, which expands
+
 export {
   CreateSlice,
   CreateStream,
   Entry,
+  ExpandBox,
   LogIn,
   MenuBar,
   NavButton,

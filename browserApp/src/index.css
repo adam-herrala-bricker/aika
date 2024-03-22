@@ -71,6 +71,42 @@
   border-color: lightgray;
 }
 
+.delete-account-container {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+
+  row-gap: 5px;
+}
+
+.expand-body-container {
+  padding-top: 15px;
+  padding-left: 10px;
+}
+
+.expand-box {
+  padding: 10px;
+
+  border-style: solid;
+  border-radius: 10px;
+  border-width: 1px;
+}
+
+.expand-header-container{
+  display: flex;
+  flex-direction: row;
+}
+
+.expand-header-text {
+  align-self: flex-start;
+  font-size: large;
+  font-weight: bold;
+}
+
+.icon-angle:hover {
+  opacity: 75%;
+}
+
 .menu-bar-container-flex {
   padding: 10px;
 
@@ -174,6 +210,19 @@
 
 .permissions-shared-container {
   margin-top: 25px;
+}
+
+.settings-container {
+  height: 85vh;
+  
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+
+  padding-top: 10px;
+
+  overflow-y: scroll;
+  scrollbar-width: none;
 }
 
 .share-options-container {
@@ -419,6 +468,10 @@
 
 .username-container {
   text-align: end;
+}
+
+.ui.button.button-unchange-on-disable:disabled {
+  opacity: 1 !important;
 }
 
 .ui.input.stretchy {

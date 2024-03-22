@@ -23,11 +23,29 @@ export const userApi = appApi.injectEndpoints({
         url: '/login',
         method: 'DELETE'
       })
+    }),
+
+    changePassword: build.mutation({
+      query: (passwords) => ({
+        url: '/users/change-password',
+        method: 'PUT',
+        body: passwords
+      })
+    }),
+
+    deleteAccount: build.mutation({
+      query: (password) => ({
+        url: '/users',
+        method: 'DELETE',
+        body: password
+      })
     })
   })
 });
 
 export const {
+  useChangePasswordMutation,
+  useDeleteAccountMutation,
   useLoginUserMutation,
   useLogoutUserMutation,
   useRegisterUserMutation,

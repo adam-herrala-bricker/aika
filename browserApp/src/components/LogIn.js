@@ -31,7 +31,7 @@ const LogIn = () => {
   };
 
   // reset mutation after 5 seconds to clear error message
-  if (result.error) {
+  if (result.isError) {
     setTimeout(() => {
       result.reset();
     }, 5000);
@@ -60,7 +60,14 @@ const LogIn = () => {
             placeholder = 'password' />
         </FormField>
         <div className = 'generic-flex-column'>
-          <Button type = 'submit' primary>{buttonLabel}</Button>
+          <Button
+            className = 'button-unchange-on-disable'
+            disabled = {result.isError}
+            negative = {result.isError}
+            type = 'submit'
+            primary>
+            {buttonLabel}
+          </Button>
           <NavButton text = 'cancel' path = '/'/>
         </div>
       </Form>

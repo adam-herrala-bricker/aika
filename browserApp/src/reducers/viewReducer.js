@@ -20,8 +20,11 @@ const viewSlice = createSlice({
       };
     },
 
-    resetView() {
-      return defaultView;
+    // want the image res to persist
+    resetView(state) {
+      return {
+        ...defaultView,
+        imageRes: state.imageRes};
     },
 
     setImageRes(state, action) {

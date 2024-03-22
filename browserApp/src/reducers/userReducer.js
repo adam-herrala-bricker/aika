@@ -64,7 +64,7 @@ export const logOut = (token) => {
   return async (dispatch) => {
     const response = await dispatch(appApi.endpoints.logoutUser.initiate({token}));
     if (response.error) {
-      console.log('something went wrong');
+      console.log('something went wrong'); // note: expected when logging out after deleting account
     }
     // just clear everything
     dispatch(clearUser());
