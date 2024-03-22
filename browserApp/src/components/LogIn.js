@@ -16,13 +16,13 @@ const LogIn = () => {
     ? result.error.data.error
     : 'submit';
 
-  const [username, setUsername] = useState('');
+  const [credentials, setCredentials] = useState(''); // username or email
   const [password, setPassword] = useState('');
 
   // event handler
   const handleSubmit = async () => {
     try {
-      const result = await loginUser({username, password}).unwrap();
+      const result = await loginUser({credentials, password}).unwrap();
       dispatch(setUser(result));
       navigate('/');
     } catch (error) {
@@ -47,9 +47,9 @@ const LogIn = () => {
             autoCorrect = 'off'
             type = 'text'
             name = 'username'
-            value = {username}
-            onChange = {(event) => setUsername(event.target.value)}
-            placeholder = 'username' />
+            value = {credentials}
+            onChange = {(event) => setCredentials(event.target.value)}
+            placeholder = 'username or email' />
         </FormField>
         <FormField>
           <Input
