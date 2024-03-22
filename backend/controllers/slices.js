@@ -35,12 +35,14 @@ const uploadImage = multer({
 router.post('/view/:id', streamPermissions, async (req, res) => {
   const defaultLimit = 10;
   const defaultOffset = 0;
+  const defaultRes = 'web';
 
   const streamId = req.params.id;
   const permissions = req.permissions;
 
   const thisLimit = req.body.limit || defaultLimit;
   const thisOffset = req.body.offset || defaultOffset;
+  const thisRes = req.body.res || defaultRes;
   const thisSearch = req.body.search;
 
   if (!permissions.read) return res.status(403).json({error: 'read permission required'});
@@ -78,10 +80,12 @@ router.post('/view/:id', streamPermissions, async (req, res) => {
     if (slice.imageData) {
       // create new sharp instance --> web res
       const webResData = sharp(slice.imageData);
-      webResData.resize({height: 1024, width: 1024, fit: 'outside', withoutEnlargement: true});
+      if (thisRes !== 'full') {
+        webResData.resize({height: 1024, width: 1024, fit: 'outside', withoutEnlargement: true});
+      }
 
       // save web res image to temp folder
-      await webResData.toFile(`./temp/downloads/${slice.id}_${slice.imageName}`);
+      await webResData.toFile(`./temp/downloads/${slice.id}_${thisRes}_${slice.imageName}`);
 
       // don't return image data to FE
       slice.imageData = null;

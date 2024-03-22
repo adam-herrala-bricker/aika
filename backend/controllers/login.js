@@ -1,13 +1,24 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const router = require('express').Router();
+const {Op} = require('sequelize');
 const {ActiveSession, User} = require('../models');
 const {USER_SECRET} = require('../util/config');
 
 // POST request to login (returns bearer token)
 router.post('/', async (req, res) => {
-  const {username, password} = req.body;
-  const thisUser = await User.findOne({where: {username}});
+  const {credentials, password} = req.body;
+
+  // both username and email are unique, so there's no risk of this finding the wrong user
+  const thisUser = await User.findOne({
+    where: {
+      [Op.or]:
+      {
+        username: credentials,
+        email: credentials
+      }
+    }
+  });
 
   // check the password against the hash
   const passwordCorrect = thisUser === null

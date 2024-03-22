@@ -1,5 +1,8 @@
 # API Guide
 
+>[!IMPORTANT]
+>The stable base URL for the API is https://nastytoboggan.com. Its domestic counterpart, https://nastytoboggan.fi, is sometimes used to trial new features and may not always behave as expected.
+
 ## User Creation and Deletion
 
 ### POST `/api/users`
@@ -55,16 +58,38 @@ The user has 30 minutes to follow the link and confirm the provided email. If th
 
 ### DELETE `/api/users`
 
-Deletes user identified in token. (This means that users can only authorize requests to delete themselves).
+Deletes user identified in token. (This means that users can only authorize requests to delete themselves). User's password is also required.
 
 #### Headers:
 - `Authorization: Bearer <token>`
 
 #### Body:
-- None
+- `password` 
+  - type: string
+  - required: true 
 
 #### Returns:
 - `Status 204` (no body)
+
+## User Updates
+
+### PUT `/api/users/change-password`
+
+Allows users to change their own password. As with deletion, users are IDed via the token used for authentication, so it is only possible for users to delete themselves.
+
+#### Headers:
+- `Authorization: Bearer <token>`
+
+#### Body:
+- `oldPassword` 
+  - type: string
+  - required: true
+- `newPassword`
+  - type: string
+  - required: true 
+
+#### Returns:
+- `Status 200` (no body)
 
 ## Log-in and Log-out
 
@@ -78,10 +103,13 @@ Used to log users in.
 Checks the provided password against the stored hash. Creates a new `ActiveSession` instance in the database and returns a bearer token for authenticating requests.
 
 #### Body:
-- `username`
+- `credentials`
+  - either username or email 
   - type: string
+  - required: true
 - `password`
   - type: string
+  - required: true
 
 #### Returns:
 - `id`
@@ -393,6 +421,12 @@ Slices are sorted by time created, with the most recent returned first.
   - type: integer
   - required: false
   - default: 0
+- `res`
+  - resolution of image to generate for the slice (if it includes one)
+  - type: string
+  - required: false
+  - value options: 'web', 'full'
+  - default: 'web'  
 - `search`
   - case insensitive substring searching for title + text
   - type: string
@@ -418,7 +452,7 @@ Slices are sorted by time created, with the most recent returned first.
 
 ## Media Access
 
-### GET `/media/{streamId}/{fileName}`
+### GET `/media/{streamId}/{sliceID}_{res}_{fileName}`
 
 Returns media for the given stream and file (subject to the same authorization and permission requirements as slices).
 

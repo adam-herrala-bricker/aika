@@ -143,7 +143,7 @@ describe('valid requests', () => {
     expect(body).toMatchObject([slice.valid.four, slice.valid.two, slice.valid.one, slice.valid.zero]);
   });
 
-  test('request to image src path', async () => {
+  test('request to image src path (default --> web res)', async () => {
     // need to view slice on stream first
     await api
       .post(`/api/slices/view/${streamZero.id}`)
@@ -152,7 +152,22 @@ describe('valid requests', () => {
 
     // then verify that the src path works
     await api
-      .get(`/media/${streamZero.id}/${sliceZero.id}_${fileName.good.jpg.one}`)
+      .get(`/media/${streamZero.id}/${sliceZero.id}_web_${fileName.good.jpg.one}`)
+      .set('Authorization', `Bearer ${userTwo.token}`)
+      .expect(200);
+  });
+
+  test('request to image src path (full res', async () => {
+    // slice request
+    await api
+      .post(`/api/slices/view/${streamZero.id}`)
+      .set('Authorization', `Bearer ${userTwo.token}`)
+      .send({res: 'full'})
+      .expect(200);
+
+    // media request
+    await api
+      .get(`/media/${streamZero.id}/${sliceZero.id}_full_${fileName.good.jpg.one}`)
       .set('Authorization', `Bearer ${userTwo.token}`)
       .expect(200);
   });
@@ -233,7 +248,7 @@ describe('invalid requests', () => {
 
     test('missing token', async () => {
       const {body} = await api
-        .get(`/media/${streamZero.id}/${sliceZero.id}_${fileName.good.jpg.one}`)
+        .get(`/media/${streamZero.id}/${sliceZero.id}_web_${fileName.good.jpg.one}`)
         .expect(401);
 
       expect(body.error).toBe('token missing');
@@ -241,7 +256,7 @@ describe('invalid requests', () => {
 
     test('bad token', async () => {
       const {body} = await api
-        .get(`/media/${streamZero.id}/${sliceZero.id}_${fileName.good.jpg.one}`)
+        .get(`/media/${streamZero.id}/${sliceZero.id}_web_${fileName.good.jpg.one}`)
         .set('Authorization', `Bearer ${badToken}`)
         .expect(400);
 
@@ -250,7 +265,7 @@ describe('invalid requests', () => {
 
     test('expired token', async () => {
       const {body} = await api
-        .get(`/media/${streamZero.id}/${sliceZero.id}_${fileName.good.jpg.one}`)
+        .get(`/media/${streamZero.id}/${sliceZero.id}_web_${fileName.good.jpg.one}`)
         .set('Authorization', `Bearer ${expiredUserTwoToken}`)
         .expect(403);
 
@@ -261,7 +276,7 @@ describe('invalid requests', () => {
       await clearPermissions(userFive, streamZero);
 
       const {body} = await api
-        .get(`/media/${streamZero.id}/${sliceZero.id}_${fileName.good.jpg.one}`)
+        .get(`/media/${streamZero.id}/${sliceZero.id}_web_${fileName.good.jpg.one}`)
         .set('Authorization', `Bearer ${userFive.token}`)
         .expect(403);
 
@@ -272,7 +287,7 @@ describe('invalid requests', () => {
       await createPermissions(userFive, streamZero, {read: false});
 
       const {body} = await api
-        .get(`/media/${streamZero.id}/${sliceZero.id}_${fileName.good.jpg.one}`)
+        .get(`/media/${streamZero.id}/${sliceZero.id}_web_${fileName.good.jpg.one}`)
         .set('Authorization', `Bearer ${userFive.token}`)
         .expect(403);
 
@@ -281,7 +296,7 @@ describe('invalid requests', () => {
 
     test('bad image path', async () => {
       await api
-        .get(`/media/${streamZero.id}/${sliceZero.id}_${fileName.bad.jpg.one}`)
+        .get(`/media/${streamZero.id}/${sliceZero.id}_web_${fileName.bad.jpg.one}`)
         .set('Authorization', `Bearer ${userTwo.token}`)
         .expect(404);
     });

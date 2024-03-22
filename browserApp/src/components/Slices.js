@@ -40,6 +40,7 @@ const SliceImage = ({slice}) => {
   const [changeDirection, setChangeDirection] = React.useState(null); // can be + or -
   const {token} = useSelector((i) => i.user);
   const {loadedId} = useSelector((i) => i.stream);
+  const {imageRes} = useSelector((i) => i.view);
 
   // event handlers
   const handleFadeOut = (direction) => {
@@ -57,7 +58,7 @@ const SliceImage = ({slice}) => {
   // fetches image using using authorization header
   React.useEffect(() => {
     // base url for image
-    const srcBase = `${BACKEND_URL}/media/${loadedId}/${slice.id}_${slice.imageName}`; // eslint-disable-line no-undef
+    const srcBase = `${BACKEND_URL}/media/${loadedId}/${slice.id}_${imageRes}_${slice.imageName}`; // eslint-disable-line no-undef
 
     // function adding authorization header to image request
     const fetchAuthorized = async () => {
@@ -226,6 +227,7 @@ const Slice = ({slice, myPermissions}) => {
 const Slices = () => {
   const dispatch = useDispatch();
   const {loadedId, loadedName, scroller, search} = useSelector((i) => i.stream);
+  const {imageRes} = useSelector((i) => i.view);
   // ref for element to add scroll event listener
   const scrollRef = React.useRef(0);
 
@@ -234,7 +236,8 @@ const Slices = () => {
     streamId: loadedId,
     limit: scroller.limit,
     offset: scroller.offset,
-    search: search
+    search: search,
+    res: imageRes
   });
 
   // used for infinite scrolling

@@ -1,10 +1,11 @@
+// also includes tests for modifying user entry (as initiated by user)
 const supertest = require('supertest');
 const app = require('../app');
 const api = supertest(app);
 const {ActiveConfirmation, Slice, Stream, User} = require('../models');
 const {connectToDB, sequelize} = require('../util/db');
 const {clearDB, addUser, logInUser, addSlice, addStream} = require('./util/functions');
-const {badToken, expiredUserTwoToken, slice, stream, user} = require('./util/constants');
+const {badToken, expiredUserTwoToken, newPassword, slice, stream, user} = require('./util/constants');
 
 beforeAll(async () => {
   // this runs migrations and makes sure that all the relations are there
@@ -69,7 +70,7 @@ describe('valid user requests', () => {
     const responseBadLogin = await api
       .post('/api/login')
       .send({
-        username: user.one.username,
+        credentials: user.one.username,
         password: user.one.password
       })
       .expect(403);
@@ -97,8 +98,44 @@ describe('valid user requests', () => {
     await api
       .post('/api/login')
       .send({
-        username: user.one.username,
+        credentials: user.one.username,
         password: user.one.password
+      })
+      .expect(200);
+  });
+
+  test('user can change their own password', async () => {
+    // add + login user to change
+    await addUser(user.two);
+    const thisUser = await logInUser(user.two);
+
+    // request to change password
+    await api
+      .put('/api/users/change-password')
+      .set('Authorization', `Bearer ${thisUser.token}`)
+      .send({
+        oldPassword: user.two.password,
+        newPassword: newPassword
+      })
+      .expect(200);
+
+    // cannot log in with old password
+    const logInOld = await api
+      .post('/api/login')
+      .send({
+        credentials: user.two.username,
+        password: user.two.password
+      })
+      .expect(404);
+
+    expect(logInOld.body.error).toBe('username or password incorrect');
+
+    // can log in with new password
+    await api
+      .post('/api/login')
+      .send({
+        credentials: user.two.username,
+        password: newPassword
       })
       .expect(200);
   });
@@ -116,6 +153,7 @@ describe('valid user requests', () => {
     await api
       .delete('/api/users/')
       .set('Authorization', `Bearer ${thisUser.token}`)
+      .send({password: user.two.password})
       .expect(204);
 
     // confirm that the user is gone
@@ -134,7 +172,7 @@ describe('valid user requests', () => {
 
 // invalid user requests (include malicious attempts to set limit higher or confirm email using the api)
 describe('invalid user requests', () => {
-  describe('duplicate info', () => {
+  describe('creation - duplicate info', () => {
     beforeEach(async () => {
       // add user.zero to DB
       await addUser(user.zero);
@@ -167,7 +205,7 @@ describe('invalid user requests', () => {
     });
   });
 
-  describe('missing info', () => {
+  describe('creation - missing info', () => {
     test('missing username', async () => {
       const userCopy = {...user.zero};
       delete userCopy.username;
@@ -327,6 +365,35 @@ describe('invalid user requests', () => {
 
     });
 
+    test('cannot delete without providing password', async () => {
+      // request to delete
+      const {body} = await api
+        .delete('/api/users/')
+        .set('Authorization', `Bearer ${thisUser.token}`)
+        .expect(400);
+
+      expect(body.error).toBe('password required');
+
+      // user is still in DB
+      const isUser = await User.findByPk(thisUser.id);
+      expect(isUser.id).toBe(thisUser.id);
+    });
+
+    test('cannot delete if password is incorrect', async () => {
+      // request to delete
+      const {body} = await api
+        .delete('/api/users/')
+        .set('Authorization', `Bearer ${thisUser.token}`)
+        .send({password: 'this_is_the_wrong_password'})
+        .expect(404);
+
+      expect(body.error).toBe('password incorrect');
+
+      // user is still in DB
+      const isUser = await User.findByPk(thisUser.id);
+      expect(isUser.id).toBe(thisUser.id);
+    });
+
     test('can only delete self', async () => {
       // add + log in second user
       await addUser(user.five);
@@ -336,6 +403,7 @@ describe('invalid user requests', () => {
       await api
         .delete('/api/users')
         .set('Authorization', `Bearer ${userFive.token}`)
+        .send({password: user.five.password})
         .expect(204);
 
       // user five is gone
@@ -345,6 +413,132 @@ describe('invalid user requests', () => {
       // but user two is still there
       const userTwoEntry = await User.findByPk(thisUser.id);
       expect(userTwoEntry.id).toBe(thisUser.id);
+    });
+
+  });
+
+  describe('invalid password change', () => {
+    let thisUser; // user whose password we'll try to change
+
+    beforeEach(async () => {
+      // add + login user two
+      await addUser(user.two);
+      thisUser = await logInUser(user.two);
+    });
+
+    test('no old password provided', async () => {
+      const {body} = await api
+        .put('/api/users/change-password')
+        .set('Authorization', `Bearer ${thisUser.token}`)
+        .send({
+          newPassword: newPassword
+        })
+        .expect(400);
+
+      expect(body.error).toBe('old and new passwords required');
+    });
+
+    test('no new password provided', async () => {
+      const {body} = await api
+        .put('/api/users/change-password')
+        .set('Authorization', `Bearer ${thisUser.token}`)
+        .send({
+          oldPassword: user.two.password
+        })
+        .expect(400);
+
+      expect(body.error).toBe('old and new passwords required');
+    });
+
+    test('no token', async () => {
+      const {body} = await api
+        .put('/api/users/change-password')
+        .send({
+          oldPassword: user.two.password,
+          newPassword: newPassword
+        })
+        .expect(401);
+
+      expect(body.error).toBe('token missing');
+    });
+
+    test('bad token', async () => {
+      const {body} = await api
+        .put('/api/users/change-password')
+        .set('Authorization', `Bearer ${badToken}`)
+        .send({
+          oldPassword: user.two.password,
+          newPassword: newPassword
+        })
+        .expect(400);
+
+      expect(body.error).toBe('jwt malformed');
+    });
+
+    test('expired token', async () => {
+      const {body} = await api
+        .put('/api/users/change-password')
+        .set('Authorization', `Bearer ${expiredUserTwoToken}`)
+        .send({
+          oldPassword: user.two.password,
+          newPassword: newPassword
+        })
+        .expect(403);
+
+      expect(body.error).toBe('login token has expired');
+    });
+
+    test('token for different user than password', async () => {
+      // log in a second user
+      await addUser(user.five);
+      const userFive = await logInUser(user.five);
+
+      // now the request
+      const {body} = await api
+        .put('/api/users/change-password')
+        .set('Authorization', `Bearer ${userFive.token}`)
+        .send({
+          oldPassword: user.two.password,
+          newPassword: newPassword
+        })
+        .expect(404);
+
+      expect(body.error).toBe('password incorrect');
+    });
+
+    test('old password is wrong', async () => {
+      const {body} = await api
+        .put('/api/users/change-password')
+        .set('Authorization', `Bearer ${thisUser.token}`)
+        .send({
+          oldPassword: 'this_is_not_the_correct_password',
+          newPassword: newPassword
+        })
+        .expect(404);
+
+      expect(body.error).toBe('password incorrect');
+    });
+
+    afterEach(async () => {
+      // verify that the user cannot log in with the new password
+      const {body} = await api
+        .post('/api/login')
+        .send({
+          credentials: user.two.username,
+          password: newPassword
+        })
+        .expect(404);
+
+      expect(body.error).toBe('username or password incorrect');
+
+      // but they can still log in with the old one
+      await api
+        .post('/api/login')
+        .send({
+          credentials: user.two.username,
+          password: user.two.password
+        })
+        .expect(200);
     });
 
   });

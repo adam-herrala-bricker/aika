@@ -16,13 +16,13 @@ const LogIn = () => {
     ? result.error.data.error
     : 'submit';
 
-  const [username, setUsername] = useState('');
+  const [credentials, setCredentials] = useState(''); // username or email
   const [password, setPassword] = useState('');
 
   // event handler
   const handleSubmit = async () => {
     try {
-      const result = await loginUser({username, password}).unwrap();
+      const result = await loginUser({credentials, password}).unwrap();
       dispatch(setUser(result));
       navigate('/');
     } catch (error) {
@@ -31,7 +31,7 @@ const LogIn = () => {
   };
 
   // reset mutation after 5 seconds to clear error message
-  if (result.error) {
+  if (result.isError) {
     setTimeout(() => {
       result.reset();
     }, 5000);
@@ -47,9 +47,9 @@ const LogIn = () => {
             autoCorrect = 'off'
             type = 'text'
             name = 'username'
-            value = {username}
-            onChange = {(event) => setUsername(event.target.value)}
-            placeholder = 'username' />
+            value = {credentials}
+            onChange = {(event) => setCredentials(event.target.value)}
+            placeholder = 'username or email' />
         </FormField>
         <FormField>
           <Input
@@ -60,7 +60,14 @@ const LogIn = () => {
             placeholder = 'password' />
         </FormField>
         <div className = 'generic-flex-column'>
-          <Button type = 'submit' primary>{buttonLabel}</Button>
+          <Button
+            className = 'button-unchange-on-disable'
+            disabled = {result.isError}
+            negative = {result.isError}
+            type = 'submit'
+            primary>
+            {buttonLabel}
+          </Button>
           <NavButton text = 'cancel' path = '/'/>
         </div>
       </Form>

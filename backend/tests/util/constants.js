@@ -2,13 +2,15 @@ const badToken = '1111111111111111111';
 const expiredUserTwoToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0MzJlZWQ0LWNkMDgtNDAyOS1iNmQ1LWFlM2FhMzFmNzdmMSIsInVzZXJuYW1lIjoidGVzdC50d28iLCJpYXQiOjE3MDYxNjc5NzZ9.sdKr0md5Glze4mQtRQnCZDVYZSymg-oipuT2CxE31v0';
 const invalidId = '8333c83b-273a-479c-95d6-2c7da850deb1';
 
+const newPassword = 'this_is_a_new_password';
+
 const user = {
   zero: {
     username: 'test.zero',
     firstName: 'test',
     lastName: 'zero',
     email: 'test.zero@example.com',
-    password: 'example'
+    password: 'example0'
   },
 
   one: {
@@ -16,7 +18,7 @@ const user = {
     firstName: 'test',
     lastName: 'one',
     email: 'test.one@example.com',
-    password: 'example'
+    password: 'example1'
   },
 
   // note: user two already has confirmed email
@@ -26,7 +28,7 @@ const user = {
     firstName: 'test',
     lastName: 'two',
     email: 'test.two@example.com',
-    password: 'example',
+    password: 'example2',
     emailConfirmed: true
   },
 
@@ -46,7 +48,7 @@ const user = {
     firstName: 'test',
     lastName: 'four',
     email: 'test.four@example.com',
-    password: 'example',
+    password: 'example4',
     emailConfirmed: true,
     isDisabled: true,
   },
@@ -58,7 +60,7 @@ const user = {
     firstName: 'test',
     lastName: 'five',
     email: 'test.five@example.com',
-    password: 'example',
+    password: 'example5',
     emailConfirmed: true,
   },
 
@@ -68,7 +70,7 @@ const user = {
     firstName: 'test',
     lastName: 'six',
     email: 'test.six@example.com',
-    password: 'example',
+    password: 'example6',
     emailConfirmed: true,
   }
 };
@@ -183,6 +185,7 @@ module.exports = {
   expiredUserTwoToken,
   fileName,
   invalidId,
+  newPassword,
   slice,
   stream,
   user

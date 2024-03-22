@@ -64,7 +64,7 @@ const logInUser = async (user) => {
   const {body} = await api
     .post('/api/login')
     .send({
-      username: user.username,
+      credentials: user.username,
       password: user.password
     });
 

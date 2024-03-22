@@ -46,7 +46,50 @@ router.post('/', async (req, res) => {
   });
 });
 
-// DELETE request to remove a user identified in token (requires USER token)
+// PUT request to change user password (requires USER token + old password)
+router.put('/change-password', async (req, res) => {
+  // thow an error if no token provided
+  if (!req.decodedToken) {
+    return res.status(401).json({error: 'token missing'});
+  }
+
+  const thisID = req.decodedToken.id;
+  const {oldPassword, newPassword} = req.body;
+
+  // need both old and new password
+  if (!oldPassword || !newPassword) return res.status(400).json({error: 'old and new passwords required'});
+
+  // check for user with that ID
+  const thisUser = await User.findByPk(thisID);
+  if (!thisUser) return res.status(404).json({error: 'user not found'});
+
+  // verify that the provided password is correct
+  // check provided password against password hash in DB
+  const passwordCorrect = thisUser === null
+    ? false
+    : await bcrypt.compare(oldPassword, thisUser.passwordHash);
+
+  if (!passwordCorrect) {
+    return res.status(404).json({error: 'password incorrect'});
+  }
+
+  // create new password hash
+  let newPasswordHash;
+  try {
+    newPasswordHash = await bcrypt.hash(newPassword, 10);
+  } catch (error) {
+    return res.status(400).json({error: error.message});
+  }
+
+  // save new passwordHash in DB
+  thisUser.passwordHash = newPasswordHash;
+  await thisUser.save();
+
+  res.status(200).end();
+
+});
+
+// DELETE request to remove a user identified in token (requires USER token + user's password)
 // note: this route only allows users to delete themselves
 // a seperate route will be needed for admin deletion of users
 router.delete('/', async (req, res) => {
@@ -56,10 +99,24 @@ router.delete('/', async (req, res) => {
   }
 
   const thisID = req.decodedToken.id;
+  const providedPW = req.body.password;
+
+  // no password included with request
+  if (!providedPW) return res.status(400).json({error: 'password required'});
+
   const thisUser = await User.findByPk(thisID);
 
   // no user with that ID
   if (!thisUser) return res.status(404).json({error: 'user not found'});
+
+  // check provided password against password hash in DB
+  const passwordCorrect = thisUser === null
+    ? false
+    : await bcrypt.compare(providedPW, thisUser.passwordHash);
+
+  if (!passwordCorrect) {
+    return res.status(404).json({error: 'password incorrect'});
+  }
 
   // remove everything associated with that user
   await ActiveConfirmation.destroy({where: {userId: thisID}});

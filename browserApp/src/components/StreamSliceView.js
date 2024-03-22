@@ -2,7 +2,7 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {closeSideMenu} from '../reducers/viewReducer';
 import {Menu, Segment, Sidebar, SidebarPusher, SidebarPushable} from 'semantic-ui-react';
-import {Streams, Slices, StreamInfo} from '.';
+import {Streams, Slices, StreamInfo, Settings} from '.';
 
 const StreamSliceView = () => {
   const dispatch = useDispatch();
@@ -30,6 +30,7 @@ const StreamSliceView = () => {
           <SidebarPusher>
             {loadedId && streamSliceMain === 'slice' && <Slices/>}
             {loadedId && streamSliceMain === 'info' && <StreamInfo />}
+            {streamSliceMain === 'settings' && <Settings />}
           </SidebarPusher>
         </div>
       </SidebarPushable>

@@ -54,20 +54,10 @@ const CreateStream = () => {
     <div className = 'create-stream-container'>
       <MenuItem
         disabled = {result.isError}
-        onClick = {() => setIsOpen(true)}>
+        onClick = {() => setIsOpen(!isOpen)}>
         <Header size = 'medium'>{thisLabel}</Header>
-        {isOpen && <CreateForm newStream = {newStream} setIsOpen = {setIsOpen}/>}
       </MenuItem>
-      {isOpen &&
-        <MenuItem>
-          <Button
-            compact
-            fluid
-            onClick = {() => setIsOpen(false)}>
-              cancel
-          </Button>
-        </MenuItem>
-      }
+      {isOpen && <MenuItem><CreateForm newStream = {newStream} setIsOpen = {setIsOpen}/></MenuItem>}
     </div>
   );
 };

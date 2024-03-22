@@ -44,7 +44,6 @@
   height: 100vh;
 
   border-top-style: solid;
-  border-bottom-style: solid;
   border-width: 15px;
 }
 
@@ -72,6 +71,42 @@
   border-color: lightgray;
 }
 
+.delete-account-container {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+
+  row-gap: 5px;
+}
+
+.expand-body-container {
+  padding-top: 15px;
+  padding-left: 10px;
+}
+
+.expand-box {
+  padding: 10px;
+
+  border-style: solid;
+  border-radius: 10px;
+  border-width: 1px;
+}
+
+.expand-header-container{
+  display: flex;
+  flex-direction: row;
+}
+
+.expand-header-text {
+  align-self: flex-start;
+  font-size: large;
+  font-weight: bold;
+}
+
+.icon-angle:hover {
+  opacity: 75%;
+}
+
 .menu-bar-container-flex {
   padding: 10px;
 
@@ -86,9 +121,7 @@
   border-bottom-style: solid;
 }
 
-.menu-bar-container-grid {
-  min-height: 10vh;
-
+.menu-bar-container-grid {  
   padding-top: 10px;
   padding-bottom: 10px;
 
@@ -177,6 +210,19 @@
 
 .permissions-shared-container {
   margin-top: 25px;
+}
+
+.settings-container {
+  height: 85vh;
+  
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+
+  padding-top: 10px;
+
+  overflow-y: scroll;
+  scrollbar-width: none;
 }
 
 .share-options-container {
@@ -293,10 +339,6 @@
   column-gap: 5px;
 }
 
-.slice-single-super-container {
-  scroll-snap-align: start;
-}
-
 .slice-single-time-container {
   margin-left: 10px;
 
@@ -346,7 +388,6 @@
 
   overflow-y: scroll;
   scrollbar-width: none;
-  scroll-snap-type: y proximity;
 }
 
 .slice-tag-solo-container {
@@ -368,14 +409,15 @@
 }
 
 .slice-view-container {
-  height: 85vh;
+  max-height: 90vh;
+  padding-bottom: 10px;
 
   display: flex;
   flex-direction: column;
 }
 
 .stream-info-container {
-  padding: 10px;
+  padding-top: 10px;
   display: flex;
   flex-direction: column;
   align-self: stretch;
@@ -426,6 +468,16 @@
 
 .username-container {
   text-align: end;
+}
+
+.ui.button.button-unchange-on-disable:disabled {
+  opacity: 1 !important;
+}
+
+.ui.header.header-truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .ui.input.stretchy {
