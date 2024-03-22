@@ -4,18 +4,20 @@ import {useGetStreamsQuery} from '../services/streams';
 import {clearStreamCache, setStream} from '../reducers/streamReducer';
 import {closeSideMenu, resetView} from '../reducers/viewReducer';
 import {Header, MenuItem} from 'semantic-ui-react';
-import {CreateStream} from '.';
+import {CreateStream, SettingsButton} from '.';
 
 const Stream = ({thisStream}) => {
   const dispatch = useDispatch();
   const {userId} = useSelector((i) => i.user);
   const {loadedId} = useSelector((i) => i.stream);
+  const {streamSliceMain} = useSelector((i) => i.view);
   const isOwner = userId === thisStream.creatorId;
 
   // event handler
   // clears cache of loaded stream before loading new stream
   const handleClick = () => {
-    if (thisStream.id !== loadedId) { // don't change state if you click on current stream
+    // change slice state if (i) moving to different stream or (ii) coming in from a different view
+    if (thisStream.id !== loadedId || streamSliceMain !== 'slice') {
       // clears current cache if there's a loaded stream + resets scrolling
       dispatch(clearStreamCache(loadedId));
 
@@ -74,6 +76,7 @@ const Streams = () => {
           thisStream = {streamUser.stream} />
       )}
       <CreateStream />
+      <SettingsButton />
     </div>
   );
 };
