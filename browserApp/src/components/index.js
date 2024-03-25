@@ -5,7 +5,6 @@ import LogIn from './LogIn'; // component to log in
 import Register from './Register'; // component to register as a new user
 
 import MenuBar from './MenuBar'; // menu bar component for top of app;
-import SliceMenu from './SliceMenu'; // menu bar for Slices component;
 
 import Slices from './Slices'; // component for viewing slices
 import Streams from './Streams'; // displays streams in the side menu
@@ -16,7 +15,6 @@ import ShareForm from './ShareForm'; // form used to share stream with new user
 import Settings from './Settings'; // component for user + app settings
 import SettingsButton from './SettingsButton'; // used on *Streams* to direct to settings
 
-import CreateSlice from './CreateSlice'; // component to create new slice
 import CreateStream from './CreateStream'; // component to create new stream
 
 import NavButton from './NavButton'; // button specifically for nagivating via a route
@@ -25,7 +23,6 @@ import ToggleSideMenu from './ToggleSideMenu'; // button just to toggle side men
 import ExpandBox from './ExpandBox'; // wrapper for a box, which expands
 
 export {
-  CreateSlice,
   CreateStream,
   Entry,
   ExpandBox,
@@ -36,7 +33,6 @@ export {
   Settings,
   SettingsButton,
   ShareForm,
-  SliceMenu,
   Slices,
   StreamInfo,
   Streams,
