@@ -1,3 +1,7 @@
+:root {
+  --scroller-height: 85dvh;
+}
+
 .outer-container {
   height: 100vh;
 
@@ -178,7 +182,7 @@
 
   text-overflow: ellipsis;
 
-  max-width: 100px;
+  max-width: 25vw;
 }
 
 .permission-bubble-container {
@@ -207,7 +211,7 @@
 }
 
 .settings-container {
-  height: 85vh;
+  height: var(--scroller-height);
   
   display: flex;
   flex-direction: column;
@@ -384,10 +388,10 @@
   scrollbar-width: none;
 }
 
-.slice-status-bar {
+.slice-status-bubble {
   position: absolute;
-  bottom: 0px;
-  left: 0px;
+  top: 100px;
+  right: 0px;
 
   margin: 5px;
   padding: 8px;
@@ -427,7 +431,7 @@
 }
 
 .slice-view-container {
-  max-height: 90vh;
+  height: var(--scroller-height);
 
   display: flex;
   flex-direction: column;
@@ -447,7 +451,7 @@
   flex-grow: 1;
   justify-content: flex-start;
 
-  height: 85vh;
+  height: var(--scroller-height);
 
   overflow-y: scroll;
   scrollbar-width: none;

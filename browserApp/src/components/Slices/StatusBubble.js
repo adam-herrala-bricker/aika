@@ -24,7 +24,7 @@ const StatusBar = ({isFetching, loadedN}) => {
 
   if (isFetching) {
     return (
-      <div className = 'slice-status-bar'>
+      <div className = 'slice-status-bubble'>
         <Loader
           active
           inline
@@ -35,7 +35,9 @@ const StatusBar = ({isFetching, loadedN}) => {
   }
 
   return (
-    <div className = 'slice-status-bar'>
+    <div
+      className = 'slice-status-bubble'
+      onClick = {() => setHide(true)}>
       {loadedN} slices loaded
     </div>
   );
