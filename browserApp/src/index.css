@@ -390,6 +390,30 @@
   scrollbar-width: none;
 }
 
+.slice-status-bar {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+
+  margin: 5px;
+  padding: 8px;
+
+  font-size: 12px;
+  font-weight: 100;
+
+  opacity: 80%;
+
+  display: flex;
+  flex-direction: row;
+  align-self: flex-start;
+
+  background-color: black;
+  color: white;
+
+  border-radius: 10px;
+}
+
+
 .slice-tag-solo-container {
   margin-top: 0px;
 }
@@ -410,7 +434,6 @@
 
 .slice-view-container {
   max-height: 90vh;
-  padding-bottom: 10px;
 
   display: flex;
   flex-direction: column;

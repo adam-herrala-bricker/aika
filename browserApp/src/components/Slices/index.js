@@ -6,6 +6,7 @@ import {useGetSlicesQuery} from '../../services/slices';
 import Slice from './Slice';
 import CreateSlice from './CreateSlice';
 import SliceMenu from './SliceMenu';
+import StatusBubble from './StatusBubble';
 
 const Slices = () => {
   const dispatch = useDispatch();
@@ -54,14 +55,14 @@ const Slices = () => {
   }
 
   if (isLoading || myPermissions.isLoading) {
-    return <div>loading ...</div>;
+    return <div>loading stream...</div>;
   }
 
   return (
     <div className = 'slice-view-container'>
       {loadedId && <SliceMenu stream = {{loadedName, loadedId}}/>}
       {myPermissions?.data?.write && <CreateSlice />}
-      {(search.length > 0 && !isFetching && !isLoading && data.length === 0) &&
+      {(search.length > 0 && !isFetching && data.length === 0) &&
         <div className = 'slice-no-search-results'>no slices found</div>}
       <div ref = {scrollRef} className = 'slice-scroll-region'>
         {data && data.map((slice) =>
@@ -70,6 +71,7 @@ const Slices = () => {
             myPermissions = {myPermissions.data}
             slice = {slice}/>)}
       </div>
+      <StatusBubble isFetching = {isFetching} loadedN = {data.length}/>
     </div>
   );
 };
