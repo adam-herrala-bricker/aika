@@ -10,7 +10,8 @@ const defaultStream = {
     offset: 0,
   },
 
-  lastScrolled: 0, // date last scrolled
+  lastObservedLength: 0, // for triggering queries only when the last one is complete (and has returned something new)
+  lastScrolled: 0, // date-time last scrolled (for debounce)
 
   search: '',
 };
@@ -21,15 +22,20 @@ const streamSlice = createSlice({
   initialState: defaultStream,
 
   reducers: {
-    incrementScroller(state) {
+    incrementScroller(state, action) {
       const debounce = 1000; // time in ms
+
       const timeNow = new Date();
       const timeThen = new Date(state.lastScrolled);
 
+      const currentDataLength = action.payload;
+
       // won't increment if within debounce period
-      if (timeNow - timeThen > debounce) {
+      if ((timeNow - timeThen > debounce) && (currentDataLength > state.lastObservedLength)) {
+        console.log(state.scroller.limit + state.scroller.offset);
         return {
           ...state,
+          lastObservedLength: currentDataLength,
           scroller: {
             ...state.scroller,
             offset: state.scroller.limit + state.scroller.offset
@@ -58,6 +64,7 @@ const streamSlice = createSlice({
     resetScroller(state) {
       return {
         ...state,
+        lastObservedLength: defaultStream.lastObservedLength,
         scroller: defaultStream.scroller
       };
     },

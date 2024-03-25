@@ -249,8 +249,9 @@ const Slices = () => {
         const scrolledToBottom =
           (scrollTop + clientHeight >= .95*scrollHeight);
 
-        if (clientHeight > 0 && scrolledToBottom && !isLoading) {
-          dispatch(incrementScroller());
+        if (clientHeight > 0 && scrolledToBottom && !isFetching) {
+          console.log('data length', data.length);
+          dispatch(incrementScroller(data.length));
         }
       };
 
