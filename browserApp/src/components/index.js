@@ -10,7 +10,6 @@ import Slices from './Slices'; // component for viewing slices
 import Streams from './Streams'; // displays streams in the side menu
 
 import StreamInfo from './StreamInfo'; // view info for a stream, set permissions, delete
-import ShareForm from './ShareForm'; // form used to share stream with new user
 
 import Settings from './Settings'; // component for user + app settings
 import SettingsButton from './SettingsButton'; // used on *Streams* to direct to settings
@@ -32,7 +31,6 @@ export {
   Register,
   Settings,
   SettingsButton,
-  ShareForm,
   Slices,
   StreamInfo,
   Streams,

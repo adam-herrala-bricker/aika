@@ -2,14 +2,14 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   useDeleteStreamMutation,
-  useGetAllPermissionsQuery,
   useGetMyPermissionsQuery
-} from '../services/streams';
-import {resetStream} from '../reducers/streamReducer';
-import {resetView, setStreamSliceMain} from '../reducers/viewReducer';
+} from '../../services/streams';
+import {resetStream} from '../../reducers/streamReducer';
+import {resetView, setStreamSliceMain} from '../../reducers/viewReducer';
 import {Button, Confirm, Header} from 'semantic-ui-react';
-import {ShareForm} from '.';
-import {permissionTypes} from '../util/constants';
+import AllPermissions from './AllPermissions';
+import ShareForm from './ShareForm';
+import {permissionTypes} from '../../util/constants';
 
 const ViewPermissions = ({data}) => {
 
@@ -26,37 +26,6 @@ const ViewPermissions = ({data}) => {
             {type}
           </div>)}
       </div>
-    </div>
-  );
-};
-
-const AllPermissions = () => {
-  const {loadedId} = useSelector((i) => i.stream);
-  const {username} = useSelector((i) => i.user);
-  const {data, isLoading} = useGetAllPermissionsQuery(loadedId);
-
-  if (isLoading) return null;
-
-  return (
-    <div className = 'permissions-display-container'>
-      <Header size = 'medium'>all users with stream permissions</Header>
-      {data.map((permissions) =>
-        <div key = {permissions.id} className = 'permissions-shared-container'>
-          <Header size = 'tiny'>
-            {permissions.user.username === username
-              ? 'me'
-              : permissions.user.username}
-          </Header>
-          <div className = 'permission-bubble-container'>
-            {permissionTypes.map((type) =>
-              <div
-                className = {permissions[type] ? 'permission-bubble-yes' : 'permission-bubble-no'}
-                key = {type}>
-                {type}
-              </div>)}
-          </div>
-        </div>
-      )}
     </div>
   );
 };

@@ -1,9 +1,9 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {setSharing, resetSharing} from '../reducers/sharingReducer';
-import {useSetPermissionsMutation} from '../services/permissions';
+import {setSharing, resetSharing} from '../../reducers/sharingReducer';
+import {useSetPermissionsMutation} from '../../services/permissions';
 import {Button, Confirm, Form, FormField, Header, Popup} from 'semantic-ui-react';
-import {permissionPopup, permissionTypes} from '../util/constants';
+import {permissionPopup, permissionTypes} from '../../util/constants';
 
 const ShareOption = ({type}) => {
   const dispatch = useDispatch();
