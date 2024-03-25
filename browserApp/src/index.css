@@ -92,19 +92,26 @@
   border-width: 1px;
 }
 
-.expand-header-container{
+.expand-header-container {
+  caret-color: transparent;
   display: flex;
   flex-direction: row;
 }
 
+.expand-header-container:hover {
+  opacity: 70%;
+}
+
+.expand-body-container:active {
+  background-color: none;
+}
+
 .expand-header-text {
+  user-select: none;
+
   align-self: flex-start;
   font-size: large;
   font-weight: bold;
-}
-
-.icon-angle:hover {
-  opacity: 75%;
 }
 
 .menu-bar-container-flex {
@@ -495,6 +502,10 @@
 
 .ui.button.button-unchange-on-disable:disabled {
   opacity: 1 !important;
+}
+
+.ui.header {
+  caret-color: transparent;
 }
 
 .ui.header.header-truncate {

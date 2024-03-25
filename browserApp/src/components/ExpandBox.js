@@ -5,11 +5,11 @@ const ExpandBox = ({header, child}) => {
   const [showChild, setShowChild] = React.useState(false);
   return (
     <div className = 'expand-box'>
-      <div className = 'expand-header-container'>
+      <div
+        className = 'expand-header-container'
+        onClick = {() => setShowChild(!showChild)}>
         <Icon
-          className = 'icon-angle'
           name = {showChild ? 'angle down' : 'angle right'}
-          onClick = {() => setShowChild(!showChild)}
           size = 'large' />
         <div className = 'expand-header-text'>
           {header}
