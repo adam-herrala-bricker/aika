@@ -14,7 +14,7 @@ const ChangePassword = () => {
   const [password, setPassword] = React.useState(defaultPassword);
 
   const passwordsMatch = password.new === password.confirm;
-  const confirmText = passwordsMatch ? 'maches' : 'does not match';
+  const confirmText = passwordsMatch ? 'matches' : 'does not match';
 
   const passwordTooShort = password.new.length < 8;
 

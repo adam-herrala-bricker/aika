@@ -1,3 +1,7 @@
+:root {
+  --scroller-height: 85dvh;
+}
+
 .outer-container {
   height: 100vh;
 
@@ -92,19 +96,26 @@
   border-width: 1px;
 }
 
-.expand-header-container{
+.expand-header-container {
+  caret-color: transparent;
   display: flex;
   flex-direction: row;
 }
 
+.expand-header-container:hover {
+  opacity: 70%;
+}
+
+.expand-body-container:active {
+  background-color: none;
+}
+
 .expand-header-text {
+  user-select: none;
+
   align-self: flex-start;
   font-size: large;
   font-weight: bold;
-}
-
-.icon-angle:hover {
-  opacity: 75%;
 }
 
 .menu-bar-container-flex {
@@ -171,7 +182,7 @@
 
   text-overflow: ellipsis;
 
-  max-width: 100px;
+  max-width: 25vw;
 }
 
 .permission-bubble-container {
@@ -199,21 +210,8 @@
   color: lightgray;
 }
 
-.permissions-display-container, .share-form-container, .stream-delete-container {
-  border-style: solid;
-  border-radius: 5px;
-  border-width: 2px;
-
-  padding: 10px;
-  margin-bottom: 20px;
-}
-
-.permissions-shared-container {
-  margin-top: 25px;
-}
-
 .settings-container {
-  height: 85vh;
+  height: var(--scroller-height);
   
   display: flex;
   flex-direction: column;
@@ -390,6 +388,30 @@
   scrollbar-width: none;
 }
 
+.slice-status-bubble {
+  position: absolute;
+  top: 100px;
+  right: 0px;
+
+  margin: 5px;
+  padding: 8px;
+
+  font-size: 12px;
+  font-weight: 100;
+
+  opacity: 80%;
+
+  display: flex;
+  flex-direction: row;
+  align-self: flex-start;
+
+  background-color: black;
+  color: white;
+
+  border-radius: 10px;
+}
+
+
 .slice-tag-solo-container {
   margin-top: 0px;
 }
@@ -409,11 +431,16 @@
 }
 
 .slice-view-container {
-  max-height: 90vh;
-  padding-bottom: 10px;
+  height: var(--scroller-height);
 
   display: flex;
   flex-direction: column;
+}
+
+.stream-info-body {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
 }
 
 .stream-info-container {
@@ -424,7 +451,7 @@
   flex-grow: 1;
   justify-content: flex-start;
 
-  height: 85vh;
+  height: var(--scroller-height);
 
   overflow-y: scroll;
   scrollbar-width: none;
@@ -472,6 +499,10 @@
 
 .ui.button.button-unchange-on-disable:disabled {
   opacity: 1 !important;
+}
+
+.ui.header {
+  caret-color: transparent;
 }
 
 .ui.header.header-truncate {

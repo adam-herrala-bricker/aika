@@ -1,9 +1,9 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {useNewSliceMutation} from '../services/slices';
-import {resetScroller} from '../reducers/streamReducer';
-import {clearImage, clearSlice, updateSlice} from '../reducers/sliceReducer';
-import {urlToBlob} from '../util/helpers';
+import {useNewSliceMutation} from '../../services/slices';
+import {resetScroller} from '../../reducers/streamReducer';
+import {clearImage, clearSlice, updateSlice} from '../../reducers/sliceReducer';
+import {urlToBlob} from '../../util/helpers';
 import {
   Button,
   Form,

@@ -1,0 +1,108 @@
+import React from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {appApi} from '../../services/config';
+import {resetScroller} from '../../reducers/streamReducer';
+import {useDeleteSliceMutation} from '../../services/slices';
+import {Button, Confirm, Header, Transition} from 'semantic-ui-react';
+import {customDateFormat, howLongAgo} from '../../util/helpers';
+import SliceImage from './SliceImage';
+import TagGroup from './TagGroup';
+
+
+const Slice = ({slice, myPermissions}) => {
+  const defaultDeleteMessage = 'Are you sure you want to delete this slice?';
+
+  const dispatch = useDispatch();
+  const thisDate = new Date(slice.createdAt);
+  const {loadedId} = useSelector((i) => i.stream);
+  const {username} = useSelector((i) => i.user);
+  const [isConfirm, setIsConfirm] = React.useState(false);
+  const [deleteMessage, setDeleteMessage] = React.useState(defaultDeleteMessage);
+  const [deleteSlice, result] = useDeleteSliceMutation();
+
+  const canDelete = myPermissions.deleteAll
+    || (myPermissions.deleteOwn && username === slice.user.username);
+
+  // event handlers
+  const handleDelete = async () => {
+    try {
+      // reset scroll location so it will start querying from beginning
+      dispatch(resetScroller());
+      await deleteSlice(slice.id).unwrap();
+      // clears the cache for this stream
+      dispatch(appApi.util.updateQueryData('getSlices', {streamId: loadedId}, () => {return [];}));
+    } catch (error) {
+      setDeleteMessage(error.data.error);
+    }
+  };
+
+  const handleConfirmCancel = () => {
+    setDeleteMessage(defaultDeleteMessage);
+    result.reset();
+    setIsConfirm(false);
+  };
+
+  return (
+    <Transition
+      animation = 'fade'
+      duration = {500}
+      transitionOnMount = {true}>
+      <div className = 'slice-single-super-container'>
+        <div className = 'slice-single-time-container'>
+          <div>{howLongAgo(thisDate)}</div>
+          <div className = 'slice-single-date-text'>
+            {customDateFormat(thisDate)}
+          </div>
+        </div>
+        <div className = 'slice-single-container'>
+          <div className = 'slice-single-top-row'>
+            <div className = 'slice-user-group'>
+              <div className = 'slice-single-user-button'>
+                <div className = 'slice-single-user-button-text'>
+                  {slice.user.firstName[0]}
+                </div>
+              </div>
+              <div className = 'slice-single-column'>
+                {`${slice.user.firstName} ${slice.user.lastName}`}
+                <div className = 'slice-username-container'>
+                  <i>{slice.user.username}</i>
+                </div>
+              </div>
+            </div>
+            <div>
+              {canDelete &&
+            <div>
+              <Button
+                basic
+                color = 'red'
+                compact
+                onClick = {() => setIsConfirm(true)}
+                size = 'mini'>
+                delete
+              </Button>
+              <Confirm
+                confirmButton = {!result.isError && 'Delete'}
+                content = {deleteMessage}
+                header = 'Confirm slice deletion'
+                open = {isConfirm}
+                onCancel = {handleConfirmCancel}
+                onConfirm = {handleDelete}
+              />
+            </div>}
+            </div>
+          </div>
+          <div>
+            <Header size = 'medium'>{slice.title}</Header>
+          </div>
+          <div className = 'slice-text-container'>
+            {slice.text}
+          </div>
+          {!slice.imageName && <div className = 'slice-tag-solo-container'><TagGroup slice = {slice} /></div>}
+          {slice.imageName && <SliceImage slice = {slice}/>}
+        </div>
+      </div>
+    </Transition>
+  );
+};
+
+export default Slice;

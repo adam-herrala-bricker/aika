@@ -29,6 +29,7 @@ const LogOutButton = ({thisUser}) => {
         disabled = {!isWarning}
         trigger = {
           <Button
+            color = 'vk'
             compact
             fluid
             negative = {isWarning}

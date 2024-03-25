@@ -1,8 +1,8 @@
 import React from 'react';
 import {useDebouncedCallback} from 'use-debounce';
 import {useDispatch} from 'react-redux';
-import {clearStreamCache, setSearch} from '../reducers/streamReducer';
-import {setStreamSliceMain} from '../reducers/viewReducer';
+import {clearStreamCache, setSearch} from '../../reducers/streamReducer';
+import {setStreamSliceMain} from '../../reducers/viewReducer';
 import {Button, Header, Input} from 'semantic-ui-react';
 
 const SliceMenu = ({stream}) => {
