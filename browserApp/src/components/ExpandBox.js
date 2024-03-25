@@ -1,8 +1,8 @@
 import React from 'react';
 import {Icon} from 'semantic-ui-react';
 
-const ExpandBox = ({header, child}) => {
-  const [showChild, setShowChild] = React.useState(false);
+const ExpandBox = ({header, renderOpen, children}) => {
+  const [showChild, setShowChild] = React.useState(renderOpen);
   return (
     <div className = 'expand-box'>
       <div
@@ -17,7 +17,7 @@ const ExpandBox = ({header, child}) => {
       </div>
       {showChild &&
       <div className = 'expand-body-container'>
-        {child}
+        {children}
       </div>}
     </div>
   );

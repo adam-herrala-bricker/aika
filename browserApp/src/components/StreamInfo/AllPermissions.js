@@ -9,18 +9,19 @@ const AllPermissions = () => {
   const {username} = useSelector((i) => i.user);
   const {data, isLoading} = useGetAllPermissionsQuery(loadedId);
 
-  if (isLoading) return null;
+  if (isLoading) return <div>loading...</div>;
 
   return (
-    <div className = 'permissions-display-container'>
-      <Header size = 'medium'>all users with stream permissions</Header>
+    <div className = 'stream-info-body'>
       {data.map((permissions) =>
-        <div key = {permissions.id} className = 'permissions-shared-container'>
-          <Header size = 'tiny'>
-            {permissions.user.username === username
-              ? 'me'
-              : permissions.user.username}
-          </Header>
+        <div key = {permissions.id}>
+          <div>
+            <Header size = 'tiny'>
+              {permissions.user.username === username
+                ? 'me'
+                : permissions.user.username}
+            </Header>
+          </div>
           <div className = 'permission-bubble-container'>
             {permissionTypes.map((type) =>
               <div

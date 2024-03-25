@@ -13,10 +13,10 @@ const Settings = () => {
       <div>
         <Header size = 'large'>Settings</Header>
       </div>
-      <ExpandBox header = 'User info' child = {<UserInfo />}/>
-      <ExpandBox header = 'Display settings' child = {<DisplaySettings />}/>
-      <ExpandBox header = 'Change password' child = {<ChangePassword />}/>
-      <ExpandBox header = 'Delete account' child = {<DeleteAccount />}/>
+      <ExpandBox header = 'User info'><UserInfo /></ExpandBox>
+      <ExpandBox header = 'Display settings'><DisplaySettings /></ExpandBox>
+      <ExpandBox header = 'Change password'><ChangePassword /></ExpandBox>
+      <ExpandBox header = 'Delete account'><DeleteAccount /></ExpandBox>
     </div>
   );
 };

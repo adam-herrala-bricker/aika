@@ -2,7 +2,7 @@ import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {setSharing, resetSharing} from '../../reducers/sharingReducer';
 import {useSetPermissionsMutation} from '../../services/permissions';
-import {Button, Confirm, Form, FormField, Header, Popup} from 'semantic-ui-react';
+import {Button, Confirm, Form, FormField, Popup} from 'semantic-ui-react';
 import {permissionPopup, permissionTypes} from '../../util/constants';
 
 const ShareOption = ({type}) => {
@@ -41,9 +41,8 @@ const ShareForm = () => {
   };
 
   return (
-    <div className = 'share-form-container'>
+    <div>
       <Form onSubmit = {handleSubmit}>
-        <Header size = 'small'>share with user</Header>
         <FormField>
           <label>username</label>
           <input
