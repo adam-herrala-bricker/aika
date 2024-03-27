@@ -421,12 +421,6 @@ Slices are sorted by time created, with the most recent returned first.
   - type: integer
   - required: false
   - default: 0
-- `res`
-  - resolution of image to generate for the slice (if it includes one)
-  - type: string
-  - required: false
-  - value options: 'web', 'full'
-  - default: 'web'  
 - `search`
   - case insensitive substring searching for title + text
   - type: string
@@ -455,6 +449,8 @@ Slices are sorted by time created, with the most recent returned first.
 ### GET `/media/{streamId}/{sliceID}_{res}_{fileName}`
 
 Returns media for the given stream and file (subject to the same authorization and permission requirements as slices).
+
+Currently supported values for `res` are 'web' (smaller dimension <= 1024) and 'full' (original dimensions). 
 
 >[!Important]
 >Remember to include the file extension in `fileName`
