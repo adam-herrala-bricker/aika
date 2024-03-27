@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const sharp = require('sharp');
 const {Op} = require('sequelize');
 const {ActiveSession, Slice, Stream, StreamUser} = require('../models');
 const {USER_SECRET} = require('./config');
@@ -106,6 +107,26 @@ const slicePermissions = async (req, res, next) => {
   next();
 };
 
+// manages adding images to temp media folder upon request, but only if necessary
+const tempDownloads = async (req, res, next) => {
+  const reqInfo = req.path.replace('/', '').split('_');
+  const sliceId = reqInfo[0];
+  const thisRes = reqInfo[1];
+
+  const thisSlice = await Slice.findByPk(sliceId);
+
+  // create new sharp instance --> web res
+  const webResData = sharp(thisSlice.imageData);
+  if (thisRes !== 'full') {
+    webResData.resize({height: 1024, width: 1024, fit: 'outside', withoutEnlargement: true});
+  }
+
+  // save web res image to temp folder
+  await webResData.toFile(`./temp/downloads/${sliceId}_${thisRes}_${thisSlice.imageName}`);
+
+  next();
+};
+
 const errorHandler = (error, request, response, next) => {
 
   if (error.name === 'CastError') {
@@ -133,5 +154,6 @@ module.exports = {
   staticAuthorization,
   streamPermissions,
   slicePermissions,
+  tempDownloads,
   errorHandler,
 };

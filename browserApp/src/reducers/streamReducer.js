@@ -32,7 +32,6 @@ const streamSlice = createSlice({
 
       // won't increment if within debounce period or if last query didn't return anything new
       if ((timeNow - timeThen > debounce) && (currentDataLength > state.lastObservedLength)) {
-        console.log(state.scroller.limit + state.scroller.offset);
         return {
           ...state,
           lastObservedLength: currentDataLength,

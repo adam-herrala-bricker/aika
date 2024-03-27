@@ -1,7 +1,6 @@
 const {unlink} = require('node:fs/promises');
 const router = require('express').Router();
 const multer = require('multer');
-const sharp = require('sharp');
 const {Op} = require('sequelize');
 const {Slice, User} = require('../models');
 const {slicePermissions, streamPermissions} = require('../util/middleware');
@@ -35,14 +34,12 @@ const uploadImage = multer({
 router.post('/view/:id', streamPermissions, async (req, res) => {
   const defaultLimit = 10;
   const defaultOffset = 0;
-  const defaultRes = 'web';
 
   const streamId = req.params.id;
   const permissions = req.permissions;
 
   const thisLimit = req.body.limit || defaultLimit;
   const thisOffset = req.body.offset || defaultOffset;
-  const thisRes = req.body.res || defaultRes;
   const thisSearch = req.body.search;
 
   if (!permissions.read) return res.status(403).json({error: 'read permission required'});
@@ -70,27 +67,13 @@ router.post('/view/:id', streamPermissions, async (req, res) => {
       model: User,
       attributes: ['username', 'id', 'firstName', 'lastName']
     },
+    attributes: {
+      exclude: ['imageData'] // don't need it + clogs up Redux
+    },
     limit: thisLimit,
     offset: thisOffset,
     order: [['createdAt', 'DESC']],
   });
-
-  // load temp media for slices with images
-  for await (const slice of slices) {
-    if (slice.imageData) {
-      // create new sharp instance --> web res
-      const webResData = sharp(slice.imageData);
-      if (thisRes !== 'full') {
-        webResData.resize({height: 1024, width: 1024, fit: 'outside', withoutEnlargement: true});
-      }
-
-      // save web res image to temp folder
-      await webResData.toFile(`./temp/downloads/${slice.id}_${thisRes}_${slice.imageName}`);
-
-      // don't return image data to FE
-      slice.imageData = null;
-    }
-  }
 
   res.json(slices);
 

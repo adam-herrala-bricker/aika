@@ -11,7 +11,7 @@ import StatusBubble from './StatusBubble';
 const Slices = () => {
   const dispatch = useDispatch();
   const {loadedId, loadedName, scroller, search} = useSelector((i) => i.stream);
-  const {imageRes} = useSelector((i) => i.view);
+
   // ref for element to add scroll event listener
   const scrollRef = React.useRef(0);
 
@@ -21,7 +21,6 @@ const Slices = () => {
     limit: scroller.limit,
     offset: scroller.offset,
     search: search,
-    res: imageRes
   });
 
   // used for infinite scrolling
@@ -34,7 +33,6 @@ const Slices = () => {
           (scrollTop + clientHeight >= .95*scrollHeight);
 
         if (clientHeight > 0 && scrolledToBottom && !isFetching) {
-          console.log('data length', data.length);
           dispatch(incrementScroller(data.length));
         }
       };
