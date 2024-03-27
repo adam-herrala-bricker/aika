@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {appApi} from '../../services/config';
 import {resetScroller} from '../../reducers/streamReducer';
 import {useDeleteSliceMutation} from '../../services/slices';
-import {Button, Confirm, Header, Transition} from 'semantic-ui-react';
+import {Button, Header, Icon, Modal, ModalActions, ModalContent, Transition} from 'semantic-ui-react';
 import {customDateFormat, howLongAgo} from '../../util/helpers';
 import SliceImage from './SliceImage';
 import TagGroup from './TagGroup';
@@ -80,14 +80,31 @@ const Slice = ({slice, myPermissions}) => {
                 size = 'mini'>
                 delete
               </Button>
-              <Confirm
-                confirmButton = {!result.isError && 'Delete'}
-                content = {deleteMessage}
-                header = 'Confirm slice deletion'
-                open = {isConfirm}
-                onCancel = {handleConfirmCancel}
-                onConfirm = {handleDelete}
-              />
+              <Modal
+                basic
+                open = {isConfirm}>
+                <Header>
+                  <Icon name = 'trash alternate outline'/>
+                  Confirm slice deletion
+                </Header>
+                <ModalContent>
+                  {deleteMessage}
+                </ModalContent>
+                <ModalActions>
+                  <Button
+                    inverted
+                    onClick = {handleConfirmCancel}>
+                    Cancel
+                  </Button>
+                  <Button
+                    color = 'red'
+                    inverted
+                    loading = {!result.isUninitialized}
+                    onClick = {handleDelete}>
+                    Delete
+                  </Button>
+                </ModalActions>
+              </Modal>
             </div>}
             </div>
           </div>

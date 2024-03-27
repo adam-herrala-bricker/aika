@@ -11,6 +11,7 @@ import {
   FormGroup,
   FormTextArea,
   Header,
+  Icon,
   Image,
   Label
 } from 'semantic-ui-react';
@@ -128,7 +129,10 @@ const CreateSlice = () => {
 
   return (
     <div className = 'slice-create-container-open'>
-      <Header size = 'medium'>New Slice</Header>
+      <Header size = 'medium'>
+        <Icon name = 'clone outline'/>
+        New Slice
+      </Header>
       <Form onSubmit = {submitSlice}>
         <Header size = 'tiny'>Title</Header>
         <FormGroup

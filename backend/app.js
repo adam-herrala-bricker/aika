@@ -36,6 +36,7 @@ app.use(
   '/media/:id/',
   middleware.streamPermissions,
   middleware.staticAuthorization,
+  middleware.tempDownloads, // only run this AFTER permissions + auth have been cleared
   express.static('./temp/downloads/')
 );
 

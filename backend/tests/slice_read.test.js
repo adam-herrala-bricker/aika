@@ -61,7 +61,7 @@ describe('valid requests', () => {
     const sliceZeroBody = body[3];
     expect(sliceZeroBody.imageName).toBe(fileName.good.jpg.one);
     expect(sliceZeroBody.imageType).toBe('image/jpeg');
-    expect(sliceZeroBody.imageData).toBe(null);
+    expect(sliceZeroBody).not.toHaveProperty('imageData');
 
     // returns creating user too
     body.forEach((slice) => {

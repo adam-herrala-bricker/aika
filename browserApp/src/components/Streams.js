@@ -16,8 +16,8 @@ const Stream = ({thisStream}) => {
   // event handler
   // clears cache of loaded stream before loading new stream
   const handleClick = () => {
-    // change slice state if (i) moving to different stream or (ii) coming in from a different view
-    if (thisStream.id !== loadedId || streamSliceMain !== 'slice') {
+    // change slice state if (i) moving to different stream or (ii) there's not a stream loaded yet or (iii) coming in from a different view
+    if (thisStream.id !== loadedId || !loadedId || streamSliceMain !== 'slice') {
       // clears current cache if there's a loaded stream + resets scrolling
       dispatch(clearStreamCache(loadedId));
 
