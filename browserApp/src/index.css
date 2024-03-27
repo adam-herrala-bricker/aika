@@ -176,6 +176,8 @@
   align-items: baseline;
   column-gap: 5px;
 
+  box-shadow: white 0px 10px 20px;
+
   z-index: 101;
 }
 
