@@ -274,13 +274,20 @@ Adds a new slice to the stream with the given `id` (if user has `write` permissi
   - default: false
 - `image`
   - type: file
-  - required: false  
+  - required: false
+- `strandName`
+  - Name of strand for this slice to link to. If no strand by that name exists on the stream, a new strand will be created.
+  - type: string
+  - required: false   
 
 #### Returns:
 - `id`
   - type: UUID v4
 - `creatorId`
   - UUID of user that created slice
+- `strandId`
+  - UUID of strand that slice is linked to
+  - `null` if slice is not linked to strand  
 - `streamId`
   - UUID of stream that slice is on
 - `title`
