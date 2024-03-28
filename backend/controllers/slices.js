@@ -42,6 +42,9 @@ router.post('/view/:id', streamPermissions, async (req, res) => {
   const thisLimit = req.body.limit || defaultLimit;
   const thisOffset = req.body.offset || defaultOffset;
   const thisSearch = req.body.search;
+  const strandId = req.body.strandId;
+
+  const ordering = strandId ? 'ASC' : 'DESC';
 
   if (!permissions.read) return res.status(403).json({error: 'read permission required'});
 
@@ -60,20 +63,33 @@ router.post('/view/:id', streamPermissions, async (req, res) => {
     };
   }
 
+  // filter just for a single strand if one is given
+  let whereStrand = {};
+  if (strandId) {
+    whereStrand = {strandId: strandId};
+  }
+
   const slices = await Slice.findAll({
     where: {
       streamId: streamId,
-      ...whereSearch},
-    include: {
-      model: User,
-      attributes: ['username', 'id', 'firstName', 'lastName']
-    },
+      ...whereSearch,
+      ...whereStrand},
+    include: [
+      {
+        model: User,
+        attributes: ['username', 'id', 'firstName', 'lastName']
+      },
+      {
+        model: Strand,
+        attributes: ['name', 'createdAt', 'updatedAt']
+      }
+    ],
     attributes: {
       exclude: ['imageData'] // don't need it + clogs up Redux
     },
     limit: thisLimit,
     offset: thisOffset,
-    order: [['createdAt', 'DESC']],
+    order: [['createdAt', ordering]],
   });
 
   res.json(slices);

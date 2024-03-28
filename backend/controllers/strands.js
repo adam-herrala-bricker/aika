@@ -1,7 +1,7 @@
 // everything here requires a user token
-const router = require('express').Router();
+// const router = require('express').Router();
 
-const {Strand} = require('../models');
+// const {Strand} = require('../models');
 
 // get all strands (used when creating a new slice to see existing ones)
 
