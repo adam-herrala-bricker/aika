@@ -24,7 +24,7 @@ User.belongsToMany(Stream, {through: StreamUser, as: 'connected_users'});
 Stream.hasMany(StreamUser, {foreignKey: 'streamId'});
 StreamUser.belongsTo(Stream, {foreignKey: 'streamId'});
 
-User.hasMany(StreamUser, {foreighKey: 'userId'});
+User.hasMany(StreamUser, {foreignKey: 'userId'});
 StreamUser.belongsTo(User, {foreignKey: 'userId'});
 
 Slice.belongsTo(User, {foreignKey: 'creatorId'});
@@ -33,13 +33,20 @@ User.hasMany(Slice, {foreignKey: 'creatorId'});
 Slice.belongsTo(Stream);
 Stream.hasMany(Slice);
 
-Slice.belongsTo(Strand, {foreignKey: 'creatorId'});
-Strand.hasMany(Slice, {foreignKey: 'creatorId'});
+Slice.belongsTo(Strand);
+Strand.hasMany(Slice);
+
+Strand.belongsTo(User, {foreignKey: 'creatorId'});
+User.hasMany(Strand, {foreignKey: 'creatorId'});
+
+Strand.belongsTo(Stream, {foreignKey: 'streamId'});
+Stream.hasMany(Strand, {foreignKey: 'streamId'});
 
 module.exports = {
   ActiveConfirmation,
   ActiveSession,
   Slice,
+  Strand,
   Stream,
   StreamUser,
   User

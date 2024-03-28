@@ -15,6 +15,12 @@ module.exports = {
         references: {model: 'users', key: 'id'}
       },
 
+      stream_id: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {model: 'streams', key: 'id'}
+      },
+
       name: {
         type: DataTypes.TEXT,
         allowNull: false

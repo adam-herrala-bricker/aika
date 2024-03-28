@@ -2,7 +2,7 @@ const {unlink} = require('node:fs/promises');
 const router = require('express').Router();
 const multer = require('multer');
 const {Op} = require('sequelize');
-const {Slice, User} = require('../models');
+const {Slice, Strand, User} = require('../models');
 const {slicePermissions, streamPermissions} = require('../util/middleware');
 const {readFileData} = require('../util/helpers');
 
@@ -84,6 +84,7 @@ router.post('/:id', streamPermissions, uploadImage.single('image'), async (req, 
   const creatorId = req.decodedToken.id;
   const streamId = req.params.id;
   const permissions = req.permissions;
+  const {strandName} = req.body;
 
   if (!creatorId || !streamId) {
     return res.status(400).json({error: 'user and stream id must be provided'});
@@ -91,6 +92,27 @@ router.post('/:id', streamPermissions, uploadImage.single('image'), async (req, 
 
   if (!permissions.write) {
     return res.status(403).json({error: 'user cannot write to this stream'});
+  }
+
+  // link to strand if provided
+  if (strandName) {
+    // check to see if strand already exists
+    const foundStrand = await Strand.findOne({
+      where: {[Op.and]: { // strand names are unique for each stream
+        name: strandName,
+        streamId: streamId
+      }}
+    });
+    if (foundStrand) {
+      req.body.strandId = foundStrand.id;
+    } else { // create new strand if none found
+      const newStrand = await Strand.create({
+        name: strandName,
+        creatorId: creatorId,
+        streamId: streamId
+      });
+      req.body.strandId = newStrand.id;
+    }
   }
 
   const newEntry = await Slice.create({

@@ -136,6 +136,29 @@ const slice = {
   }
 };
 
+const strand = {
+  zero: {
+    name: 'strandZero'
+  },
+
+  one: {
+    name: 'strandOne'
+  },
+
+  two: {
+    name: 'strandTwo'
+  },
+
+  three: {
+    name:
+      'strandThree'
+  },
+
+  four: {
+    name: 'strandFour'
+  }
+};
+
 
 const stream = {
   zero: {
@@ -187,6 +210,7 @@ module.exports = {
   invalidId,
   newPassword,
   slice,
+  strand,
   stream,
   user
 };
