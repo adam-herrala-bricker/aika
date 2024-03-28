@@ -295,7 +295,7 @@ Adds a new slice to the stream with the given `id` (if user has `write` permissi
 - `isPublic`
 - `isMilestone`
 - `imageName`
-  - format: `{streamId}-{originalName}` 
+  - Images uploaded over mobile may have the name 'blob.' 
 - `imageType` 
 - `createdAt`
 - `updatedAt`    
