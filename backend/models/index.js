@@ -1,6 +1,7 @@
 const ActiveConfirmation = require('./activeConfirmation');
 const ActiveSession = require('./activeSession');
 const Slice = require('./slice');
+const Strand = require('./strand');
 const Stream = require('./stream');
 const StreamUser = require('./streamUser');
 const User = require('./user');
@@ -31,6 +32,9 @@ User.hasMany(Slice, {foreignKey: 'creatorId'});
 
 Slice.belongsTo(Stream);
 Stream.hasMany(Slice);
+
+Slice.belongsTo(Strand, {foreignKey: 'creatorId'});
+Strand.hasMany(Slice, {foreignKey: 'creatorId'});
 
 module.exports = {
   ActiveConfirmation,
