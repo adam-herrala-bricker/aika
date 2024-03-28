@@ -29,4 +29,27 @@ const readFileData = async (filePath) => {
   return imageData;
 };
 
-module.exports = {getCryptoKey, howLongAgoInMinutes, readFileData};
+// adds extension to file if missing (currently supports .jpg and .png)
+// plus transforms 'blob' name into date/time
+const extensionBlobHelper = (file) => {
+  const getExtension = (fileName) => fileName.split('.').slice(-1)[0];
+
+  // change 'blob' name into something more user-friendly
+  if (file.originalname === 'blob') {
+    const now = new Date();
+
+    file.originalname =`${now.getFullYear()}${now.getMonth() + 1}${now.getDate()}-${now.getHours()}${now.getMinutes()}${now.getSeconds()}`;
+  }
+
+
+  if ((file.mimetype === 'image/jpeg') && (getExtension(file.originalname) !== 'jpg')) {
+    return file.originalname + '.jpg';
+  } else if ((file.mimetype === 'image/png') && (getExtension(file.originalname) !== 'png')) {
+    return file.originalname + '.png';
+  }
+
+  // fallback --> just return orignal file name
+  return file.originalname;
+};
+
+module.exports = {extensionBlobHelper, getCryptoKey, howLongAgoInMinutes, readFileData};

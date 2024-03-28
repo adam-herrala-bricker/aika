@@ -4,7 +4,7 @@ const multer = require('multer');
 const {Op} = require('sequelize');
 const {Slice, Strand, User} = require('../models');
 const {slicePermissions, streamPermissions} = require('../util/middleware');
-const {readFileData} = require('../util/helpers');
+const {extensionBlobHelper, readFileData} = require('../util/helpers');
 
 // for multer middleware
 const storageImage = multer.diskStorage({
@@ -12,6 +12,7 @@ const storageImage = multer.diskStorage({
     cb(null, './temp/uploads/');
   },
   filename: (req, file, cb) => {
+    file.originalname = extensionBlobHelper(file);
     cb(null, `${req.params.id}_${file.originalname}`);
   },
 });
@@ -80,60 +81,63 @@ router.post('/view/:id', streamPermissions, async (req, res) => {
 });
 
 // POST request to create new slice
-router.post('/:id', streamPermissions, uploadImage.single('image'), async (req, res) => {
-  const creatorId = req.decodedToken.id;
-  const streamId = req.params.id;
-  const permissions = req.permissions;
-  const {strandName} = req.body;
+router.post('/:id',
+  streamPermissions,
+  uploadImage.single('image'),
+  async (req, res) => {
+    const creatorId = req.decodedToken.id;
+    const streamId = req.params.id;
+    const permissions = req.permissions;
+    const {strandName} = req.body;
 
-  if (!creatorId || !streamId) {
-    return res.status(400).json({error: 'user and stream id must be provided'});
-  }
-
-  if (!permissions.write) {
-    return res.status(403).json({error: 'user cannot write to this stream'});
-  }
-
-  // link to strand if provided
-  if (strandName) {
-    // check to see if strand already exists
-    const foundStrand = await Strand.findOne({
-      where: {[Op.and]: { // strand names are unique for each stream
-        name: strandName,
-        streamId: streamId
-      }}
-    });
-    if (foundStrand) {
-      req.body.strandId = foundStrand.id;
-    } else { // create new strand if none found
-      const newStrand = await Strand.create({
-        name: strandName,
-        creatorId: creatorId,
-        streamId: streamId
-      });
-      req.body.strandId = newStrand.id;
+    if (!creatorId || !streamId) {
+      return res.status(400).json({error: 'user and stream id must be provided'});
     }
-  }
 
-  const newEntry = await Slice.create({
-    ...req.body,
-    imageData: await readFileData(req.file?.path),
-    imageName: req.file?.originalname,
-    imageType: req.file?.mimetype,
-    creatorId: creatorId,
-    streamId: streamId,
+    if (!permissions.write) {
+      return res.status(403).json({error: 'user cannot write to this stream'});
+    }
+
+    // link to strand if provided
+    if (strandName) {
+      // check to see if strand already exists
+      const foundStrand = await Strand.findOne({
+        where: {[Op.and]: { // strand names are unique for each stream
+          name: strandName,
+          streamId: streamId
+        }}
+      });
+      if (foundStrand) {
+        req.body.strandId = foundStrand.id;
+      } else { // create new strand if none found
+        const newStrand = await Strand.create({
+          name: strandName,
+          creatorId: creatorId,
+          streamId: streamId
+        });
+        req.body.strandId = newStrand.id;
+      }
+    }
+
+    const newEntry = await Slice.create({
+      ...req.body,
+      imageData: await readFileData(req.file?.path),
+      imageName: req.file?.originalname,
+      imageType: req.file?.mimetype,
+      creatorId: creatorId,
+      streamId: streamId,
+    });
+
+    // remove data from returned entry
+    newEntry.imageData = null;
+
+    if (req.file) {
+      // delete temp file
+      await unlink(`${req.file.path}`);
+    }
+
+    res.json(newEntry);
   });
-
-  // remove data from returned entry
-  newEntry.imageData = null;
-
-  if (req.file) {
-    // delete temp file
-    await unlink(`${req.file.path}`);
-  }
-
-  res.json(newEntry);
-});
 
 // DELETE request to delete a slice
 router.delete('/:id', slicePermissions, async (req, res) => {
