@@ -6,6 +6,7 @@ import {useDeleteSliceMutation} from '../../services/slices';
 import {Button, Header, Icon, Modal, ModalActions, ModalContent, Transition} from 'semantic-ui-react';
 import {customDateFormat, howLongAgo} from '../../util/helpers';
 import SliceImage from './SliceImage';
+import StrandOptions from './StrandOptions';
 import TagGroup from './TagGroup';
 
 
@@ -108,8 +109,9 @@ const Slice = ({slice, myPermissions}) => {
             </div>}
             </div>
           </div>
-          <div>
-            <Header size = 'medium'>{slice.title}</Header>
+          <div className = 'slice-header-container'>
+            <div className = 'expand-header-text'>{slice.title}</div>
+            <StrandOptions slice = {slice}/>
           </div>
           <div className = 'slice-text-container'>
             {slice.text}

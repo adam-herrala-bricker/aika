@@ -4,7 +4,8 @@ import {createSlice} from '@reduxjs/toolkit';
 const defaultView = {
   showSideMenu: true,
   streamSliceMain: 'slice',  // main component for StreamSliceView (other values = 'info', 'settings')
-  imageRes: 'web' // other value = 'full'
+  imageRes: 'web', // other value = 'full'
+  createSliceHidden: true
 };
 
 const viewSlice = createSlice({
@@ -25,6 +26,13 @@ const viewSlice = createSlice({
       return {
         ...defaultView,
         imageRes: state.imageRes};
+    },
+
+    setCreateSliceHidden(state, action) {
+      return {
+        ...state,
+        createSliceHidden: action.payload
+      };
     },
 
     setImageRes(state, action) {
@@ -55,6 +63,7 @@ export const {
   resetView,
   setImageRes,
   setStreamSliceMain,
+  setCreateSliceHidden,
   toggleSideMenu
 } = viewSlice.actions;
 

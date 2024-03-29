@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useNewSliceMutation} from '../../services/slices';
 import {resetScroller} from '../../reducers/streamReducer';
 import {clearImage, clearSlice, updateSlice} from '../../reducers/sliceReducer';
+import {setCreateSliceHidden} from '../../reducers/viewReducer';
 import {urlToBlob} from '../../util/helpers';
 import {
   Button,
@@ -24,7 +25,7 @@ const CreateSlice = () => {
   const [newSlice, result] = useNewSliceMutation();
   const thisSlice = useSelector((i) => i.slice);
   const {loadedId} = useSelector((i) => i.stream);
-  const [hidden, setHidden] = React.useState(true);
+  const {createSliceHidden} = useSelector((i) => i.view);
   const [titleError, setTitleError] = React.useState(false);
   const [textError, setTextError] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -48,7 +49,8 @@ const CreateSlice = () => {
 
     handleClearImage();
 
-    setHidden(true);
+    dispatch(setCreateSliceHidden(true));
+    // setHidden(true);
   };
 
   const handleClearImage = () => {
@@ -100,7 +102,8 @@ const CreateSlice = () => {
       setTitleError(false);
       setTextError(false);
       setImageName(defaultImageMessage);
-      setHidden(true);
+      dispatch(setCreateSliceHidden(true));
+      // setHidden(true);
     } catch (error) {
       console.log(error); // will want to improve the error handling here
     }
@@ -114,12 +117,12 @@ const CreateSlice = () => {
     }, 5000);
   }
 
-  if (hidden) {
+  if (createSliceHidden) {
     return (
       <div className = 'slice-create-container-closed'>
         <Button
           fluid
-          onClick = {() => setHidden(false)}
+          onClick = {() => dispatch(setCreateSliceHidden(false))}
           primary>
           New Slice
         </Button>
@@ -200,6 +203,14 @@ const CreateSlice = () => {
           </div>
         </FormGroup>
         }
+        <Header size = 'tiny'>Strand</Header>
+        <FormGroup>
+          <FormInput
+            name = 'strand'
+            onChange = {(event) => dispatch(updateSlice({strandName: event.target.value}))}
+            placeholder = 'Strand'
+            value = {thisSlice.strandName}/>
+        </FormGroup>
         <div className = 'slice-create-text-area'>
           <FormTextArea
             error = {textError}

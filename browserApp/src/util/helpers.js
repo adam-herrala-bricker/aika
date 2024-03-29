@@ -1,11 +1,22 @@
 import {timeLevels} from './constants';
 
 // function to sort slices by createdAt (newest first)
-export const sortSliceByDate = (a, b) => {
+export const sortSliceByDateDESC = (a, b) => {
   if (a.createdAt > b.createdAt) {
     return -1;
   } else if (a.createdAt < b.createdAt) {
     return 1;
+  } else {
+    return 0;
+  }
+};
+
+// function to sort slices by createdAt (oldest first)
+export const sortSliceByDateASC = (a, b) => {
+  if (a.createdAt > b.createdAt) {
+    return 1;
+  } else if (a.createdAt < b.createdAt) {
+    return -1;
   } else {
     return 0;
   }

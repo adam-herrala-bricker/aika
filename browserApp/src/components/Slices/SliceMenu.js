@@ -9,7 +9,7 @@ const SliceMenu = ({stream}) => {
   const dispatch = useDispatch();
 
   const debouncedSearch = useDebouncedCallback((value) => {
-    dispatch(clearStreamCache(stream.loadedId));
+    dispatch(clearStreamCache(stream.loadedId, true));
     dispatch(setSearch(value));
   }, 300);
 

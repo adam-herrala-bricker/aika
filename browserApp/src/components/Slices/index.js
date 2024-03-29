@@ -10,7 +10,13 @@ import StatusBubble from './StatusBubble';
 
 const Slices = () => {
   const dispatch = useDispatch();
-  const {loadedId, loadedName, scroller, search} = useSelector((i) => i.stream);
+  const {loadedId, loadedName, scroller, search, strand} = useSelector((i) => i.stream);
+
+  let strandSelect = {};
+
+  if (strand.id) {
+    strandSelect = {strandId: strand.id};
+  }
 
   // ref for element to add scroll event listener
   const scrollRef = React.useRef(0);
@@ -21,6 +27,7 @@ const Slices = () => {
     limit: scroller.limit,
     offset: scroller.offset,
     search: search,
+    ...strandSelect
   });
 
   // used for infinite scrolling
@@ -59,7 +66,7 @@ const Slices = () => {
   return (
     <div className = 'slice-view-container'>
       {loadedId && <SliceMenu stream = {{loadedName, loadedId}}/>}
-      {myPermissions?.data?.write && <CreateSlice />}
+      {myPermissions?.data?.write && !strand.id && <CreateSlice />}
       {(search.length > 0 && !isFetching && data.length === 0) &&
         <div className = 'slice-no-search-results'>no slices found</div>}
       <div ref = {scrollRef} className = 'slice-scroll-region'>

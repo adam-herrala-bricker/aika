@@ -81,7 +81,7 @@ router.post('/view/:id', streamPermissions, async (req, res) => {
       },
       {
         model: Strand,
-        attributes: ['name', 'createdAt', 'updatedAt']
+        attributes: ['id', 'name', 'createdAt', 'updatedAt']
       }
     ],
     attributes: {
@@ -114,8 +114,8 @@ router.post('/:id',
       return res.status(403).json({error: 'user cannot write to this stream'});
     }
 
-    // link to strand if provided
-    if (strandName) {
+    // link to strand if provided (and not an empty string)
+    if (strandName && strandName.length > 0) {
       // check to see if strand already exists
       const foundStrand = await Strand.findOne({
         where: {[Op.and]: { // strand names are unique for each stream

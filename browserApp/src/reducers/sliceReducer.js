@@ -7,6 +7,7 @@ const defaultSlice = {
   imageUrl: '',
   isMilestone: false,
   isPublic: false,
+  strandName: ''
 };
 
 const sliceSlice = createSlice({

@@ -4,7 +4,8 @@ const webpack = require('webpack');
 const config = (env, argv) => {
   const backend_url = argv.mode === 'production'
     ? 'https://nastytoboggan.fi'
-    : 'http://localhost:3001';
+    // : 'http://localhost:3001';
+    : 'http://192.168.178.24:3001';
 
   return {
     entry: './src/index.js',
