@@ -51,7 +51,7 @@ const Slices = () => {
       };
     }
 
-  }, [data, scrollRef]);
+  }, [data, myPermissions, scrollRef]);
 
   // error
   if (isError) {
