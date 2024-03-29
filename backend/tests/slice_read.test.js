@@ -12,7 +12,17 @@ const {
   createPermissions,
   logInUser
 } = require('./util/functions');
-const {badToken, expiredUserTwoToken, fileName, invalidId, slice, stream, user} = require('./util/constants');
+
+const {
+  badToken,
+  expiredUserTwoToken,
+  fileName,
+  invalidId,
+  slice,
+  strand,
+  stream,
+  user
+} = require('./util/constants');
 
 // user objects
 let userTwo; // creator, has permissions
@@ -21,8 +31,9 @@ let userFive; // non-creator, lacks permissions
 // stream object
 let streamZero;
 
-// slice object
+// slice objects
 let sliceZero;
+let sliceOne;
 
 beforeAll(async () => {
   await connectToDB();
@@ -38,11 +49,13 @@ beforeAll(async () => {
   // tests make no changes to streams or slices, so only need to add once
   streamZero = await addStream(user.two, stream.zero);
 
-  // add four slices to streamZero (as userTwo), one of which is an image
+  // add five slices to streamZero (as userTwo), one of which is an image
+  // note that slice.one and slice.four are on strand.one, and slice.two is on strand.two
   sliceZero = await addImageSlice(userTwo, streamZero.id, slice.valid.zero, fileName.good.jpg.one);
-  await addSlice(userTwo, streamZero.id, slice.valid.one);
-  await addSlice(userTwo, streamZero.id, slice.valid.two);
+  sliceOne = await addSlice(userTwo, streamZero.id, {...slice.valid.one, strandName: strand.one.name});
+  await addSlice(userTwo, streamZero.id, {...slice.valid.two, strandName: strand.two.name});
   await addSlice(userTwo, streamZero.id, slice.valid.four); // skipping public
+  await addSlice(userTwo, streamZero.id, {...slice.valid.five, strandName: strand.one.name});
 
 });
 
@@ -54,19 +67,35 @@ describe('valid requests', () => {
       .set('Authorization', `Bearer ${userTwo.token}`)
       .expect(200);
 
+    console.log(body);
     // note that order matters: it should be display most recent first
-    expect(body).toMatchObject([slice.valid.four, slice.valid.two, slice.valid.one, slice.valid.zero]);
+    expect(body).toMatchObject([slice.valid.five, slice.valid.four, slice.valid.two, slice.valid.one, slice.valid.zero]);
 
     // image metadata returned for slice.zero
-    const sliceZeroBody = body[3];
+    const sliceZeroBody = body[4];
     expect(sliceZeroBody.imageName).toBe(fileName.good.jpg.one);
     expect(sliceZeroBody.imageType).toBe('image/jpeg');
     expect(sliceZeroBody).not.toHaveProperty('imageData');
 
-    // returns creating user too
+    // returns creating user
     body.forEach((slice) => {
       expect(slice.user.username).toBe(userTwo.username);
     });
+
+    // slices not on strands have no strand data
+    expect(body[1].strandId).toBe(null);
+    expect(body[1].strand).toBe(null);
+    expect(body[4].strandId).toBe(null);
+    expect(body[4].strand).toBe(null);
+
+    // slices on strands return expected data
+    expect(body[0].strandId).toBe(sliceOne.strandId);
+    expect(body[0].strand.name).toBe(strand.one.name);
+    expect(body[2].strandId).not.toBe(null);
+    expect(body[2].strand.name).toBe(strand.two.name);
+    expect(body[3].strandId).toBe(sliceOne.strandId);
+    expect(body[3].strand.name).toBe(strand.one.name);
+
   });
 
   test('view with limit given', async () => {
@@ -76,7 +105,7 @@ describe('valid requests', () => {
       .send({limit: 2})
       .expect(200);
 
-    expect(body).toMatchObject([slice.valid.four, slice.valid.two]);
+    expect(body).toMatchObject([slice.valid.five, slice.valid.four]);
 
     // returns creating user too
     body.forEach((slice) => {
@@ -91,7 +120,7 @@ describe('valid requests', () => {
       .send({offset: 2})
       .expect(200);
 
-    expect(body).toMatchObject([slice.valid.one, slice.valid.zero]);
+    expect(body).toMatchObject([slice.valid.two, slice.valid.one, slice.valid.zero]);
 
     // returns creating user too
     body.forEach((slice) => {
@@ -109,7 +138,7 @@ describe('valid requests', () => {
       })
       .expect(200);
 
-    expect(body).toMatchObject([slice.valid.two, slice.valid.one]);
+    expect(body).toMatchObject([slice.valid.four, slice.valid.two]);
 
     // returns creating user too
     body.forEach((slice) => {
@@ -140,7 +169,41 @@ describe('valid requests', () => {
       .expect(200);
 
     // all slices on stream
-    expect(body).toMatchObject([slice.valid.four, slice.valid.two, slice.valid.one, slice.valid.zero]);
+    expect(body).toMatchObject([slice.valid.five, slice.valid.four, slice.valid.two, slice.valid.one, slice.valid.zero]);
+  });
+
+  test('single strand view', async () => {
+    const {body} = await api
+      .post(`/api/slices/view/${streamZero.id}`)
+      .set('Authorization', `Bearer ${userTwo.token}`)
+      .send({
+        strandId: sliceOne.strandId
+      })
+      .expect(200);
+
+    // note the order here is the reverse of a regular slice query
+    expect(body).toMatchObject([slice.valid.one, slice.valid.five]);
+
+    expect(body[0].strandId).toBe(sliceOne.strandId);
+    expect(body[1].strandId).toBe(sliceOne.strandId);
+
+    expect(body[0].strand.name).toBe(strand.one.name);
+    expect(body[1].strand.name).toBe(strand.one.name);
+  });
+
+  test('single strand + search', async () => {
+    const {body} = await api
+      .post(`/api/slices/view/${streamZero.id}`)
+      .set('Authorization', `Bearer ${userTwo.token}`)
+      .send({
+        strandId: sliceOne.strandId,
+        search: 'ordinary'
+      })
+      .expect(200);
+
+    expect(body).toMatchObject([slice.valid.five]);
+    expect(body[0].strandId).toBe(sliceOne.strandId);
+    expect(body[0].strand.name).toBe(strand.one.name);
   });
 
   test('request to image src path (default --> web res)', async () => {

@@ -14,6 +14,12 @@ const defaultStream = {
   lastScrolled: 0, // date-time last scrolled (for debounce)
 
   search: '',
+  strand: {
+    id: null,
+    name: null,
+    createdAt: null,
+    updatedAt: null
+  },
 };
 
 const streamSlice = createSlice({
@@ -51,6 +57,13 @@ const streamSlice = createSlice({
       };
     },
 
+    setStrand(state, action) {
+      return {
+        ...state,
+        strand: action.payload
+      };
+    },
+
     setStream(state, action) {
       const newStream = action.payload;
       return {
@@ -60,11 +73,14 @@ const streamSlice = createSlice({
       };
     },
 
-    resetScroller(state) {
+    resetScroller(state, action) {
+      const holdStrand = action.payload;
+
       return {
         ...state,
         lastObservedLength: defaultStream.lastObservedLength,
-        scroller: defaultStream.scroller
+        scroller: defaultStream.scroller,
+        strand: holdStrand ? state.strand : defaultStream.strand
       };
     },
 
@@ -74,16 +90,17 @@ const streamSlice = createSlice({
   }
 });
 
-export const {incrementScroller, setSearch, setStream, resetScroller, resetStream} = streamSlice.actions;
+export const {incrementScroller, setSearch, setStrand, setStream, resetScroller, resetStream} = streamSlice.actions;
 
 // clears the cache for this stream (used whenever switching between streams)
-export const clearStreamCache = (streamId) => {
+// holdStrand tells it to preserve the strand through clearing the cache
+export const clearStreamCache = (streamId, holdStrand = false) => {
   return (dispatch) => {
     // this replaces the cache item with an empty array (if it's there)
     if (streamId) {
       dispatch(appApi.util.updateQueryData('getSlices', {streamId}, () => {return [];}));
     }
-    dispatch(resetScroller());
+    dispatch(resetScroller(holdStrand));
   };
 };
 

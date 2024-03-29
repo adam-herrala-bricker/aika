@@ -1,4 +1,5 @@
 :root {
+  --bottom-buffer: 80px;
   --scroller-height: 90dvh;
 }
 
@@ -168,15 +169,12 @@
 
 .menu-slice-container {
   margin-top: 5px;
-  margin-bottom: 10px;
 
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
   align-items: baseline;
   column-gap: 5px;
-
-  box-shadow: white 0px 10px 20px;
 
   z-index: 101;
 }
@@ -215,6 +213,11 @@
   color: lightgray;
 }
 
+.refresh-stream {
+  position: absolute;
+  right: 0px;
+}
+
 .settings-container {
   height: var(--scroller-height);
   
@@ -223,6 +226,7 @@
   row-gap: 10px;
 
   padding-top: 10px;
+  padding-bottom: var(--bottom-buffer);
 
   overflow-y: scroll;
   scrollbar-width: none;
@@ -257,6 +261,7 @@
   border-width: 2px;
   border-radius: 10px;
 
+  margin-top: 10px;
   padding: 10px;
 
   box-shadow: white 0px 10px 20px 30px;
@@ -271,6 +276,12 @@
 
 .slice-create-title-group {
   row-gap: 5px;
+}
+
+.slice-header-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .slice-image {
@@ -405,12 +416,14 @@
   overflow-y: scroll;
   scrollbar-width: none;
 
+  padding: 5px;
+  padding-top: 10px;
   padding-bottom: 80px;
 }
 
 .slice-status-bubble {
   position: absolute;
-  top: 50px;
+  top: 30px;
   right: 0px;
 
   margin: 5px;
@@ -429,8 +442,20 @@
   color: white;
 
   border-radius: 10px;
+
+  z-index: 200;
+
+  caret-color: transparent;
+  cursor: pointer;
 }
 
+.slice-strand-options {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+
+  column-gap: 3px;
+}
 
 .slice-tag-solo-container {
   margin-top: 0px;
@@ -457,6 +482,32 @@
   flex-direction: column;
 }
 
+.strand-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+
+  border-style: solid;
+  border-radius: 10px;
+  border-width: 1px;
+
+  padding: 10px;
+  margin-right: 10px;
+}
+
+.strand-header-exit {
+  position: absolute;
+  top: 50px;
+  right: 0px;
+
+  z-index: 200;
+}
+
+.strand-header-name {
+  font-size: large;
+  font-weight: bold;
+}
+
 .stream-info-body {
   display: flex;
   flex-direction: column;
@@ -475,6 +526,8 @@
 
   overflow-y: scroll;
   scrollbar-width: none;
+
+  padding-bottom: var(--bottom-buffer);
 }
 
 .stream-info-header-container {
@@ -495,6 +548,19 @@
   border-radius: 5px;
 }
 
+.stream-not-selected, .stream-selected {
+  padding-left: 10px;
+}
+
+.stream-selected {
+  border-left-style: solid;
+  color: rgb(85, 112, 149);
+}
+
+.streams-container {
+  padding-bottom: var(--bottom-buffer);
+}
+
 .tag-container {
   padding-top: 1px;
   padding-bottom: 1px;
@@ -511,6 +577,10 @@
   display: flex;
   flex-direction: row;
   column-gap: 5px;
+}
+
+.text-opaque {
+  color: black;
 }
 
 .username-container {

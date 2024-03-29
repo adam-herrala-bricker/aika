@@ -32,6 +32,14 @@ flowchart LR
             S4(created_at)
             S5(updated_at)
         end
+        subgraph Strand
+            ST1(id)
+            ST2(creator_id)
+            ST3(stream_id)
+            ST4(name)
+            ST5(created_at)
+            ST6(updated_at)
+        end
         subgraph StreamUser
             SU1(id)
             SU2(stream_id)
@@ -57,6 +65,7 @@ flowchart LR
             SL10(image_data)
             SL11(image_name)
             SL12(image_type)
+            SL13(strand_id)
         end
         subgraph ActiveConfirm
             AC1(id)
@@ -73,4 +82,7 @@ flowchart LR
     S1---SL3
     SL2---U1
     U1---AC2
+    U1---ST2
+    S1---ST3
+    SL13---ST1
 ```

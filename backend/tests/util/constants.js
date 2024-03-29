@@ -83,11 +83,11 @@ const slice = {
     },
 
     one: {
-      title: 'title only slice'
+      title: 'title only slice',
     },
 
     two: {
-      text: 'and this slice only has text'
+      text: 'and this slice only has text',
     },
 
     three: {
@@ -98,7 +98,7 @@ const slice = {
     four: {
       title: 'milestone slice',
       text: 'and what a milestone it was',
-      isMilestone: true
+      isMilestone: true,
     },
 
     five: {
@@ -136,6 +136,28 @@ const slice = {
   }
 };
 
+const strand = {
+  zero: {
+    name: 'strandZero'
+  },
+
+  one: {
+    name: 'strandOne'
+  },
+
+  two: {
+    name: 'strandTwo'
+  },
+
+  three: {
+    name:
+      'strandThree'
+  },
+
+  four: {
+    name: 'strandFour'
+  }
+};
 
 const stream = {
   zero: {
@@ -187,6 +209,7 @@ module.exports = {
   invalidId,
   newPassword,
   slice,
+  strand,
   stream,
   user
 };

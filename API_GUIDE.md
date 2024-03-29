@@ -274,13 +274,20 @@ Adds a new slice to the stream with the given `id` (if user has `write` permissi
   - default: false
 - `image`
   - type: file
-  - required: false  
+  - required: false
+- `strandName`
+  - Name of strand for this slice to link to. If no strand by that name exists on the stream, a new strand will be created.
+  - type: string
+  - required: false   
 
 #### Returns:
 - `id`
   - type: UUID v4
 - `creatorId`
   - UUID of user that created slice
+- `strandId`
+  - UUID of strand that slice is linked to
+  - `null` if slice is not linked to strand  
 - `streamId`
   - UUID of stream that slice is on
 - `title`
@@ -288,7 +295,6 @@ Adds a new slice to the stream with the given `id` (if user has `write` permissi
 - `isPublic`
 - `isMilestone`
 - `imageName`
-  - format: `{streamId}-{originalName}` 
 - `imageType` 
 - `createdAt`
 - `updatedAt`    
@@ -405,7 +411,7 @@ Returns an array of ALL permissions for stream with given `id`. Requires admin p
 
 View slices on stream with given `id`. Requires `read` permissions for that stream.
 
-Slices are sorted by time created, with the most recent returned first.
+By default, slices are sorted by time created, with the more recent returned first. If a strand id is given, then slices are instead returned oldest first.
 
 #### Headers:
 - `Authorization: Bearer <token>`
@@ -425,11 +431,17 @@ Slices are sorted by time created, with the most recent returned first.
   - case insensitive substring searching for title + text
   - type: string
   - required: false
+- `strandId`
+  - if given, returns only slices from this strand
+  - type: UUID
+  - required: false  
 
 #### Returns:
 - Array of `Slice` instances:
   - `id`
   - `creatorId`
+  - `strandId`
+    - `null` if N/A 
   - `streamId`
   - `title`
   - `text`
@@ -439,10 +451,16 @@ Slices are sorted by time created, with the most recent returned first.
   - `imageType`
   - `createdAt`
   - `updatedAt`
-  - `User` instance with properties:
+  - `user`: 'User' instance with properties
     - `username`
     - `firstName`
-    - `lastName` 
+    - `lastName`
+  - `strand`: 'Strand' instance with properties
+    - `id` 
+    - `name`
+    - `createdAt`
+    - `updatedAt`
+    - note: `null` if slice is not linked to a strand
 
 ## Media Access
 

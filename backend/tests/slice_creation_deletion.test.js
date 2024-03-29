@@ -2,7 +2,7 @@ const {readFile} = require('node:fs/promises');
 const supertest = require('supertest');
 const app = require('../app');
 const api = supertest(app);
-const {Slice} = require('../models');
+const {Slice, Strand} = require('../models');
 const {connectToDB, sequelize} = require('../util/db');
 const {
   addImageSlice,
@@ -22,6 +22,7 @@ const {
   fileName,
   invalidId,
   slice,
+  strand,
   stream,
   user
 } = require('./util/constants');
@@ -83,6 +84,9 @@ describe('valid requests', () => {
           expect(entry).toHaveProperty('id');
           expect(entry).toHaveProperty('createdAt');
           expect(entry).toHaveProperty('updatedAt');
+
+          // not linked to any strand
+          expect(entry.strandId).toBe(null);
         });
       });
 
@@ -187,6 +191,67 @@ describe('valid requests', () => {
           expect(entry.title).toBe(slice.valid.seven.title);
           expect(entry.text).toBe(slice.valid.seven.text);
         });
+      });
+
+      test('linked to new strand', async () => {
+        await Strand.destroy({truncate: true, cascade: true}); // make sure there aren't any strands
+
+        // create new slice
+        const {body} = await api
+          .post(`/api/slices/${streamZero.id}`)
+          .set('Authorization', `Bearer ${userTwo.token}`)
+          .send({
+            ...slice.valid.four,
+            strandName: strand.zero.name
+          })
+          .expect(200);
+
+        // body returns strand id as expected
+        expect(body).toHaveProperty('strandId');
+
+        // strand is in DB as expected
+        const newStrand = await Strand.findByPk(body.strandId);
+
+        expect(newStrand).not.toBe(null);
+        expect(newStrand.creatorId).toBe(userTwo.id);
+        expect(newStrand.streamId).toBe(streamZero.id);
+      });
+
+      test('linked to existed strand', async () => {
+        await Strand.destroy({truncate: true, cascade: true}); // make sure there aren't any strands
+
+        // create new strand
+        const response1 = await api
+          .post(`/api/slices/${streamZero.id}`)
+          .set('Authorization', `Bearer ${userTwo.token}`)
+          .send({
+            ...slice.valid.zero,
+            strandName: strand.zero.name
+          })
+          .expect(200);
+
+        // now a second slice on that strand
+        const response2 = await api
+          .post(`/api/slices/${streamZero.id}`)
+          .set('Authorization', `Bearer ${userTwo.token}`)
+          .send({
+            ...slice.valid.one,
+            strandName: strand.zero.name
+          })
+          .expect(200);
+
+        const body1 = response1.body;
+        const body2 = response2.body;
+
+        const strandDB = await Strand.findByPk(body1.strandId);
+
+        // everything is as expected
+        expect(body2.strandId).not.toBe(null);
+        expect(body1.strandId).toBe(body2.strandId);
+        expect(strandDB).not.toBe(null);
+        expect(strandDB.id).toBe(body2.strandId);
+        expect(strandDB.streamId).toBe(streamZero.id);
+        expect(strandDB.creatorId).toBe(userTwo.id);
       });
     });
 
