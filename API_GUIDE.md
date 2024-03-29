@@ -456,6 +456,7 @@ By default, slices are sorted by time created, with the more recent returned fir
     - `firstName`
     - `lastName`
   - `strand`: 'Strand' instance with properties
+    - `id` 
     - `name`
     - `createdAt`
     - `updatedAt`
