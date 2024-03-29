@@ -216,6 +216,11 @@
   color: lightgray;
 }
 
+.refresh-stream {
+  position: absolute;
+  right: 0px;
+}
+
 .settings-container {
   height: var(--scroller-height);
   
@@ -441,7 +446,7 @@
   z-index: 200;
 
   caret-color: transparent;
-
+  cursor: pointer;
 }
 
 .slice-strand-options {
@@ -543,6 +548,15 @@
   border-radius: 5px;
 }
 
+.stream-not-selected, .stream-selected {
+  padding-left: 10px;
+}
+
+.stream-selected {
+  border-left-style: solid;
+  color: rgb(85, 112, 149);
+}
+
 .streams-container {
   padding-bottom: var(--bottom-buffer);
 }
@@ -563,6 +577,10 @@
   display: flex;
   flex-direction: row;
   column-gap: 5px;
+}
+
+.text-opaque {
+  color: black;
 }
 
 .username-container {

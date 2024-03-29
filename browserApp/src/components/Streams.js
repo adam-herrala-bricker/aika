@@ -3,46 +3,56 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useGetStreamsQuery} from '../services/streams';
 import {clearStreamCache, setStream} from '../reducers/streamReducer';
 import {closeSideMenu, resetView} from '../reducers/viewReducer';
-import {Header, MenuItem} from 'semantic-ui-react';
+import {Header, Icon, MenuItem} from 'semantic-ui-react';
 import {CreateStream, SettingsButton} from '.';
 
 const Stream = ({thisStream}) => {
   const dispatch = useDispatch();
   const {userId} = useSelector((i) => i.user);
-  const {loadedId} = useSelector((i) => i.stream);
+  const {loadedId, scroller} = useSelector((i) => i.stream);
   const {streamSliceMain} = useSelector((i) => i.view);
   const isOwner = userId === thisStream.creatorId;
+
+  const selectedStream = thisStream.id === loadedId;
+  const sliceView = streamSliceMain === 'slice';
 
   // event handler
   // clears cache of loaded stream before loading new stream
   const handleClick = () => {
-    // change slice state if (i) moving to different stream or (ii) there's not a stream loaded yet or (iii) coming in from a different view
-    if (thisStream.id !== loadedId || !loadedId || streamSliceMain !== 'slice') {
-      // clears current cache if there's a loaded stream + resets scrolling
-      dispatch(clearStreamCache(loadedId));
+    // clears current cache if there's a loaded stream + resets scrolling
+    dispatch(clearStreamCache(loadedId));
 
-      // loads new stream
-      dispatch(setStream({
-        name: thisStream.name,
-        id: thisStream.id
-      }));
+    // loads new stream
+    dispatch(setStream({
+      name: thisStream.name,
+      id: thisStream.id
+    }));
 
-      // return to default view when switching between streams
-      dispatch(resetView());
-    }
+    // return to default view when switching between streams
+    dispatch(resetView());
     dispatch(closeSideMenu());
   };
 
   return (
-    <MenuItem onClick = {handleClick}>
-      <Header
-        className = 'header-truncate'
-        size = 'small'>
-        {thisStream.name}
-      </Header>
-      {isOwner
-        ? <div>owner</div>
-        : <div>shared</div>}
+    <MenuItem
+      disabled = {sliceView && selectedStream && scroller.offset === 0}
+      onClick = {handleClick}>
+      {sliceView && selectedStream &&
+        <div className = 'refresh-stream'>
+          <Icon name = 'refresh' />
+        </div>}
+      <div className = {sliceView && selectedStream ? 'stream-selected' : 'stream-not-selected'}>
+        <Header
+          className = 'header-truncate'
+          size = 'small'>
+          {thisStream.name}
+        </Header>
+        <div className = 'text-opaque'>
+          {isOwner
+            ? <div>owner</div>
+            : <div>shared</div>}
+        </div>
+      </div>
     </MenuItem>
   );
 };

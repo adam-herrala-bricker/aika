@@ -41,7 +41,9 @@ export const sliceApi = appApi.injectEndpoints({
 
       // forces a refetch when the args change
       forceRefetch: (currentArgs, previousArgs) => {
-        return currentArgs !== previousArgs;
+        const argChange = currentArgs !== previousArgs;
+
+        return argChange;
       },
 
       providesTags: ['Slice']
