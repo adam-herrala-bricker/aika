@@ -68,7 +68,7 @@ const Streams = () => {
   }
 
   return (
-    <div>
+    <div className = 'streams-container'>
       <MenuItem>
         <Header size = 'medium'>My Streams</Header>
       </MenuItem>
