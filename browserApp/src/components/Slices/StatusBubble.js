@@ -5,7 +5,7 @@ import {Loader} from 'semantic-ui-react';
 
 const StatusBar = ({isFetching, loadedN}) => {
   const dispatch = useDispatch();
-  const {strand} = useSelector((i) => i.stream);
+  const {loadedId, strand} = useSelector((i) => i.stream);
   const [hide, setHide] = React.useState(false);
 
   // effect hook to handle timeout
@@ -43,7 +43,7 @@ const StatusBar = ({isFetching, loadedN}) => {
     return (
       <div
         className = 'slice-status-bubble'
-        onClick = {() => dispatch(clearStreamCache())}>
+        onClick = {() => dispatch(clearStreamCache(loadedId))}>
         Viewing strand: {strand.name}
       </div>
     );
