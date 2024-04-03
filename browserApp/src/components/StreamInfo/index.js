@@ -34,6 +34,7 @@ const StreamInfo = () => {
   const [deleteButton, setDeleteButton] = React.useState('Delete');
   const [deleteMessage, setDeleteMessage] = React.useState('Are you sure you want to delete this stream?');
   const {loadedId, loadedName} = useSelector((i) => i.stream);
+  const {appWidth, mobileBreakpoint} = useSelector((i) => i.view);
   const {data, isLoading} = useGetMyPermissionsQuery(loadedId);
 
   // event handler
@@ -53,7 +54,7 @@ const StreamInfo = () => {
   }
 
   return (
-    <div className = 'stream-info-container'>
+    <div className = {appWidth > mobileBreakpoint ? 'stream-info-container-browser' : 'stream-info-container-mobile'}>
       <div>
         <div className = 'stream-info-header-container'>
           <div>

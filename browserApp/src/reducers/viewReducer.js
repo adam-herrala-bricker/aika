@@ -5,7 +5,10 @@ const defaultView = {
   showSideMenu: true,
   streamSliceMain: 'slice',  // main component for StreamSliceView (other values = 'info', 'settings')
   imageRes: 'web', // other value = 'full'
-  createSliceHidden: true
+  createSliceHidden: true,
+
+  appWidth: window.innerWidth, // actual width of app
+  mobileBreakpoint: 600 // breakpoint width in px
 };
 
 const viewSlice = createSlice({
@@ -21,11 +24,19 @@ const viewSlice = createSlice({
       };
     },
 
-    // want the image res to persist
+    // want the app width and image res to persist
     resetView(state) {
       return {
         ...defaultView,
+        appWidth: state.appWidth,
         imageRes: state.imageRes};
+    },
+
+    setAppWidth(state, action) {
+      return {
+        ...state,
+        appWidth: action.payload
+      };
     },
 
     setCreateSliceHidden(state, action) {
@@ -61,6 +72,7 @@ const viewSlice = createSlice({
 export const {
   closeSideMenu,
   resetView,
+  setAppWidth,
   setImageRes,
   setStreamSliceMain,
   setCreateSliceHidden,

@@ -11,6 +11,7 @@ import StatusBubble from './StatusBubble';
 const Slices = () => {
   const dispatch = useDispatch();
   const {loadedId, loadedName, scroller, search, strand} = useSelector((i) => i.stream);
+  const {appWidth, mobileBreakpoint} = useSelector((i) => i.view);
 
   let strandSelect = {};
 
@@ -64,7 +65,7 @@ const Slices = () => {
   }
 
   return (
-    <div className = 'slice-view-container'>
+    <div className = { appWidth > mobileBreakpoint ? 'slice-view-container-browser' : 'slice-view-container-mobile'}>
       {loadedId && <SliceMenu stream = {{loadedName, loadedId}}/>}
       {myPermissions?.data?.write && !strand.id && <CreateSlice />}
       {(search.length > 0 && !isFetching && data.length === 0) &&
