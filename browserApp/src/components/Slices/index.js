@@ -1,12 +1,14 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {incrementScroller} from '../../reducers/streamReducer';
+import {setSliceScrollPosition} from '../../reducers/viewReducer';
 import {useGetMyPermissionsQuery} from '../../services/streams';
 import {useGetSlicesQuery} from '../../services/slices';
 import Slice from './Slice';
 import CreateSlice from './CreateSlice';
 import SliceMenu from './SliceMenu';
 import StatusBubble from './StatusBubble';
+import ScrollToTopButton from './ScrollToTopButton';
 
 const Slices = () => {
   const dispatch = useDispatch();
@@ -36,6 +38,7 @@ const Slices = () => {
     if (!isError && !isLoading && !myPermissions.isLoading) {
       const onScroll = () => {
         const {clientHeight, scrollHeight, scrollTop} = scrollRef.current;
+        dispatch(setSliceScrollPosition(scrollTop));
 
         const scrolledToBottom =
           (scrollTop + clientHeight >= .95*scrollHeight);
@@ -78,6 +81,7 @@ const Slices = () => {
             slice = {slice}/>)}
       </div>
       <StatusBubble isFetching = {isFetching} loadedN = {data.length}/>
+      <ScrollToTopButton scrollRef = {scrollRef}/>
     </div>
   );
 };

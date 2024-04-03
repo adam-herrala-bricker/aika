@@ -430,8 +430,26 @@
   padding-bottom: 80px;
 }
 
+.slice-scroll-to-top-container {
+  position: fixed;
+  bottom: 20px;
+  right: 0px;
+
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 15px;
+}
+
+.slice-scroll-to-top-container:hover{
+  opacity: 85%;
+}
+
+.ui.icon:focus {
+  outline: 0 none !important;
+}
+
 .slice-status-bubble {
-  position: absolute;
+  position: fixed;
   top: 30px;
   right: 0px;
 

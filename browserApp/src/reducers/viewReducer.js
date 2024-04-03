@@ -8,7 +8,9 @@ const defaultView = {
   createSliceHidden: true,
 
   appWidth: window.innerWidth, // actual width of app
-  mobileBreakpoint: 600 // breakpoint width in px
+  mobileBreakpoint: 600, // breakpoint width in px
+
+  sliceScrollPosition: 0 // for watching to turn 'to top' button on/off
 };
 
 const viewSlice = createSlice({
@@ -53,6 +55,13 @@ const viewSlice = createSlice({
       };
     },
 
+    setSliceScrollPosition(state, action) {
+      return {
+        ...state,
+        sliceScrollPosition: action.payload
+      };
+    },
+
     setStreamSliceMain(state, action) {
       return {
         ...state,
@@ -74,6 +83,7 @@ export const {
   resetView,
   setAppWidth,
   setImageRes,
+  setSliceScrollPosition,
   setStreamSliceMain,
   setCreateSliceHidden,
   toggleSideMenu

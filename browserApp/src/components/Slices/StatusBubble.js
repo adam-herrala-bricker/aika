@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {clearStreamCache} from '../../reducers/streamReducer';
 import {Loader} from 'semantic-ui-react';
 
-const StatusBar = ({isFetching, loadedN}) => {
+const StatusBubble = ({isFetching, loadedN}) => {
   const dispatch = useDispatch();
   const {loadedId, strand} = useSelector((i) => i.stream);
   const [hide, setHide] = React.useState(false);
@@ -59,4 +59,4 @@ const StatusBar = ({isFetching, loadedN}) => {
   );
 };
 
-export default StatusBar;
+export default StatusBubble;
