@@ -1,16 +1,19 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {incrementScroller} from '../../reducers/streamReducer';
+import {setSliceScrollPosition} from '../../reducers/viewReducer';
 import {useGetMyPermissionsQuery} from '../../services/streams';
 import {useGetSlicesQuery} from '../../services/slices';
 import Slice from './Slice';
 import CreateSlice from './CreateSlice';
 import SliceMenu from './SliceMenu';
 import StatusBubble from './StatusBubble';
+import ScrollToTopButton from './ScrollToTopButton';
 
 const Slices = () => {
   const dispatch = useDispatch();
   const {loadedId, loadedName, scroller, search, strand} = useSelector((i) => i.stream);
+  const {appWidth, mobileBreakpoint} = useSelector((i) => i.view);
 
   let strandSelect = {};
 
@@ -35,6 +38,7 @@ const Slices = () => {
     if (!isError && !isLoading && !myPermissions.isLoading) {
       const onScroll = () => {
         const {clientHeight, scrollHeight, scrollTop} = scrollRef.current;
+        dispatch(setSliceScrollPosition(scrollTop));
 
         const scrolledToBottom =
           (scrollTop + clientHeight >= .95*scrollHeight);
@@ -64,9 +68,9 @@ const Slices = () => {
   }
 
   return (
-    <div className = 'slice-view-container'>
+    <div className = { appWidth > mobileBreakpoint ? 'slice-view-container-browser' : 'slice-view-container-mobile'}>
       {loadedId && <SliceMenu stream = {{loadedName, loadedId}}/>}
-      {myPermissions?.data?.write && !strand.id && <CreateSlice />}
+      {myPermissions?.data?.write && <CreateSlice />}
       {(search.length > 0 && !isFetching && data.length === 0) &&
         <div className = 'slice-no-search-results'>no slices found</div>}
       <div ref = {scrollRef} className = 'slice-scroll-region'>
@@ -77,6 +81,7 @@ const Slices = () => {
             slice = {slice}/>)}
       </div>
       <StatusBubble isFetching = {isFetching} loadedN = {data.length}/>
+      <ScrollToTopButton scrollRef = {scrollRef}/>
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import React from 'react';
+import {useSelector} from 'react-redux';
 import {Header} from 'semantic-ui-react';
 import {ExpandBox} from '..';
 import ChangePassword from './ChangePassword';
@@ -7,9 +8,10 @@ import DisplaySettings from './DisplaySettings';
 import UserInfo from './UserInfo';
 
 const Settings = () => {
+  const {appWidth, mobileBreakpoint} = useSelector((i) => i.view);
 
   return(
-    <div className = 'settings-container'>
+    <div className = {appWidth > mobileBreakpoint ? 'settings-container-browser' : 'settings-container-mobile'}>
       <div>
         <Header size = 'large'>Settings</Header>
       </div>

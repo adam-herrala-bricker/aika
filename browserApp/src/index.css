@@ -1,6 +1,7 @@
 :root {
   --bottom-buffer: 80px;
-  --scroller-height: 90dvh;
+  --scroller-height-browser: 80vh;
+  --scroller-height-mobile: 90dvh;
 }
 
 .outer-container {
@@ -219,9 +220,7 @@
   right: 0px;
 }
 
-.settings-container {
-  height: var(--scroller-height);
-  
+.settings-container-browser, .settings-container-mobile {  
   display: flex;
   flex-direction: column;
   row-gap: 10px;
@@ -232,6 +231,15 @@
   overflow-y: scroll;
   scrollbar-width: none;
 }
+
+.settings-container-browser {
+  height: var(--scroller-height-browser);
+}
+
+.settings-container-mobile {
+  height: var(--scroller-height-mobile);
+}
+
 
 .share-options-container {
   display: flex;
@@ -422,8 +430,26 @@
   padding-bottom: 80px;
 }
 
+.slice-scroll-to-top-container {
+  position: fixed;
+  bottom: 20px;
+  right: 0px;
+
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 15px;
+}
+
+.slice-scroll-to-top-container:hover{
+  opacity: 85%;
+}
+
+.ui.icon:focus {
+  outline: 0 none !important;
+}
+
 .slice-status-bubble {
-  position: absolute;
+  position: fixed;
   top: 30px;
   right: 0px;
 
@@ -476,11 +502,17 @@
   margin-bottom: 10px;
 }
 
-.slice-view-container {
-  height: var(--scroller-height);
-
+.slice-view-container-browser, .slice-view-container-mobile {
   display: flex;
   flex-direction: column;
+}
+
+.slice-view-container-browser {
+  height: var(--scroller-height-browser);
+}
+
+.slice-view-container-mobile {
+  height: var(--scroller-height-mobile);
 }
 
 .strand-header {
@@ -515,7 +547,7 @@
   row-gap: 10px;
 }
 
-.stream-info-container {
+.stream-info-container-browser, .stream-info-container-mobile {
   padding-top: 10px;
   display: flex;
   flex-direction: column;
@@ -523,12 +555,18 @@
   flex-grow: 1;
   justify-content: flex-start;
 
-  height: var(--scroller-height);
-
   overflow-y: scroll;
   scrollbar-width: none;
 
   padding-bottom: var(--bottom-buffer);
+}
+
+.stream-info-container-browser {
+  height: var(--scroller-height-browser);
+}
+
+.stream-info-container-mobile {
+  height: var(--scroller-height-mobile);
 }
 
 .stream-info-header-container {

@@ -3,9 +3,9 @@ import {useDispatch, useSelector} from 'react-redux';
 import {clearStreamCache} from '../../reducers/streamReducer';
 import {Loader} from 'semantic-ui-react';
 
-const StatusBar = ({isFetching, loadedN}) => {
+const StatusBubble = ({isFetching, loadedN}) => {
   const dispatch = useDispatch();
-  const {strand} = useSelector((i) => i.stream);
+  const {loadedId, strand} = useSelector((i) => i.stream);
   const [hide, setHide] = React.useState(false);
 
   // effect hook to handle timeout
@@ -43,7 +43,7 @@ const StatusBar = ({isFetching, loadedN}) => {
     return (
       <div
         className = 'slice-status-bubble'
-        onClick = {() => dispatch(clearStreamCache())}>
+        onClick = {() => dispatch(clearStreamCache(loadedId))}>
         Viewing strand: {strand.name}
       </div>
     );
@@ -59,4 +59,4 @@ const StatusBar = ({isFetching, loadedN}) => {
   );
 };
 
-export default StatusBar;
+export default StatusBubble;

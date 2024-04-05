@@ -1,6 +1,7 @@
 import React from 'react';
 import {Route, Routes} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
+import {setAppWidth} from './reducers/viewReducer';
 import {manageAutoLogout, setUser} from './reducers/userReducer';
 import {Entry, LogIn, MenuBar, Register, StreamSliceView} from './components';
 
@@ -13,10 +14,9 @@ const Home = ({thisUser}) => {
 };
 
 const App = () => {
-  const mobileBreakpoint = 600; // width in px to swith from browser to mobile view
   const dispatch = useDispatch();
+  const {appWidth, mobileBreakpoint} = useSelector((i) => i.view);
   const thisUser = useSelector((i) => i.user);
-  const [appWidth, setAppWidth] = React.useState(window.innerWidth);
 
   // keep user logged in on refresh
   const loggedInUserJSON = window.localStorage.getItem('aikaUser');
@@ -36,7 +36,7 @@ const App = () => {
   // lets us watch the width of the window (to trigger breakpoint)
   React.useEffect(() => {
     const onResize = (event) => {
-      setAppWidth(event.target.innerWidth);
+      dispatch(setAppWidth(event.target.innerWidth));
     };
 
     window.addEventListener('resize', onResize);

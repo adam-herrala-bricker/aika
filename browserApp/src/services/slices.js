@@ -74,6 +74,13 @@ export const sliceApi = appApi.injectEndpoints({
       }),
 
       invalidatesTags: ['Slice']
+    }),
+
+    getStrands: build.query({
+      query: (streamId) => ({
+        url: `strands/${streamId}`,
+        method: 'GET'
+      })
     })
   })
 });
@@ -81,5 +88,6 @@ export const sliceApi = appApi.injectEndpoints({
 export const {
   useDeleteSliceMutation,
   useGetSlicesQuery,
+  useGetStrandsQuery,
   useNewSliceMutation
 } = sliceApi;

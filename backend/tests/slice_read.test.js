@@ -1,3 +1,5 @@
+// also includes strand read
+
 const supertest = require('supertest');
 const app = require('../app');
 const api = supertest(app);
@@ -29,7 +31,8 @@ let userTwo; // creator, has permissions
 let userFive; // non-creator, lacks permissions
 
 // stream object
-let streamZero;
+let streamZero; // main stream for every test
+let streamOne; // used only to verify no bleed-over in strand names between streams
 
 // slice objects
 let sliceZero;
@@ -48,6 +51,7 @@ beforeAll(async () => {
 
   // tests make no changes to streams or slices, so only need to add once
   streamZero = await addStream(user.two, stream.zero);
+  streamOne = await addStream(user.two, stream.one);
 
   // add five slices to streamZero (as userTwo), one of which is an image
   // note that slice.one and slice.four are on strand.one, and slice.two is on strand.two
@@ -57,6 +61,7 @@ beforeAll(async () => {
   await addSlice(userTwo, streamZero.id, slice.valid.four); // skipping public
   await addSlice(userTwo, streamZero.id, {...slice.valid.five, strandName: strand.one.name});
 
+  await addSlice(userTwo, streamOne.id, {...slice.valid.five, strandName: strand.three.name}); // here to confirm no bleed over from strand three
 });
 
 describe('valid requests', () => {
@@ -234,6 +239,15 @@ describe('valid requests', () => {
       .set('Authorization', `Bearer ${userTwo.token}`)
       .expect(200);
   });
+
+  test('get strand names', async () => {
+    const {body} = await api
+      .get(`/api/strands/${streamZero.id}`)
+      .set('Authorization', `Bearer ${userTwo.token}`)
+      .expect(200);
+
+    expect(body).toMatchObject([strand.one, strand.two]);
+  });
 });
 
 describe('invalid requests', () => {
@@ -362,6 +376,56 @@ describe('invalid requests', () => {
         .get(`/media/${streamZero.id}/${sliceZero.id}_web_${fileName.bad.jpg.one}`)
         .set('Authorization', `Bearer ${userTwo.token}`)
         .expect(404);
+    });
+  });
+
+  describe('GET for strands', () => {
+    test('missing token', async () => {
+      const {body} = await api
+        .get(`/api/strands/${streamZero.id}`)
+        .expect(401);
+
+      expect(body.error).toBe('token missing');
+    });
+
+    test('bad token', async () => {
+      const {body} = await api
+        .get(`/api/strands/${streamZero.id}`)
+        .set('Authorization', `Bearer ${badToken}`)
+        .expect(400);
+
+      expect(body.error).toBe('jwt malformed');
+    });
+
+    test('expired token', async () => {
+      const {body} = await api
+        .get(`/api/strands/${streamZero.id}`)
+        .set('Authorization', `Bearer ${expiredUserTwoToken}`)
+        .expect(403);
+
+      expect(body.error).toBe('login token has expired');
+    });
+
+    test('no permissions for stream', async () => {
+      await clearPermissions(userFive, streamZero);
+
+      const {body} = await api
+        .get(`/api/strands/${streamZero.id}`)
+        .set('Authorization', `Bearer ${userFive.token}`)
+        .expect(403);
+
+      expect(body.error).toBe('no user permissions for this stream');
+    });
+
+    test('write permission set to false', async () => {
+      await createPermissions(userFive, streamZero, {write: false});
+
+      const {body} = await api
+        .get(`/api/strands/${streamZero.id}`)
+        .set('Authorization', `Bearer ${userFive.token}`)
+        .expect(403);
+
+      expect(body.error).toBe('user cannot write to this stream');
     });
   });
 });
