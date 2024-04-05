@@ -144,6 +144,7 @@ const CreateSlice = () => {
           className = 'slice-create-title-group'
           inline>
           <FormInput
+            autoComplete = 'off'
             error = {titleError}
             name = 'title'
             onChange = {handleTitleChange}
@@ -208,6 +209,7 @@ const CreateSlice = () => {
         <Header size = 'tiny'>Strand</Header>
         <FormGroup>
           <FormInput
+            autoComplete = 'off'
             list = 'strands'
             name = 'strand'
             onChange = {(event) => dispatch(updateSlice({strandName: event.target.value}))}
