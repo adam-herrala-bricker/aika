@@ -407,6 +407,20 @@ Returns an array of ALL permissions for stream with given `id`. Requires admin p
   - `user`
     - `username`
 
+### GET `/api/strands/{streamId}`
+
+Returns unique strand names for stream with given `streamId`. Requires `write` permissions for that stream.
+
+#### Headers:
+- `Authorization: Bearer <token>`
+
+#### Body:
+  - None
+
+#### Returns:
+  - Array of `Strand` instances with the following properties:
+    - `name`
+
 ### POST `/api/slices/view/{id}`
 
 View slices on stream with given `id`. Requires `read` permissions for that stream.
@@ -464,7 +478,7 @@ By default, slices are sorted by time created, with the more recent returned fir
 
 ## Media Access
 
-### GET `/media/{streamId}/{sliceID}_{res}_{fileName}`
+### GET `/media/{streamId}/{sliceId}_{res}_{fileName}`
 
 Returns media for the given stream and file (subject to the same authorization and permission requirements as slices).
 
