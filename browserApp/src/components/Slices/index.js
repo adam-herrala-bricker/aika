@@ -70,7 +70,7 @@ const Slices = () => {
   return (
     <div className = { appWidth > mobileBreakpoint ? 'slice-view-container-browser' : 'slice-view-container-mobile'}>
       {loadedId && <SliceMenu stream = {{loadedName, loadedId}}/>}
-      {myPermissions?.data?.write && !strand.id && <CreateSlice />}
+      {myPermissions?.data?.write && <CreateSlice />}
       {(search.length > 0 && !isFetching && data.length === 0) &&
         <div className = 'slice-no-search-results'>no slices found</div>}
       <div ref = {scrollRef} className = 'slice-scroll-region'>

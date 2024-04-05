@@ -89,7 +89,7 @@ const CreateSlice = () => {
 
   const submitSlice = async () => {
     // resets the scroller so that query will get new slice
-    dispatch(resetScroller());
+    dispatch(resetScroller(true)); // holdStrand = true;
     setIsSubmitting(true);
     const imageBlob = await urlToBlob(thisSlice.imageUrl);
     try {

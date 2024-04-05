@@ -1,13 +1,15 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import {useGetMyPermissionsQuery} from '../../services/streams';
 import {updateSlice} from '../../reducers/sliceReducer';
 import {clearStreamCache, setStrand} from '../../reducers/streamReducer';
 import {setCreateSliceHidden} from '../../reducers/viewReducer';
 import {Button} from 'semantic-ui-react';
 
 const OptionsOpen = ({slice, setOpen}) => {
-  const {loadedId, strand} = useSelector((i) => i.stream);
   const dispatch = useDispatch();
+  const {loadedId, strand} = useSelector((i) => i.stream);
+  const myPermissions = useGetMyPermissionsQuery(loadedId);
 
   const handleCreateStrandSlice = () => {
     dispatch(updateSlice({strandName: slice.strand.name}));
@@ -21,13 +23,17 @@ const OptionsOpen = ({slice, setOpen}) => {
     setOpen(false);
   };
 
+  if (!myPermissions.data) {
+    return <div>error loading permissions</div>;
+  }
+
   return (
     <div>
       <Button
         basic
         color = 'black'
         compact
-        disabled = {strand.id ? true : false}
+        disabled = {!myPermissions.data.write}
         icon = 'code branch'
         onClick = {handleCreateStrandSlice}
         size = 'mini'/>
