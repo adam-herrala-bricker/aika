@@ -1,3 +1,5 @@
+// also includes strand read
+
 const supertest = require('supertest');
 const app = require('../app');
 const api = supertest(app);
@@ -233,6 +235,15 @@ describe('valid requests', () => {
       .get(`/media/${streamZero.id}/${sliceZero.id}_full_${fileName.good.jpg.one}`)
       .set('Authorization', `Bearer ${userTwo.token}`)
       .expect(200);
+  });
+
+  test('get strand names', async () => {
+    const {body} = await api
+      .get(`/api/strands/${streamZero.id}`)
+      .set('Authorization', `Bearer ${userTwo.token}`)
+      .expect(200);
+
+    expect(body).toMatchObject([strand.one, strand.two]);
   });
 });
 

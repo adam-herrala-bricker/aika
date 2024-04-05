@@ -1,6 +1,6 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {useNewSliceMutation} from '../../services/slices';
+import {useGetStrandsQuery, useNewSliceMutation} from '../../services/slices';
 import {resetScroller} from '../../reducers/streamReducer';
 import {clearImage, clearSlice, updateSlice} from '../../reducers/sliceReducer';
 import {setCreateSliceHidden} from '../../reducers/viewReducer';
@@ -36,6 +36,8 @@ const CreateSlice = () => {
   const wrongFileType = imageType && !['image/jpeg', 'image/png'].includes(imageType);
   const fileTooLarge = imageSize && imageSize > 10 * 1000000; // 10M
   const fileError = wrongFileType || fileTooLarge;
+
+  const {data} = useGetStrandsQuery(loadedId); // data = strand names
 
   const buttonLabel = result.isError
     ? result.error.data.error
@@ -206,10 +208,15 @@ const CreateSlice = () => {
         <Header size = 'tiny'>Strand</Header>
         <FormGroup>
           <FormInput
+            list = 'strands'
             name = 'strand'
             onChange = {(event) => dispatch(updateSlice({strandName: event.target.value}))}
             placeholder = 'Strand'
             value = {thisSlice.strandName}/>
+          <datalist id = 'strands'>
+            {data.map((i) =>
+              <option key = {i.name} value = {i.name}>{i.name}</option>)}
+          </datalist>
         </FormGroup>
         <div className = 'slice-create-text-area'>
           <FormTextArea
